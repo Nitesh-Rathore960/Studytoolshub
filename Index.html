@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>StudyToolsHub - Student Tools</title>
+
+    <!-- CSS FILE -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+    <div class="logo">
+
+        <h1>StudyToolsHub</h1>
+
+        <p>Smart Tools for Students</p>
+
+    </div>
+
+
+    <nav>
+
+        <a href="#home">Home</a>
+
+        <a href="#calculators">Calculators</a>
+
+        <a href="#study">Study Tools</a>
+
+        <a href="#coding">Coding Tools</a>
+
+        <a href="#resources">Resources</a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- ================= HOME PAGE ================= -->
+
+<main id="homePage">
+
+
+    <!-- HERO -->
+
+    <section class="hero" id="home">
+
+        <span class="hero-badge">
+            🎓 Made for Students
+        </span>
+
+
+        <h2>
+            All Student Tools in One Place
+        </h2>
+
+
+        <p>
+            Calculate, study, practice and code
+            with simple and useful tools.
+        </p>
+
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search a tool..."
+            >
+
+            <button id="searchButton">
+                Search
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= CALCULATORS ================= -->
+
+    <section
+        class="tools"
+        id="calculators"
+    >
+
+        <h2>
+            Popular Tools
+        </h2>
+
+
+        <p class="section-description">
+            Useful tools for students, available in one place.
+        </p>
+
+
+        <div class="tool-container">
+
+
+            <!-- PERCENTAGE -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    🧮
+                </div>
+
+
+                <h3>
+                    Percentage Calculator
+                </h3>
+
+
+                <p>
+                    Calculate your percentage quickly
+                    using obtained and total marks.
+                </p>
+
+
+                <input
+                    type="number"
+                    id="number"
+                    placeholder="Obtained marks"
+                >
+
+
+                <input
+                    type="number"
+                    id="total"
+                    placeholder="Total marks"
+                >
+
+
+                <button id="calculateBtn">
+                    Calculate
+                </button>
+
+
+                <h4 id="result"></h4>
+
+            </div>
+
+
+
+            <!-- CGPA -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    🎓
+                </div>
+
+
+                <h3>
+                    CGPA Calculator
+                </h3>
+
+
+                <p>
+                    Calculate your CGPA easily.
+                </p>
+
+
+                <input
+                    type="number"
+                    id="gradePoints"
+                    placeholder="Total Grade Points"
+                    step="0.01"
+                >
+
+
+                <input
+                    type="number"
+                    id="subjects"
+                    placeholder="Number of Subjects"
+                >
+
+
+                <button id="cgpaBtn">
+                    Calculate CGPA
+                </button>
+
+
+                <h4 id="cgpaResult"></h4>
+
+            </div>
+
+
+
+            <!-- AGE -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    📅
+                </div>
+
+
+                <h3>
+                    Age Calculator
+                </h3>
+
+
+                <p>
+                    Calculate your exact age
+                    from your date of birth.
+                </p>
+
+
+                <input
+                    type="date"
+                    id="birthDate"
+                >
+
+
+                <button id="ageBtn">
+                    Calculate Age
+                </button>
+
+
+                <h4 id="ageResult"></h4>
+
+            </div>
+
+
+
+            <!-- STUDY TIMER -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    ⏱️
+                </div>
+
+
+                <h3>
+                    Study Timer
+                </h3>
+
+
+                <p>
+                    Focus during your study sessions.
+                </p>
+
+
+                <h2 id="timer">
+                    25:00
+                </h2>
+
+
+                <button id="startTimer">
+                    Start
+                </button>
+
+
+                <button id="pauseTimer">
+                    Pause
+                </button>
+
+
+                <button id="resetTimer">
+                    Reset
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= STUDY TOOLS ================= -->
+
+    <section
+        class="tools"
+        id="study"
+    >
+
+        <h2>
+            Study Tools
+        </h2>
+
+
+        <p class="section-description">
+            Tools that can make studying easier.
+        </p>
+
+
+        <div class="tool-container">
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    📚
+                </div>
+
+
+                <h3>
+                    Study Planner
+                </h3>
+
+
+                <p>
+                    Create a simple daily
+                    study schedule.
+                </p>
+
+
+                <button>
+                    Open Tool
+                </button>
+
+            </div>
+
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    📝
+                </div>
+
+
+                <h3>
+                    Quiz Practice
+                </h3>
+
+
+                <p>
+                    Practice questions and
+                    test your knowledge.
+                </p>
+
+
+                <button>
+                    Start Quiz
+                </button>
+
+            </div>
+
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    🔢
+                </div>
+
+
+                <h3>
+                    Unit Converter
+                </h3>
+
+
+                <p>
+                    Convert common units
+                    quickly and easily.
+                </p>
+
+
+                <button>
+                    Open Tool
+                </button>
+
+            </div>
+
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    🔤
+                </div>
+
+
+                <h3>
+                    Word Counter
+                </h3>
+
+
+                <p>
+                    Count words and characters
+                    in your text.
+                </p>
+
+
+                <button>
+                    Open Tool
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= CODING TOOLS ================= -->
+
+    <section
+        class="tools"
+        id="coding"
+    >
+
+        <h2>
+            Coding Tools
+        </h2>
+
+
+        <p class="section-description">
+            Practice coding directly from your browser.
+        </p>
+
+
+        <div class="tool-container">
+
+
+            <!-- HTML EDITOR -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    💻
+                </div>
+
+
+                <h3>
+                    HTML / CSS / JS Editor
+                </h3>
+
+
+                <p>
+                    Write HTML, CSS and JavaScript
+                    and preview your website.
+                </p>
+
+
+                <button id="openEditor">
+                    Open Editor
+                </button>
+
+            </div>
+
+
+
+            <!-- C/C++ -->
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    ⚙️
+                </div>
+
+
+                <h3>
+                    C / C++ Compiler
+                </h3>
+
+
+                <p>
+                    Write and run C and C++
+                    programs online.
+                </p>
+
+
+                <button>
+                    Open Compiler
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= RESOURCES ================= -->
+
+    <section
+        class="tools"
+        id="resources"
+    >
+
+        <h2>
+            Student Resources
+        </h2>
+
+
+        <p class="section-description">
+            Helpful resources for learning
+            and preparation.
+        </p>
+
+
+        <div class="tool-container">
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    📖
+                </div>
+
+
+                <h3>
+                    Notes
+                </h3>
+
+
+                <p>
+                    Find useful study notes
+                    and learning material.
+                </p>
+
+
+                <button>
+                    Explore
+                </button>
+
+            </div>
+
+
+
+            <div class="tool-card">
+
+                <div class="tool-icon">
+                    📋
+                </div>
+
+
+                <h3>
+                    Important Questions
+                </h3>
+
+
+                <p>
+                    Practice important questions
+                    for your exams.
+                </p>
+
+
+                <button>
+                    Explore
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- ================= FULL SCREEN EDITOR ================= -->
+
+<section
+    id="editorPage"
+    class="editor-page"
+>
+
+
+    <div class="editor-header">
+
+        <button id="closeEditor">
+            ← Back
+        </button>
+
+
+        <h2>
+            HTML / CSS / JS Editor
+        </h2>
+
+    </div>
+
+
+    <p class="editor-description">
+        Write your code and run it instantly.
+    </p>
+
+
+
+    <div class="editor-container">
+
+
+        <!-- HTML -->
+
+        <div class="editor-box">
+
+            <h3>
+                HTML
+            </h3>
+
+
+            <textarea id="htmlCode"><h1>Hello World!</h1>
+<p>Welcome to StudyToolsHub</p></textarea>
+
+        </div>
+
+
+
+        <!-- CSS -->
+
+        <div class="editor-box">
+
+            <h3>
+                CSS
+            </h3>
+
+
+            <textarea id="cssCode">h1 {
+    color: blue;
+}</textarea>
+
+        </div>
+
+
+
+        <!-- JAVASCRIPT -->
+
+        <div class="editor-box">
+
+            <h3>
+                JavaScript
+            </h3>
+
+
+            <textarea id="jsCode">console.log("Hello!");</textarea>
+
+        </div>
+
+
+    </div>
+
+
+
+    <button id="runCode">
+        ▶ Run Code
+    </button>
+
+
+
+    <h3 class="preview-title">
+        Preview
+    </h3>
+
+
+    <iframe
+        id="preview"
+        title="Code Preview"
+    ></iframe>
+
+
+</section>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <h2>
+        StudyToolsHub
+    </h2>
+
+
+    <p>
+        Useful tools for students,
+        all in one place.
+    </p>
+
+
+    <div class="footer-links">
+
+        <a href="#home">
+            Home
+        </a>
+
+
+        <a href="#">
+            About
+        </a>
+
+
+        <a href="#">
+            Contact
+        </a>
+
+
+        <a href="#">
+            Privacy Policy
+        </a>
+
+    </div>
+
+
+    <p>
+        © 2026 StudyToolsHub.
+        All rights reserved.
+    </p>
+
+</footer>
+
+
+
+<!-- JAVASCRIPT FILE -->
+
+<script src="script.js"></script>
+
+</body>
+
+  </html>
