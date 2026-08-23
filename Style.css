@@ -1,0 +1,508 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+
+/* ================= HEADER ================= */
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 6%;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    flex-wrap: wrap;
+    gap: 20px;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo h1 {
+    font-size: 25px;
+}
+
+.logo p {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #60a5fa;
+}
+
+
+/* ================= HERO ================= */
+
+.hero {
+    background: white;
+    text-align: center;
+    padding: 90px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.hero-badge {
+    display: inline-block;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    padding: 7px 15px;
+    border-radius: 30px;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    margin-bottom: 20px;
+}
+
+.hero h2 {
+    font-size: 48px;
+    line-height: 1.15;
+
+    max-width: 800px;
+    margin: auto;
+
+    color: #111827;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 20px auto;
+
+    color: #6b7280;
+    font-size: 18px;
+}
+
+
+/* ================= SEARCH ================= */
+
+.search-box {
+    max-width: 600px;
+
+    margin: 35px auto 0;
+
+    display: flex;
+
+    background: white;
+
+    padding: 6px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 12px;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+.search-box input {
+    flex: 1;
+
+    border: none;
+    outline: none;
+
+    padding: 14px;
+
+    font-size: 16px;
+
+    min-width: 0;
+}
+
+
+/* ================= BUTTON ================= */
+
+button {
+    border: none;
+
+    background: #2563eb;
+    color: white;
+
+    padding: 12px 20px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    margin-top: 18px;
+
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+
+/* ================= TOOLS ================= */
+
+.tools {
+    padding: 70px 6%;
+}
+
+.tools > h2 {
+    text-align: center;
+
+    font-size: 34px;
+
+    color: #111827;
+}
+
+.section-description {
+    text-align: center;
+
+    color: #6b7280;
+
+    margin: 10px auto 35px;
+}
+
+.tool-container {
+    max-width: 1000px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+.tool-card {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
+    transition: 0.3s;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+}
+
+.tool-icon {
+    font-size: 35px;
+
+    margin-bottom: 12px;
+}
+
+.tool-card h3 {
+    font-size: 21px;
+
+    margin-bottom: 10px;
+}
+
+.tool-card p {
+    color: #6b7280;
+
+    margin-bottom: 15px;
+}
+
+.tool-card input {
+    width: 100%;
+
+    padding: 12px;
+
+    margin-top: 10px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 15px;
+}
+
+.tool-card input:focus {
+    border-color: #2563eb;
+}
+
+.tool-card h4 {
+    margin-top: 15px;
+
+    color: #2563eb;
+}
+
+
+/* ================= FULL SCREEN EDITOR ================= */
+
+.editor-page {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100vh;
+
+    overflow-y: auto;
+
+    background: #f5f7fb;
+
+    z-index: 9999;
+
+    padding: 30px 6%;
+}
+
+.editor-header {
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+}
+
+.editor-header button {
+    margin-top: 0;
+}
+
+.editor-header h2 {
+    color: #111827;
+}
+
+.editor-description {
+    max-width: 1100px;
+
+    margin: 15px auto 30px;
+
+    color: #6b7280;
+}
+
+.editor-container {
+    max-width: 1100px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.editor-box {
+    background: #111827;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+}
+
+.editor-box h3 {
+    color: white;
+
+    padding: 12px 15px;
+
+    font-size: 16px;
+
+    background: #1f2937;
+}
+
+.editor-box textarea {
+    width: 100%;
+
+    height: 250px;
+
+    resize: vertical;
+
+    border: none;
+
+    outline: none;
+
+    padding: 15px;
+
+    background: #0b1220;
+
+    color: #e5e7eb;
+
+    font-family: monospace;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* ================= RUN BUTTON ================= */
+
+#runCode {
+    display: block;
+
+    margin: 25px auto 0;
+
+    padding: 13px 28px;
+
+    font-size: 16px;
+}
+
+
+/* ================= PREVIEW ================= */
+
+.preview-title {
+    max-width: 1100px;
+
+    margin: 40px auto 15px;
+
+    color: #111827;
+}
+
+#preview {
+    display: block;
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    height: 350px;
+
+    margin: auto;
+
+    background: white;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 12px;
+}
+
+
+/* ================= FOOTER ================= */
+
+footer {
+    text-align: center;
+
+    background: #111827;
+
+    color: white;
+
+    padding: 35px 20px;
+
+    margin-top: 30px;
+}
+
+footer h2 {
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #d1d5db;
+}
+
+.footer-links {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+    margin: 20px 0;
+}
+
+.footer-links a {
+    color: white;
+
+    text-decoration: none;
+}
+
+.footer-links a:hover {
+    color: #60a5fa;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 800px) {
+
+    header {
+        justify-content: center;
+
+        text-align: center;
+    }
+
+    nav {
+        justify-content: center;
+
+        gap: 12px;
+    }
+
+    .hero {
+        padding: 60px 20px;
+    }
+
+    .hero h2 {
+        font-size: 32px;
+    }
+
+    .tool-container {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-container {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-page {
+        padding: 20px;
+    }
+
+    .editor-header {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+
+    .search-box {
+        flex-direction: column;
+
+        padding: 10px;
+    }
+
+    .search-box button {
+        width: 100%;
+    }
+}
