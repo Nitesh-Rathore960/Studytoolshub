@@ -39,96 +39,101 @@ document.addEventListener("DOMContentLoaded", function () {
             "%";
     });
 
+document.addEventListener("DOMContentLoaded", function () {
 
-  /* =========================
-   CGPA CALCULATOR
-========================= */
+    /* =========================
+       CGPA CALCULATOR
+    ========================= */
 
-const cgpaBtn = document.getElementById("cgpaBtn");
-const addSubjectBtn = document.getElementById("addSubjectBtn");
-const cgpaSubjects = document.getElementById("cgpaSubjects");
-const cgpaResult = document.getElementById("cgpaResult");
-
-
-/* ADD SUBJECT */
-
-addSubjectBtn.addEventListener("click", function () {
-
-    const row = document.createElement("div");
-
-    row.className = "cgpa-row";
-
-    row.innerHTML = `
-        <input
-            type="text"
-            placeholder="Subject"
-            class="cgpa-subject"
-        >
-
-        <input
-            type="number"
-            placeholder="Credits"
-            class="cgpa-credit"
-            min="1"
-        >
-
-        <input
-            type="number"
-            placeholder="Grade Point"
-            class="cgpa-grade"
-            min="0"
-            max="10"
-            step="0.1"
-        >
-    `;
-
-    cgpaSubjects.appendChild(row);
-
-});
+    const cgpaBtn = document.getElementById("cgpaBtn");
+    const addSubjectBtn = document.getElementById("addSubjectBtn");
+    const cgpaSubjects = document.getElementById("cgpaSubjects");
+    const cgpaResult = document.getElementById("cgpaResult");
 
 
-/* CALCULATE CGPA */
+    /* ADD SUBJECT */
 
-cgpaBtn.addEventListener("click", function () {
+    addSubjectBtn.addEventListener("click", function () {
 
-    const credits =
-        document.querySelectorAll(".cgpa-credit");
+        const row = document.createElement("div");
 
-    const grades =
-        document.querySelectorAll(".cgpa-grade");
+        row.className = "cgpa-row";
 
-    let totalCredits = 0;
-    let totalPoints = 0;
+        row.innerHTML = `
+            <input
+                type="text"
+                placeholder="Subject"
+                class="cgpa-subject"
+            >
 
-    for (let i = 0; i < credits.length; i++) {
+            <input
+                type="number"
+                placeholder="Credits"
+                class="cgpa-credit"
+                min="1"
+            >
 
-        const credit = Number(credits[i].value);
-        const grade = Number(grades[i].value);
+            <input
+                type="number"
+                placeholder="Grade Point"
+                class="cgpa-grade"
+                min="0"
+                max="10"
+                step="0.1"
+            >
+        `;
 
-        if (credit <= 0 || grade < 0 || grade > 10) {
+        cgpaSubjects.appendChild(row);
+    });
+
+
+    /* CALCULATE CGPA */
+
+    cgpaBtn.addEventListener("click", function () {
+
+        const credits =
+            document.querySelectorAll(".cgpa-credit");
+
+        const grades =
+            document.querySelectorAll(".cgpa-grade");
+
+        let totalCredits = 0;
+        let totalPoints = 0;
+
+        for (let i = 0; i < credits.length; i++) {
+
+            const credit = Number(credits[i].value);
+            const grade = Number(grades[i].value);
+
+            if (
+                credit <= 0 ||
+                grade < 0 ||
+                grade > 10
+            ) {
+                cgpaResult.innerText =
+                    "Please enter valid values.";
+                return;
+            }
+
+            totalCredits += credit;
+            totalPoints += credit * grade;
+        }
+
+        if (totalCredits === 0) {
             cgpaResult.innerText =
-                "Please enter valid values.";
+                "Please enter credits and grade points.";
             return;
         }
 
-        totalCredits += credit;
-        totalPoints += credit * grade;
-    }
+        const cgpa =
+            totalPoints / totalCredits;
 
-    if (totalCredits === 0) {
         cgpaResult.innerText =
-            "Please enter credits and grade points.";
-        return;
-    }
-
-    const cgpa =
-        totalPoints / totalCredits;
-
-    cgpaResult.innerText =
-        "Your CGPA is: " + cgpa.toFixed(2);
+            "Your CGPA is: " + cgpa.toFixed(2);
+    });
 
 });
-
+     
 
     /* =========================
        AGE CALCULATOR
