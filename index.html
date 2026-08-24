@@ -160,50 +160,63 @@
             </div>
 
 
+      <!-- CGPA -->
 
-            <!-- CGPA -->
+<div class="tool-card">
 
-            <div class="tool-card">
+    <div class="tool-icon">
+        🎓
+    </div>
 
-                <div class="tool-icon">
-                    🎓
+    <h3>
+        CGPA Calculator
+    </h3>
+
+    <p>
+        Enter subject credits and grade points.
+    </p>
+
+    <div id="cgpaSubjects">
+
+        <div class="cgpa-row">
+
+            <input
+                type="text"
+                placeholder="Subject"
+                class="cgpa-subject"
+            >
+
+            <input
+                type="number"
+                placeholder="Credits"
+                class="cgpa-credit"
+                min="1"
+            >
+
+            <input
+                type="number"
+                placeholder="Grade Point"
+                class="cgpa-grade"
+                min="0"
+                max="10"
+                step="0.1"
+            >
+
+        </div>
+
+    </div>
+
+    <button id="addSubjectBtn">
+        + Add Subject
+    </button>
+
+    <button id="cgpaBtn">
+        Calculate CGPA
+    </button>
+
+    <h4 id="cgpaResult"></h4>
+
                 </div>
-
-
-                <h3>
-                    CGPA Calculator
-                </h3>
-
-
-                <p>
-                    Calculate your CGPA easily.
-                </p>
-
-
-                <input
-                    type="number"
-                    id="gradePoints"
-                    placeholder="Total Grade Points"
-                    step="0.01"
-                >
-
-
-                <input
-                    type="number"
-                    id="subjects"
-                    placeholder="Number of Subjects"
-                >
-
-
-                <button id="cgpaBtn">
-                    Calculate CGPA
-                </button>
-
-
-                <h4 id="cgpaResult"></h4>
-
-            </div>
-
 
 
             <!-- AGE -->
