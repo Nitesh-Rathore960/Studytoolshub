@@ -40,95 +40,75 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     /* =========================
-       CGPA CALCULATOR
-    ========================= */
+   CGPA CALCULATOR
+========================= */
 
-    const cgpaBtn = document.getElementById("cgpaBtn");
-    const addSubjectBtn = document.getElementById("addSubjectBtn");
-    const cgpaSubjects = document.getElementById("cgpaSubjects");
-    const cgpaResult = document.getElementById("cgpaResult");
+const addSubjectBtn = document.getElementById("addSubjectBtn");
+const cgpaBtn = document.getElementById("cgpaBtn");
 
+addSubjectBtn.onclick = function () {
 
-    /* ADD SUBJECT */
+    const row = document.createElement("div");
 
-    addSubjectBtn.addEventListener("click", function () {
+    row.className = "cgpa-row";
 
-        const row = document.createElement("div");
+    row.innerHTML = `
+        <input type="text" placeholder="Subject" class="cgpa-subject">
 
-        row.className = "cgpa-row";
+        <input type="number"
+               placeholder="Credits"
+               class="cgpa-credit"
+               min="1">
 
-        row.innerHTML = `
-            <input
-                type="text"
-                placeholder="Subject"
-                class="cgpa-subject"
-            >
+        <input type="number"
+               placeholder="Grade Point"
+               class="cgpa-grade"
+               min="0"
+               max="10"
+               step="0.1">
+    `;
 
-            <input
-                type="number"
-                placeholder="Credits"
-                class="cgpa-credit"
-                min="1"
-            >
-
-            <input
-                type="number"
-                placeholder="Grade Point"
-                class="cgpa-grade"
-                min="0"
-                max="10"
-                step="0.1"
-            >
-        `;
-
-        cgpaSubjects.appendChild(row);
-    });
+    document.getElementById("cgpaSubjects").appendChild(row);
+};
 
 
-    /* CALCULATE CGPA */
+cgpaBtn.onclick = function () {
 
-    cgpaBtn.addEventListener("click", function () {
+    const credits =
+        document.querySelectorAll(".cgpa-credit");
 
-        const credits =
-            document.querySelectorAll(".cgpa-credit");
+    const grades =
+        document.querySelectorAll(".cgpa-grade");
 
-        const grades =
-            document.querySelectorAll(".cgpa-grade");
+    let totalCredits = 0;
+    let totalPoints = 0;
 
-        let totalCredits = 0;
-        let totalPoints = 0;
+    for (let i = 0; i < credits.length; i++) {
 
-        for (let i = 0; i < credits.length; i++) {
+        const credit = Number(credits[i].value);
+        const grade = Number(grades[i].value);
 
-            const credit = Number(credits[i].value);
-            const grade = Number(grades[i].value);
-
-            if (
-                credit <= 0 ||
-                grade < 0 ||
-                grade > 10
-            ) {
-                cgpaResult.innerText =
-                    "Please enter valid values.";
-                return;
-            }
-
-            totalCredits += credit;
-            totalPoints += credit * grade;
-        }
-
-        if (totalCredits === 0) {
-            cgpaResult.innerText =
-                "Please enter credits and grade points.";
+        if (credit <= 0 || grade < 0 || grade > 10) {
+            document.getElementById("cgpaResult").innerText =
+                "Please enter valid values.";
             return;
         }
 
-        const cgpa =
-            totalPoints / totalCredits;
+        totalCredits += credit;
+        totalPoints += credit * grade;
+    }
 
-        cgpaResult.innerText =
-            "Your CGPA is: " + cgpa.toFixed(2);
-    });
+    if (totalCredits === 0) {
+        document.getElementById("cgpaResult").innerText =
+            "Please enter credits and grade points.";
+        return;
+    }
+
+    const cgpa = totalPoints / totalCredits;
+
+    document.getElementById("cgpaResult").innerText =
+        "Your CGPA is: " + cgpa.toFixed(2);
+};
      
 
     /* =========================
