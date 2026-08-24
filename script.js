@@ -40,37 +40,94 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    /* =========================
-       CGPA CALCULATOR
-    ========================= */
+  /* =========================
+   CGPA CALCULATOR
+========================= */
 
-    const cgpaBtn =
-        document.getElementById("cgpaBtn");
+const cgpaBtn = document.getElementById("cgpaBtn");
+const addSubjectBtn = document.getElementById("addSubjectBtn");
+const cgpaSubjects = document.getElementById("cgpaSubjects");
+const cgpaResult = document.getElementById("cgpaResult");
 
-    cgpaBtn.addEventListener("click", function () {
 
-        const gradePoints =
-            Number(document.getElementById("gradePoints").value);
+/* ADD SUBJECT */
 
-        const subjects =
-            Number(document.getElementById("subjects").value);
+addSubjectBtn.addEventListener("click", function () {
 
-        const result =
-            document.getElementById("cgpaResult");
+    const row = document.createElement("div");
 
-        if (gradePoints <= 0 || subjects <= 0) {
-            result.innerText =
+    row.className = "cgpa-row";
+
+    row.innerHTML = `
+        <input
+            type="text"
+            placeholder="Subject"
+            class="cgpa-subject"
+        >
+
+        <input
+            type="number"
+            placeholder="Credits"
+            class="cgpa-credit"
+            min="1"
+        >
+
+        <input
+            type="number"
+            placeholder="Grade Point"
+            class="cgpa-grade"
+            min="0"
+            max="10"
+            step="0.1"
+        >
+    `;
+
+    cgpaSubjects.appendChild(row);
+
+});
+
+
+/* CALCULATE CGPA */
+
+cgpaBtn.addEventListener("click", function () {
+
+    const credits =
+        document.querySelectorAll(".cgpa-credit");
+
+    const grades =
+        document.querySelectorAll(".cgpa-grade");
+
+    let totalCredits = 0;
+    let totalPoints = 0;
+
+    for (let i = 0; i < credits.length; i++) {
+
+        const credit = Number(credits[i].value);
+        const grade = Number(grades[i].value);
+
+        if (credit <= 0 || grade < 0 || grade > 10) {
+            cgpaResult.innerText =
                 "Please enter valid values.";
             return;
         }
 
-        const cgpa =
-            gradePoints / subjects;
+        totalCredits += credit;
+        totalPoints += credit * grade;
+    }
 
-        result.innerText =
-            "Your CGPA is: " +
-            cgpa.toFixed(2);
-    });
+    if (totalCredits === 0) {
+        cgpaResult.innerText =
+            "Please enter credits and grade points.";
+        return;
+    }
+
+    const cgpa =
+        totalPoints / totalCredits;
+
+    cgpaResult.innerText =
+        "Your CGPA is: " + cgpa.toFixed(2);
+
+});
 
 
     /* =========================
