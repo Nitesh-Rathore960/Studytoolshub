@@ -506,3 +506,40 @@ footer p {
         width: 100%;
     }
 }
+
+/* =========================
+   CGPA CALCULATOR
+========================= */
+
+#cgpaSubjects {
+    width: 100%;
+    margin: 15px 0;
+}
+
+.cgpa-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.cgpa-row input {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+
+    .cgpa-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cgpa-row input {
+        width: 100%;
+        min-width: 0;
+    }
+
+    }
