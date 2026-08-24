@@ -39,8 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
             "%";
     });
 
-document.addEventListener("DOMContentLoaded", function () {
-
     /* =========================
        CGPA CALCULATOR
     ========================= */
@@ -131,8 +129,6 @@ document.addEventListener("DOMContentLoaded", function () {
         cgpaResult.innerText =
             "Your CGPA is: " + cgpa.toFixed(2);
     });
-
-});
      
 
     /* =========================
