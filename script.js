@@ -1759,8 +1759,1662 @@ if (clearWordText) {
 
 updateWordCounter();
 
+/* ==========================================
+   SCIENTIFIC CALCULATOR - PART 1
+   CORE CALCULATOR
+========================================== */
 
-  
+(() => {
+
+    const page = document.getElementById("scientificCalculatorPage");
+
+    if (!page) return;
+
+    const expressionBox =
+        document.getElementById("scientificExpression");
+
+    const answerBox =
+        document.getElementById("scientificAnswer");
+
+    const openBtn =
+        document.getElementById("openScientificCalculator");
+
+    const closeBtn =
+        document.getElementById("closeScientificCalculator");
+
+    let expression = "";
+    let answer = 0;
+
+    /* =========================
+       OPEN / CLOSE
+    ========================= */
+
+    if (openBtn) {
+        openBtn.addEventListener("click", () => {
+
+            document.getElementById("homePage").style.display = "none";
+
+            page.style.display = "block";
+
+            document.body.style.overflow = "hidden";
+
+            window.scrollTo(0, 0);
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+
+            page.style.display = "none";
+
+            document.getElementById("homePage").style.display = "block";
+
+            document.body.style.overflow = "";
+        });
+    }
+
+    /* =========================
+       DISPLAY
+    ========================= */
+
+    function updateDisplay() {
+
+        expressionBox.innerText =
+            expression || "0";
+
+        answerBox.innerText =
+            String(answer);
+    }
+
+    /* =========================
+       FACTORIAL
+    ========================= */
+
+    function factorial(n) {
+
+        if (!Number.isFinite(n)) {
+            throw new Error("Invalid factorial");
+        }
+
+        if (n < 0 || !Number.isInteger(n)) {
+            throw new Error("Factorial needs a positive integer");
+        }
+
+        if (n > 170) {
+            throw new Error("Number too large");
+        }
+
+        let result = 1;
+
+        for (let i = 2; i <= n; i++) {
+            result *= i;
+        }
+
+        return result;
+    }
+
+    /* =========================
+       TOKENIZER
+    ========================= */
+
+    function tokenize(text) {
+
+        const tokens = [];
+
+        let i = 0;
+
+        while (i < text.length) {
+
+            const char = text[i];
+
+            if (/\s/.test(char)) {
+                i++;
+                continue;
+            }
+
+            if (/[0-9.]/.test(char)) {
+
+                let number = "";
+
+                while (
+                    i < text.length &&
+                    /[0-9.]/.test(text[i])
+                ) {
+                    number += text[i];
+                    i++;
+                }
+
+                const value = Number(number);
+
+                if (!Number.isFinite(value)) {
+                    throw new Error("Invalid number");
+                }
+
+                tokens.push({
+                    type: "number",
+                    value: value
+                });
+
+                continue;
+            }
+
+            if (char === "π") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.PI
+                });
+
+                i++;
+                continue;
+            }
+
+            if (char === "e") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.E
+                });
+
+                i++;
+                continue;
+            }
+
+            if (char === "A" && text.slice(i, i + 3) === "Ans") {
+
+                tokens.push({
+                    type: "number",
+                    value: answer
+                });
+
+                i += 3;
+                continue;
+            }
+
+            if ("+-*/^()!%".includes(char)) {
+
+                tokens.push({
+                    type: char,
+                    value: char
+                });
+
+                i++;
+                continue;
+            }
+
+            throw new Error("Invalid character");
+
+        }
+
+        return tokens;
+    }
+
+    /* =========================
+       PARSER
+    ========================= */
+
+    function calculate(text) {
+
+        const tokens = tokenize(text);
+
+        let position = 0;
+
+        function current() {
+            return tokens[position];
+        }
+
+        function eat(type) {
+
+            if (
+                current() &&
+                current().type === type
+            ) {
+                position++;
+                return true;
+            }
+
+            return false;
+        }
+
+        function primary() {
+
+            if (eat("+")) {
+                return primary();
+            }
+
+            if (eat("-")) {
+                return -primary();
+            }
+
+            if (eat("(")) {
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "number"
+            ) {
+
+                const value = current().value;
+
+                position++;
+
+                return value;
+            }
+
+            throw new Error("Invalid expression");
+        }
+
+        function postfix() {
+
+            let value = primary();
+
+            while (true) {
+
+                if (eat("!")) {
+                    value = factorial(value);
+                    continue;
+                }
+
+                if (eat("%")) {
+                    value = value / 100;
+                    continue;
+                }
+
+                break;
+            }
+
+            return value;
+        }
+
+        function power() {
+
+            let value = postfix();
+
+            if (eat("^")) {
+
+                const exponent = power();
+
+                value = Math.pow(value, exponent);
+            }
+
+            return value;
+        }
+
+        function multiplyDivide() {
+
+            let value = power();
+
+            while (true) {
+
+                if (eat("*")) {
+
+                    value *= power();
+
+                } else if (eat("/")) {
+
+                    const divisor = power();
+
+                    if (divisor === 0) {
+                        throw new Error("Cannot divide by zero");
+                    }
+
+                    value /= divisor;
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        function addSub() {
+
+            let value = multiplyDivide();
+
+            while (true) {
+
+                if (eat("+")) {
+
+                    value += multiplyDivide();
+
+                } else if (eat("-")) {
+
+                    value -= multiplyDivide();
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        const result = addSub();
+
+        if (position !== tokens.length) {
+            throw new Error("Invalid expression");
+        }
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Math error");
+        }
+
+        return result;
+    }
+
+    /* =========================
+       BUTTON HANDLER
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const value =
+            button.dataset.value;
+
+        const key =
+            button.dataset.key;
+
+        /* ---------- NUMBER / OPERATOR ---------- */
+
+        if (value !== undefined) {
+
+            if (value === "^2") {
+
+                expression += "^2";
+
+            } else if (value === "^3") {
+
+                expression += "^3";
+
+            } else {
+
+                expression += value;
+            }
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- CLEAR ---------- */
+
+        if (key === "clear") {
+
+            expression = "";
+
+            answer = 0;
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- DELETE ---------- */
+
+        if (key === "delete") {
+
+            expression =
+                expression.slice(0, -1);
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- ANS ---------- */
+
+        if (key === "ans") {
+
+            expression += "Ans";
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- EQUALS ---------- */
+
+        if (key === "equals") {
+
+            if (!expression.trim()) {
+                return;
+            }
+
+            try {
+
+                const result =
+                    calculate(expression);
+
+                answer = result;
+
+                answerBox.innerText =
+                    Number.isInteger(result)
+                        ? result
+                        : Number(result.toFixed(12));
+
+            } catch (error) {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+
+            return;
+        }
+
+        /* ---------- RECIPROCAL ---------- */
+
+        if (key === "reciprocal") {
+
+            try {
+
+                const result =
+                    calculate(expression);
+
+                if (result === 0) {
+                    answerBox.innerText =
+                        "Math Error";
+                    return;
+                }
+
+                answer = 1 / result;
+
+                answerBox.innerText =
+                    Number(answer.toFixed(12));
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+
+        }
+
+    });
+
+    /* =========================
+       INITIAL DISPLAY
+    ========================= */
+
+    updateDisplay();
+
+})();
+
+/* ==========================================
+   SCIENTIFIC CALCULATOR - PART 2
+   SCIENTIFIC FUNCTIONS + MEMORY + HISTORY
+========================================== */
+
+(() => {
+
+    const page =
+        document.getElementById("scientificCalculatorPage");
+
+    if (!page) return;
+
+    const expressionBox =
+        document.getElementById("scientificExpression");
+
+    const answerBox =
+        document.getElementById("scientificAnswer");
+
+    const shiftStatus =
+        document.getElementById("shiftStatus");
+
+    const alphaStatus =
+        document.getElementById("alphaStatus");
+
+    const angleStatus =
+        document.getElementById("angleStatus");
+
+    const historyList =
+        document.getElementById("scientificHistoryList");
+
+    let memory = 0;
+    let shift = false;
+    let alpha = false;
+    let angle = "DEG";
+
+    let history = [];
+
+    /* =========================
+       ANGLE CONVERSION
+    ========================= */
+
+    function toRadians(value) {
+
+        if (angle === "DEG") {
+            return value * Math.PI / 180;
+        }
+
+        if (angle === "GRAD") {
+            return value * Math.PI / 200;
+        }
+
+        return value;
+    }
+
+    function fromRadians(value) {
+
+        if (angle === "DEG") {
+            return value * 180 / Math.PI;
+        }
+
+        if (angle === "GRAD") {
+            return value * 200 / Math.PI;
+        }
+
+        return value;
+    }
+
+    /* =========================
+       FACTORIAL
+    ========================= */
+
+    function fact(n) {
+
+        if (
+            n < 0 ||
+            !Number.isInteger(n) ||
+            n > 170
+        ) {
+            throw new Error("Invalid factorial");
+        }
+
+        let r = 1;
+
+        for (let i = 2; i <= n; i++) {
+            r *= i;
+        }
+
+        return r;
+    }
+
+    /* =========================
+       TOKENIZER
+    ========================= */
+
+    function tokenize(text) {
+
+        const tokens = [];
+
+        let i = 0;
+
+        while (i < text.length) {
+
+            const c = text[i];
+
+            if (/\s/.test(c)) {
+                i++;
+                continue;
+            }
+
+            if (/[0-9.]/.test(c)) {
+
+                let n = "";
+
+                while (
+                    i < text.length &&
+                    /[0-9.]/.test(text[i])
+                ) {
+                    n += text[i++];
+                }
+
+                const value = Number(n);
+
+                if (!Number.isFinite(value)) {
+                    throw new Error("Invalid number");
+                }
+
+                tokens.push({
+                    type: "number",
+                    value
+                });
+
+                continue;
+            }
+
+            if (text.startsWith("Ans", i)) {
+
+                tokens.push({
+                    type: "number",
+                    value: answerValue()
+                });
+
+                i += 3;
+                continue;
+            }
+
+            if (c === "π") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.PI
+                });
+
+                i++;
+                continue;
+            }
+
+            if (c === "e") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.E
+                });
+
+                i++;
+                continue;
+            }
+
+            if (/[a-zA-Z]/.test(c)) {
+
+                let name = "";
+
+                while (
+                    i < text.length &&
+                    /[a-zA-Z]/.test(text[i])
+                ) {
+                    name += text[i++];
+                }
+
+                tokens.push({
+                    type: "function",
+                    value: name
+                });
+
+                continue;
+            }
+
+            if ("+-*/^()!%".includes(c)) {
+
+                tokens.push({
+                    type: c,
+                    value: c
+                });
+
+                i++;
+                continue;
+            }
+
+            throw new Error("Invalid character");
+        }
+
+        return tokens;
+    }
+
+    /* =========================
+       ANSWER VALUE
+    ========================= */
+
+    function answerValue() {
+
+        const n =
+            Number(answerBox.innerText);
+
+        return Number.isFinite(n) ? n : 0;
+    }
+
+    /* =========================
+       SCIENTIFIC PARSER
+    ========================= */
+
+    function solve(text) {
+
+        const tokens = tokenize(text);
+
+        let pos = 0;
+
+        function current() {
+            return tokens[pos];
+        }
+
+        function eat(type) {
+
+            if (
+                current() &&
+                current().type === type
+            ) {
+                pos++;
+                return true;
+            }
+
+            return false;
+        }
+
+        function functionValue(name, value) {
+
+            switch (name) {
+
+                case "sin":
+                    return Math.sin(toRadians(value));
+
+                case "cos":
+                    return Math.cos(toRadians(value));
+
+                case "tan":
+                    return Math.tan(toRadians(value));
+
+                case "asin":
+                    return fromRadians(Math.asin(value));
+
+                case "acos":
+                    return fromRadians(Math.acos(value));
+
+                case "atan":
+                    return fromRadians(Math.atan(value));
+
+                case "log":
+                    return Math.log10(value);
+
+                case "ln":
+                    return Math.log(value);
+
+                case "sqrt":
+                    return Math.sqrt(value);
+
+                case "cbrt":
+                    return Math.cbrt(value);
+
+                case "abs":
+                    return Math.abs(value);
+
+                case "exp":
+                    return Math.exp(value);
+
+                default:
+                    throw new Error("Unknown function");
+            }
+        }
+
+        function primary() {
+
+            if (eat("+")) {
+                return primary();
+            }
+
+            if (eat("-")) {
+                return -primary();
+            }
+
+            if (eat("(")) {
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "number"
+            ) {
+
+                const value =
+                    current().value;
+
+                pos++;
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "function"
+            ) {
+
+                const name =
+                    current().value;
+
+                pos++;
+
+                if (!eat("(")) {
+                    throw new Error("Missing (");
+                }
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return functionValue(
+                    name,
+                    value
+                );
+            }
+
+            throw new Error("Invalid expression");
+        }
+
+        function postfix() {
+
+            let value = primary();
+
+            while (true) {
+
+                if (eat("!")) {
+
+                    value = fact(value);
+                    continue;
+                }
+
+                if (eat("%")) {
+
+                    value /= 100;
+                    continue;
+                }
+
+                break;
+            }
+
+            return value;
+        }
+
+        function power() {
+
+            let value = postfix();
+
+            if (eat("^")) {
+
+                value =
+                    Math.pow(
+                        value,
+                        power()
+                    );
+            }
+
+            return value;
+        }
+
+        function multiplyDivide() {
+
+            let value = power();
+
+            while (true) {
+
+                if (eat("*")) {
+
+                    value *= power();
+
+                } else if (eat("/")) {
+
+                    const divisor = power();
+
+                    if (divisor === 0) {
+                        throw new Error(
+                            "Cannot divide by zero"
+                        );
+                    }
+
+                    value /= divisor;
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        function addSub() {
+
+            let value =
+                multiplyDivide();
+
+            while (true) {
+
+                if (eat("+")) {
+
+                    value += multiplyDivide();
+
+                } else if (eat("-")) {
+
+                    value -= multiplyDivide();
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        const result = addSub();
+
+        if (pos !== tokens.length) {
+            throw new Error("Invalid expression");
+        }
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Math Error");
+        }
+
+        return result;
+    }
+
+    /* =========================
+       HISTORY
+    ========================= */
+
+    function addHistory(expr, result) {
+
+        history.unshift({
+            expression: expr,
+            result: result
+        });
+
+        if (history.length > 20) {
+            history.pop();
+        }
+
+        renderHistory();
+    }
+
+    function renderHistory() {
+
+        if (!historyList) return;
+
+        historyList.innerHTML = "";
+
+        history.forEach(item => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "history-item";
+
+            div.innerText =
+                item.expression +
+                " = " +
+                item.result;
+
+            historyList.appendChild(div);
+        });
+    }
+
+    /* =========================
+       SCIENTIFIC EQUALS
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const key =
+            button.dataset.key;
+
+        /* ---------- EQUALS ---------- */
+
+        if (key === "equals") {
+
+            const expr =
+                expressionBox.innerText.trim();
+
+            if (!expr || expr === "0") {
+                return;
+            }
+
+            try {
+
+                const result =
+                    solve(expr);
+
+                answerBox.innerText =
+                    Number.isInteger(result)
+                        ? result
+                        : Number(
+                            result.toFixed(12)
+                        );
+
+                addHistory(
+                    expr,
+                    answerBox.innerText
+                );
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+        }
+
+    });
+
+    /* =========================
+       ANGLE BUTTONS
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("[data-angle]");
+
+        if (!button) return;
+
+        angle =
+            button.dataset.angle;
+
+        if (angleStatus) {
+            angleStatus.innerText =
+                angle;
+        }
+    });
+
+    /* =========================
+       MEMORY
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const key =
+            button.dataset.key;
+
+        if (key === "memory") {
+
+            try {
+
+                memory +=
+                    solve(
+                        expressionBox.innerText
+                    );
+
+                answerBox.innerText =
+                    memory;
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+        }
+
+        if (key === "memoryRecall") {
+
+            expressionBox.innerText =
+                String(memory);
+        }
+
+    });
+
+    /* =========================
+       SHIFT
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(
+                '[data-key="shift"]'
+            );
+
+        if (!button) return;
+
+        shift = !shift;
+
+        if (shiftStatus) {
+            shiftStatus.innerText =
+                shift ? "SHIFT" : "";
+        }
+    });
+
+    /* =========================
+       ALPHA
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(
+                '[data-key="alpha"]'
+            );
+
+        if (!button) return;
+
+        alpha = !alpha;
+
+        if (alphaStatus) {
+            alphaStatus.innerText =
+                alpha ? "ALPHA" : "";
+        }
+    });
+
+    /* =========================
+       CLEAR HISTORY
+    ========================= */
+
+    const clearHistory =
+        document.getElementById(
+            "clearScientificHistory"
+        );
+
+    if (clearHistory) {
+
+        clearHistory.addEventListener(
+            "click",
+            function () {
+
+                history = [];
+
+                renderHistory();
+            }
+        );
+    }
+
+})();
+
+      /* ==========================================
+   SCIENTIFIC CALCULATOR - PART 3
+   EQN + STAT + MATRIX
+========================================== */
+
+(() => {
+
+    const page =
+        document.getElementById("scientificCalculatorPage");
+
+    if (!page) return;
+
+    /* =========================
+       MODE SWITCHING
+    ========================= */
+
+    const panels = {
+        calculate: document.getElementById("scientificCalcPanel"),
+        equation: document.getElementById("scientificEquationPanel"),
+        statistics: document.getElementById("scientificStatisticsPanel"),
+        matrix: document.getElementById("scientificMatrixPanel")
+    };
+
+    function showMode(mode) {
+
+        Object.keys(panels).forEach(name => {
+
+            if (panels[name]) {
+                panels[name].style.display =
+                    name === mode ? "block" : "none";
+            }
+        });
+
+        document
+            .querySelectorAll("[data-calc-mode]")
+            .forEach(btn => {
+
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.calcMode === mode
+                );
+            });
+    }
+
+    document
+        .querySelectorAll("[data-calc-mode]")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                showMode(button.dataset.calcMode);
+            });
+        });
+
+    showMode("calculate");
+
+
+    /* =========================
+       EQUATION MODE
+    ========================= */
+
+    const equationSelect =
+        document.getElementById("equationModeSelect");
+
+    const linearInputs =
+        document.getElementById("linearInputs");
+
+    const quadraticInputs =
+        document.getElementById("quadraticInputs");
+
+    function updateEquationMode() {
+
+        const mode =
+            equationSelect.value;
+
+        linearInputs.style.display =
+            mode === "linear"
+                ? "block"
+                : "none";
+
+        quadraticInputs.style.display =
+            mode === "quadratic"
+                ? "block"
+                : "none";
+    }
+
+    equationSelect.addEventListener(
+        "change",
+        updateEquationMode
+    );
+
+    updateEquationMode();
+
+
+    /* =========================
+       LINEAR EQUATION
+       ax + b = c
+    ========================= */
+
+    document
+        .getElementById("solveLinearEquation")
+        .addEventListener("click", () => {
+
+            const a =
+                Number(
+                    document.getElementById("linearA").value
+                );
+
+            const b =
+                Number(
+                    document.getElementById("linearB").value
+                );
+
+            const c =
+                Number(
+                    document.getElementById("linearC").value
+                );
+
+            const output =
+                document.getElementById("equationAnswer");
+
+            if (
+                !Number.isFinite(a) ||
+                !Number.isFinite(b) ||
+                !Number.isFinite(c)
+            ) {
+                output.innerText =
+                    "Please enter all values.";
+                return;
+            }
+
+            if (a === 0 && b === c) {
+
+                output.innerText =
+                    "Infinitely many solutions.";
+
+                return;
+            }
+
+            if (a === 0) {
+
+                output.innerText =
+                    "No solution.";
+
+                return;
+            }
+
+            const x =
+                (c - b) / a;
+
+            output.innerText =
+                "x = " + formatNumber(x);
+        });
+
+
+    /* =========================
+       QUADRATIC EQUATION
+       ax² + bx + c = 0
+    ========================= */
+
+    document
+        .getElementById("solveQuadraticEquation")
+        .addEventListener("click", () => {
+
+            const a =
+                Number(
+                    document.getElementById("quadraticA").value
+                );
+
+            const b =
+                Number(
+                    document.getElementById("quadraticB").value
+                );
+
+            const c =
+                Number(
+                    document.getElementById("quadraticC").value
+                );
+
+            const output =
+                document.getElementById("equationAnswer");
+
+            if (
+                !Number.isFinite(a) ||
+                !Number.isFinite(b) ||
+                !Number.isFinite(c)
+            ) {
+                output.innerText =
+                    "Please enter all values.";
+                return;
+            }
+
+            if (a === 0) {
+
+                if (b === 0) {
+
+                    output.innerText =
+                        c === 0
+                            ? "Infinitely many solutions."
+                            : "No solution.";
+
+                } else {
+
+                    output.innerText =
+                        "Linear solution: x = " +
+                        formatNumber(-c / b);
+                }
+
+                return;
+            }
+
+            const d =
+                b * b - 4 * a * c;
+
+            if (d > 0) {
+
+                const x1 =
+                    (-b + Math.sqrt(d)) /
+                    (2 * a);
+
+                const x2 =
+                    (-b - Math.sqrt(d)) /
+                    (2 * a);
+
+                output.innerText =
+                    "x₁ = " +
+                    formatNumber(x1) +
+                    "   x₂ = " +
+                    formatNumber(x2);
+
+            } else if (d === 0) {
+
+                const x =
+                    -b / (2 * a);
+
+                output.innerText =
+                    "x = " +
+                    formatNumber(x);
+
+            } else {
+
+                const real =
+                    -b / (2 * a);
+
+                const imaginary =
+                    Math.sqrt(-d) /
+                    Math.abs(2 * a);
+
+                output.innerText =
+                    "x₁ = " +
+                    formatNumber(real) +
+                    " + " +
+                    formatNumber(imaginary) +
+                    "i\n" +
+                    "x₂ = " +
+                    formatNumber(real) +
+                    " − " +
+                    formatNumber(imaginary) +
+                    "i";
+            }
+        });
+
+
+    /* =========================
+       STATISTICS
+    ========================= */
+
+    document
+        .getElementById("calculateStatisticsAdvanced")
+        .addEventListener("click", () => {
+
+            const input =
+                document.getElementById(
+                    "statisticsNumbers"
+                ).value;
+
+            const output =
+                document.getElementById(
+                    "statisticsAnswer"
+                );
+
+            const numbers =
+                input
+                    .split(/[\s,]+/)
+                    .map(Number)
+                    .filter(Number.isFinite);
+
+            if (!numbers.length) {
+
+                output.innerText =
+                    "Please enter valid numbers.";
+
+                return;
+            }
+
+            const sorted =
+                [...numbers].sort(
+                    (a, b) => a - b
+                );
+
+            const n =
+                numbers.length;
+
+            const sum =
+                numbers.reduce(
+                    (a, b) => a + b,
+                    0
+                );
+
+            const mean =
+                sum / n;
+
+            const median =
+                n % 2
+                    ? sorted[Math.floor(n / 2)]
+                    : (
+                        sorted[n / 2 - 1] +
+                        sorted[n / 2]
+                    ) / 2;
+
+            const frequencies = {};
+
+            numbers.forEach(x => {
+                frequencies[x] =
+                    (frequencies[x] || 0) + 1;
+            });
+
+            const maxFrequency =
+                Math.max(
+                    ...Object.values(frequencies)
+                );
+
+            let mode = "No mode";
+
+            if (maxFrequency > 1) {
+
+                mode =
+                    Object.keys(frequencies)
+                        .filter(
+                            x =>
+                                frequencies[x] ===
+                                maxFrequency
+                        )
+                        .join(", ");
+            }
+
+            const variance =
+                numbers.reduce(
+                    (total, x) =>
+                        total +
+                        Math.pow(x - mean, 2),
+                    0
+                ) / n;
+
+            const standardDeviation =
+                Math.sqrt(variance);
+
+            output.innerHTML =
+                "Count: " + n +
+                "<br>Sum: " + formatNumber(sum) +
+                "<br>Mean: " + formatNumber(mean) +
+                "<br>Median: " + formatNumber(median) +
+                "<br>Mode: " + mode +
+                "<br>Variance: " + formatNumber(variance) +
+                "<br>Standard Deviation: " +
+                formatNumber(standardDeviation);
+        });
+
+
+    /* =========================
+       MATRIX INPUTS
+    ========================= */
+
+    const matrixSize =
+        document.getElementById("matrixSize");
+
+    const matrixInputs =
+        document.getElementById("matrixInputs");
+
+    function createMatrix() {
+
+        const size =
+            Number(matrixSize.value);
+
+        matrixInputs.innerHTML = "";
+
+        for (let i = 0; i < size * size; i++) {
+
+            const input =
+                document.createElement("input");
+
+            input.type = "number";
+            input.className = "matrix-cell";
+            input.placeholder = "0";
+
+            matrixInputs.appendChild(input);
+        }
+    }
+
+    matrixSize.addEventListener(
+        "change",
+        createMatrix
+    );
+
+    createMatrix();
+
+
+    /* =========================
+       MATRIX DETERMINANT
+    ========================= */
+
+    document
+        .getElementById("calculateMatrix")
+        .addEventListener("click", () => {
+
+            const size =
+                Number(matrixSize.value);
+
+            const cells =
+                [...document.querySelectorAll(
+                    "#matrixInputs .matrix-cell"
+                )];
+
+            const values =
+                cells.map(input =>
+                    Number(input.value || 0)
+                );
+
+            let determinant;
+
+            if (size === 2) {
+
+                determinant =
+                    values[0] * values[3] -
+                    values[1] * values[2];
+
+            } else {
+
+                const a = values[0];
+                const b = values[1];
+                const c = values[2];
+                const d = values[3];
+                const e = values[4];
+                const f = values[5];
+                const g = values[6];
+                const h = values[7];
+                const i = values[8];
+
+                determinant =
+                    a * (e * i - f * h) -
+                    b * (d * i - f * g) +
+                    c * (d * h - e * g);
+            }
+
+            document
+                .getElementById("matrixAnswer")
+                .innerText =
+                    "Determinant = " +
+                    formatNumber(determinant);
+        });
+
+
+    /* =========================
+       NUMBER FORMAT
+    ========================= */
+
+    function formatNumber(value) {
+
+        if (!Number.isFinite(value)) {
+            return "Math Error";
+        }
+
+        if (Number.isInteger(value)) {
+            return String(value);
+        }
+
+        return Number(
+            value.toFixed(10)
+        ).toString();
+    }
+
+})();
+    
 });
 
                     
