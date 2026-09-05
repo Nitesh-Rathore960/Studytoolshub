@@ -115,6 +115,13 @@
 
         <div class="tool-container">
 
+         <!-- SCIENTIFIC CALCULATOR CARD -->
+<div class="tool-card">
+    <div class="tool-icon">🧮</div>
+    <h3>Scientific Calculator</h3>
+    <p>Advanced calculator for scientific, engineering and student calculations.</p>
+    <button id="openScientificCalculator">Open Calculator</button>
+</div> 
 
             <!-- PERCENTAGE -->
 
@@ -296,7 +303,6 @@
 
             </div>
 
-
         </div>
 
     </section>
@@ -323,29 +329,171 @@
         <div class="tool-container">
 
 
-            <div class="tool-card">
+  <!-- ================= STUDY PLANNER ================= -->
 
-                <div class="tool-icon">
-                    📚
-                </div>
+<div class="tool-card" id="studyPlanner">
+
+    <div class="tool-icon">
+        📚
+    </div>
+
+    <h3>Study Planner</h3>
+
+    <p>
+        Plan your study sessions, manage tasks
+        and track your progress.
+    </p>
+
+    <!-- SUBJECT -->
+    <input
+        type="text"
+        id="studySubject"
+        placeholder="Enter subject"
+    >
+
+    <!-- TASK -->
+    <input
+        type="text"
+        id="studyTask"
+        placeholder="Enter study task"
+    >
+
+    <!-- DATE -->
+    <input
+        type="date"
+        id="studyDate"
+    >
+
+    <!-- START TIME -->
+    <input
+        type="time"
+        id="studyStartTime"
+    >
+
+    <!-- END TIME -->
+    <input
+        type="time"
+        id="studyEndTime"
+    >
+
+    <!-- PRIORITY -->
+    <select id="studyPriority">
+
+        <option value="low">
+            Low Priority
+        </option>
+
+        <option value="medium" selected>
+            Medium Priority
+        </option>
+
+        <option value="high">
+            High Priority
+        </option>
+
+    </select>
+
+    <!-- ADD TASK -->
+    <button id="addStudyBtn">
+        + Add Study Task
+    </button>
 
 
-                <h3>
-                    Study Planner
-                </h3>
+    <!-- ================= PROGRESS ================= -->
+
+    <div class="study-progress">
+
+        <h4>
+            Study Progress
+        </h4>
+
+        <p id="studyProgressText">
+            0% Completed
+        </p>
+
+        <progress
+            id="studyProgress"
+            value="0"
+            max="100"
+        ></progress>
+
+    </div>
 
 
-                <p>
-                    Create a simple daily
-                    study schedule.
-                </p>
+    <!-- ================= FILTERS ================= -->
+
+    <div class="study-filters">
+
+        <button id="showAllTasks">
+            All
+        </button>
+
+        <button id="showTodayTasks">
+            Today
+        </button>
+
+        <button id="showPendingTasks">
+            Pending
+        </button>
+
+        <button id="showCompletedTasks">
+            Completed
+        </button>
+
+    </div>
 
 
-                <button>
-                    Open Tool
-                </button>
+    <!-- ================= TASK COUNTS ================= -->
 
-            </div>
+    <div class="task-stats">
+
+        <span>
+            Total:
+            <strong id="totalTasksCount">0</strong>
+        </span>
+
+        <span>
+            Completed:
+            <strong id="completedTasksCount">0</strong>
+        </span>
+
+        <span>
+            Pending:
+            <strong id="pendingTasksCount">0</strong>
+        </span>
+
+        <span>
+            Overdue:
+            <strong id="overdueTasksCount">0</strong>
+        </span>
+
+    </div>
+
+
+    <!-- ================= TODAY'S FOCUS ================= -->
+
+    <div class="today-focus">
+
+        <h4>
+            🎯 Today's Focus
+        </h4>
+
+        <p id="todayFocusText">
+            No study task planned for today.
+        </p>
+
+    </div>
+
+
+    <!-- ================= TASK LIST ================= -->
+
+    <div id="studyList">
+
+        <!-- Tasks will appear here using JavaScript -->
+
+    </div>
+
+</div>
 
 
 
@@ -375,57 +523,116 @@
 
 
 
-            <div class="tool-card">
+     <!-- ================= UNIT CONVERTER ================= -->
 
-                <div class="tool-icon">
-                    🔢
-                </div>
+<div class="tool-card" id="unitConverter">
 
+    <div class="tool-icon">
+        🔢
+    </div>
 
-                <h3>
-                    Unit Converter
-                </h3>
+    <h3>Unit Converter</h3>
 
+    <p>
+        Convert length, weight, temperature and time units.
+    </p>
 
-                <p>
-                    Convert common units
-                    quickly and easily.
-                </p>
+    <!-- CATEGORY -->
 
+    <select id="unitType">
 
-                <button>
-                    Open Tool
-                </button>
+        <option value="length">
+            Length
+        </option>
 
-            </div>
+        <option value="weight">
+            Weight
+        </option>
 
+        <option value="temperature">
+            Temperature
+        </option>
 
+        <option value="time">
+            Time
+        </option>
 
-            <div class="tool-card">
+        <option value="data">
+            Data
+        </option>
 
-                <div class="tool-icon">
-                    🔤
-                </div>
-
-
-                <h3>
-                    Word Counter
-                </h3>
-
-
-                <p>
-                    Count words and characters
-                    in your text.
-                </p>
+    </select>
 
 
-                <button>
-                    Open Tool
-                </button>
+    <!-- VALUE -->
 
-            </div>
+    <input
+        type="number"
+        id="unitValue"
+        placeholder="Enter value"
+    >
 
 
+    <!-- FROM -->
+
+    <select id="unitFrom"></select>
+
+
+    <!-- TO -->
+
+    <select id="unitTo"></select>
+
+
+    <button id="convertUnitBtn">
+        Convert
+    </button>
+
+
+    <h4 id="unitResult">
+        Result will appear here.
+    </h4>
+
+</div>
+
+  <!-- Word Counter -->
+          
+<div class="tool-card" id="wordCounter">
+    <div class="tool-icon">🔤</div>
+    <h3>Word Counter</h3>
+    <p>Count words, characters and sentences in your text.</p>
+
+    <textarea id="wordText"
+        placeholder="Type or paste your text here..."></textarea>
+
+    <div class="word-stats">
+        <div>
+            <strong id="wordCount">0</strong>
+            <span>Words</span>
+        </div>
+
+        <div>
+            <strong id="charCount">0</strong>
+            <span>Characters</span>
+        </div>
+
+        <div>
+            <strong id="charNoSpaceCount">0</strong>
+            <span>Without Spaces</span>
+        </div>
+
+        <div>
+            <strong id="sentenceCount">0</strong>
+            <span>Sentences</span>
+        </div>
+    </div>
+
+    <p class="reading-time">
+        ⏱️ Reading Time: <strong id="readingTime">0 min</strong>
+    </p>
+
+    <button id="clearWordText">Clear</button>
+</div>
+          
         </div>
 
     </section>
@@ -694,7 +901,240 @@
 
 </section>
 
+<!-- SCIENTIFIC CALCULATOR PAGE -->
+<section id="scientificCalculatorPage" class="scientific-page">
 
+    <div class="scientific-header">
+        <button id="closeScientificCalculator">← Back</button>
+        <h2>Scientific Calculator</h2>
+    </div>
+
+    <div class="scientific-body">
+
+        <!-- DISPLAY -->
+        <div class="casio-display">
+
+            <div class="display-status">
+                <span id="shiftStatus">SHIFT</span>
+                <span id="alphaStatus">ALPHA</span>
+                <span id="angleStatus">DEG</span>
+            </div>
+
+            <div id="scientificExpression">
+                0
+            </div>
+
+            <div id="scientificAnswer">
+                0
+            </div>
+
+        </div>
+
+        <!-- MODE -->
+        <div class="calculator-modes">
+
+            <button class="mode-button active" data-calc-mode="calculate">
+                CALC
+            </button>
+
+            <button class="mode-button" data-calc-mode="equation">
+                EQN
+            </button>
+
+            <button class="mode-button" data-calc-mode="statistics">
+                STAT
+            </button>
+
+            <button class="mode-button" data-calc-mode="matrix">
+                MATRIX
+            </button>
+
+        </div>
+
+        <!-- ANGLE -->
+        <div class="angle-buttons">
+
+            <button data-angle="DEG">DEG</button>
+            <button data-angle="RAD">RAD</button>
+            <button data-angle="GRAD">GRAD</button>
+
+        </div>
+
+        <!-- CALC PANEL -->
+        <div id="scientificCalcPanel">
+
+            <div class="scientific-keyboard">
+
+                <button class="function-key" data-key="shift">SHIFT</button>
+                <button class="function-key" data-key="alpha">ALPHA</button>
+                <button class="function-key" data-key="memory">M+</button>
+                <button class="function-key" data-key="memoryRecall">MR</button>
+                <button class="danger-key" data-key="clear">AC</button>
+
+                <button data-value="sin(">sin</button>
+                <button data-value="cos(">cos</button>
+                <button data-value="tan(">tan</button>
+                <button data-value="log(">log</button>
+                <button data-value="ln(">ln</button>
+
+                <button data-value="asin(">sin⁻¹</button>
+                <button data-value="acos(">cos⁻¹</button>
+                <button data-value="atan(">tan⁻¹</button>
+                <button data-value="sqrt(">√</button>
+                <button data-value="cbrt(">∛</button>
+
+                <button data-value="(">(</button>
+                <button data-value=")">)</button>
+                <button data-value="π">π</button>
+                <button data-value="e">e</button>
+                <button data-value="^">xʸ</button>
+
+                <button data-value="7">7</button>
+                <button data-value="8">8</button>
+                <button data-value="9">9</button>
+                <button data-value="/">÷</button>
+                <button data-value="!">x!</button>
+
+                <button data-value="4">4</button>
+                <button data-value="5">5</button>
+                <button data-value="6">6</button>
+                <button data-value="*">×</button>
+                <button data-value="^2">x²</button>
+
+                <button data-value="1">1</button>
+                <button data-value="2">2</button>
+                <button data-value="3">3</button>
+                <button data-value="-">−</button>
+                <button data-value="^3">x³</button>
+
+                <button data-value="0">0</button>
+                <button data-value=".">.</button>
+                <button data-value="%">%</button>
+                <button data-value="+">+</button>
+                <button class="equals-key" data-key="equals">=</button>
+
+                <button data-key="delete">DEL</button>
+                <button data-key="ans">Ans</button>
+                <button data-key="reciprocal">1/x</button>
+                <button data-value="abs(">Abs</button>
+                <button data-value="exp(">eˣ</button>
+
+            </div>
+
+            <!-- HISTORY -->
+            <div class="scientific-history">
+
+                <div class="history-title">
+                    <strong>History</strong>
+                    <button id="clearScientificHistory">
+                        Clear
+                    </button>
+                </div>
+
+                <div id="scientificHistoryList"></div>
+
+            </div>
+
+        </div>
+
+        <!-- EQUATION PANEL -->
+        <div id="scientificEquationPanel" class="scientific-mode-panel">
+
+            <h3>Equation Solver</h3>
+
+            <select id="equationModeSelect">
+
+                <option value="linear">
+                    Linear Equation
+                </option>
+
+                <option value="quadratic">
+                    Quadratic Equation
+                </option>
+
+            </select>
+
+
+            <div id="linearInputs">
+
+                <p>Solve: ax + b = c</p>
+
+                <input type="number" id="linearA" placeholder="a">
+                <input type="number" id="linearB" placeholder="b">
+                <input type="number" id="linearC" placeholder="c">
+
+                <button id="solveLinearEquation">
+                    Solve
+                </button>
+
+            </div>
+
+            <div id="quadraticInputs">
+
+                <p>Solve: ax² + bx + c = 0</p>
+
+                <input type="number" id="quadraticA" placeholder="a">
+                <input type="number" id="quadraticB" placeholder="b">
+                <input type="number" id="quadraticC" placeholder="c">
+
+                <button id="solveQuadraticEquation">
+                    Solve
+                </button>
+
+            </div>
+
+            <div id="equationAnswer"></div>
+
+        </div>
+
+        <!-- STATISTICS PANEL -->
+        <div id="scientificStatisticsPanel" class="scientific-mode-panel">
+
+            <h3>Statistics</h3>
+
+            <textarea
+                id="statisticsNumbers"
+                placeholder="Enter numbers&#10;Example: 10, 20, 30, 40, 50"
+            ></textarea>
+
+            <button id="calculateStatisticsAdvanced">
+                Calculate
+            </button>
+
+            <div id="statisticsAnswer"></div>
+
+        </div>
+
+        <!-- MATRIX PANEL -->
+        <div id="scientificMatrixPanel" class="scientific-mode-panel">
+
+            <h3>Matrix Calculator</h3>
+
+            <select id="matrixSize">
+
+                <option value="2">
+                    2 × 2 Matrix
+                </option>
+
+                <option value="3">
+                    3 × 3 Matrix
+                </option>
+
+            </select>
+
+            <div id="matrixInputs"></div>
+
+            <button id="calculateMatrix">
+                Calculate Determinant
+            </button>
+
+            <div id="matrixAnswer"></div>
+
+        </div>
+
+    </div>
+
+</section>
 
 <!-- ================= FOOTER ================= -->
 
@@ -750,4 +1190,4 @@
 
 </body>
 
-  </html>
+    </html>
