@@ -543,3 +543,618 @@ footer p {
     }
 
     }
+
+/* =========================
+   STUDY PLANNER
+========================= */
+
+#studyPlanner {
+    width: 100%;
+}
+
+#studyPlanner input,
+#studyPlanner select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    background: white;
+}
+
+#studyPlanner input:focus,
+#studyPlanner select:focus {
+    border-color: #2563eb;
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+.study-progress {
+    margin-top: 22px;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.study-progress h4 {
+    margin-bottom: 5px;
+    color: #111827;
+}
+
+#studyProgressText {
+    margin: 0 0 10px;
+    color: #2563eb;
+    font-size: 14px;
+}
+
+#studyProgress {
+    width: 100%;
+    height: 12px;
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.study-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.study-filters button {
+    margin-top: 0;
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+
+/* =========================
+   TASK STATS
+========================= */
+
+.task-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.task-stats span {
+    padding: 10px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #4b5563;
+}
+
+.task-stats strong {
+    color: #111827;
+}
+
+
+/* =========================
+   TODAY FOCUS
+========================= */
+
+.today-focus {
+    margin-top: 20px;
+    padding: 18px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.today-focus h4 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    color: #1d4ed8;
+    font-size: 18px;
+}
+
+#todayFocusText {
+    margin: 0;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+
+/* =========================
+   TASK LIST
+========================= */
+
+#studyList {
+    margin-top: 20px;
+}
+
+.study-task {
+    padding: 15px;
+    margin-bottom: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.study-task.completed {
+    opacity: 0.7;
+}
+
+.study-task h4 {
+    margin: 0 0 6px;
+    color: #111827;
+}
+
+.study-task p {
+    margin: 4px 0;
+    font-size: 13px;
+}
+
+.study-task-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.study-task-actions button {
+    margin-top: 0;
+    padding: 7px 11px;
+    font-size: 12px;
+}
+
+.study-task-actions .delete-task {
+    background: #dc2626;
+}
+
+.study-task-actions .delete-task:hover {
+    background: #b91c1c;
+}
+
+.study-task-actions .edit-task {
+    background: #6b7280;
+}
+
+.study-task-actions .edit-task:hover {
+    background: #4b5563;
+}
+
+
+/* =========================
+   MOBILE STUDY PLANNER
+========================= */
+
+@media (max-width: 600px) {
+
+    .task-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .study-filters button {
+        flex: 1;
+        min-width: 70px;
+    }
+
+    .study-task-actions button {
+        flex: 1;
+    }
+
+}
+  /* =========================
+   UNIT CONVERTER
+========================= */
+
+#unitConverter select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    outline: none;
+    background: white;
+
+    font-size: 15px;
+}
+
+#unitConverter select:focus {
+    border-color: #2563eb;
+}
+
+#unitConverter h4 {
+    word-break: break-word;
+} 
+
+  /* =========================
+   WORD COUNTER
+========================= */
+
+#wordCounter textarea {
+    width: 100%;
+    min-height: 180px;
+    resize: vertical;
+    padding: 14px;
+    margin-top: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+#wordCounter textarea:focus {
+    border-color: #2563eb;
+}
+
+.word-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.word-stats div {
+    background: #f3f4f6;
+    padding: 14px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.word-stats strong {
+    display: block;
+    font-size: 22px;
+    color: #2563eb;
+}
+
+.word-stats span {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.reading-time {
+    margin-top: 15px;
+    color: #4b5563;
+}
+
+#clearWordText {
+    background: #6b7280;
+}
+
+#clearWordText:hover {
+    background: #4b5563;
+}
+
+@media (max-width: 600px) {
+    .word-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ==========================================
+   STUDYTOOLSHUB ADVANCED SCIENTIFIC CALCULATOR
+========================================== */
+
+.scientific-page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+    background: #eef1f5;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.scientific-header {
+    max-width: 1050px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.scientific-header button {
+    margin-top: 0;
+}
+
+.scientific-header h2 {
+    color: #111827;
+}
+
+.scientific-body {
+    max-width: 850px;
+    margin: 25px auto;
+}
+
+/* DISPLAY */
+
+.casio-display {
+    background: #d8e1c8;
+    border: 8px solid #374151;
+    border-radius: 12px;
+    min-height: 125px;
+    padding: 12px 18px;
+    box-shadow:
+        inset 0 2px 8px rgba(0,0,0,0.25),
+        0 5px 15px rgba(0,0,0,0.15);
+    font-family: monospace;
+    overflow: hidden;
+}
+
+.display-status {
+    height: 22px;
+    display: flex;
+    gap: 15px;
+    font-size: 12px;
+    color: #374151;
+}
+
+#shiftStatus,
+#alphaStatus {
+    visibility: hidden;
+}
+
+#scientificExpression {
+    min-height: 35px;
+    text-align: right;
+    font-size: 22px;
+    color: #111827;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+#scientificAnswer {
+    min-height: 40px;
+    text-align: right;
+    font-size: 30px;
+    font-weight: bold;
+    color: #111827;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* MODES */
+
+.calculator-modes {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.mode-button {
+    margin-top: 0;
+    background: #d1d5db;
+    color: #111827;
+}
+
+.mode-button.active {
+    background: #2563eb;
+    color: white;
+}
+
+.angle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.angle-buttons button {
+    margin-top: 0;
+    padding: 8px 15px;
+    background: #6b7280;
+}
+
+/* KEYBOARD */
+
+.scientific-keyboard {
+    background: #1f2937;
+    padding: 15px;
+    border-radius: 15px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 9px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.scientific-keyboard button {
+    margin: 0;
+    min-height: 48px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #111827;
+    font-weight: bold;
+    box-shadow: 0 2px 0 #9ca3af;
+}
+
+.scientific-keyboard button:hover {
+    transform: translateY(-1px);
+    background: #e5e7eb;
+}
+
+.scientific-keyboard .function-key {
+    background: #d1d5db;
+}
+
+.scientific-keyboard .danger-key {
+    background: #dc2626;
+    color: white;
+    box-shadow: 0 2px 0 #991b1b;
+}
+
+.scientific-keyboard .equals-key {
+    background: #2563eb;
+    color: white;
+    box-shadow: 0 2px 0 #1e40af;
+}
+
+/* HISTORY */
+
+.scientific-history {
+    background: white;
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.history-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-title button {
+    margin-top: 0;
+    padding: 7px 12px;
+    background: #6b7280;
+    font-size: 12px;
+}
+
+.scientific-history-item {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f3f4f6;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.scientific-history-item .history-expression {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.scientific-history-item .history-answer {
+    font-weight: bold;
+    color: #2563eb;
+}
+
+/* ADVANCED MODES */
+
+.scientific-mode-panel {
+    display: none;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.scientific-mode-panel h3 {
+    margin-bottom: 15px;
+}
+
+.scientific-mode-panel input,
+.scientific-mode-panel select,
+.scientific-mode-panel textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+.scientific-mode-panel textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+.scientific-mode-panel button {
+    margin-top: 15px;
+}
+
+#equationAnswer,
+#statisticsAnswer,
+#matrixAnswer {
+    margin-top: 20px;
+    padding: 15px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    line-height: 1.8;
+}
+
+#quadraticInputs {
+    display: none;
+}
+
+/* MATRIX */
+
+#matrixInputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 15px;
+}
+
+#matrixInputs input {
+    margin-top: 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .scientific-page {
+        padding: 12px;
+    }
+
+    .scientific-header {
+        gap: 10px;
+    }
+
+    .scientific-header h2 {
+        font-size: 20px;
+    }
+
+    .scientific-body {
+        margin-top: 15px;
+    }
+
+    .casio-display {
+        border-width: 5px;
+        min-height: 105px;
+    }
+
+    #scientificExpression {
+        font-size: 17px;
+    }
+
+    #scientificAnswer {
+        font-size: 25px;
+    }
+
+    .scientific-keyboard {
+        padding: 8px;
+        gap: 5px;
+    }
+
+    .scientific-keyboard button {
+        min-height: 42px;
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .angle-buttons button,
+    .mode-button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    #matrixInputs {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    }
+
+
