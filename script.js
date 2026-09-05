@@ -448,442 +448,743 @@ ${javascript}
         preview.srcdoc = output;
     });
 
-      /* ==========================================
-       STUDY PLANNER - PART 1
-       ADD + SAVE + COMPLETE + DELETE
-    ========================================== */
+ /* ==========================================
+   STUDY PLANNER - COMPLETE
+   ADD + COMPLETE + DELETE
+   FILTERS + OVERDUE + TODAY FOCUS
+========================================== */
 
-    const studySubject =
-        document.getElementById("studySubject");
+const studySubject = document.getElementById("studySubject");
+const studyTask = document.getElementById("studyTask");
+const studyDate = document.getElementById("studyDate");
+const studyStartTime = document.getElementById("studyStartTime");
+const studyEndTime = document.getElementById("studyEndTime");
+const studyPriority = document.getElementById("studyPriority");
+const addStudyBtn = document.getElementById("addStudyBtn");
+const studyList = document.getElementById("studyList");
 
-    const studyTask =
-        document.getElementById("studyTask");
+const showAllTasks = document.getElementById("showAllTasks");
+const showTodayTasks = document.getElementById("showTodayTasks");
+const showPendingTasks = document.getElementById("showPendingTasks");
+const showCompletedTasks = document.getElementById("showCompletedTasks");
 
-    const studyDate =
-        document.getElementById("studyDate");
+let studyTasks = JSON.parse(
+    localStorage.getItem("studyTasks")
+) || [];
 
-    const studyStartTime =
-        document.getElementById("studyStartTime");
-
-    const studyEndTime =
-        document.getElementById("studyEndTime");
-
-    const studyPriority =
-        document.getElementById("studyPriority");
-
-    const addStudyBtn =
-        document.getElementById("addStudyBtn");
-
-    const studyList =
-        document.getElementById("studyList");
+let currentStudyFilter = "all";
 
 
-    let studyTasks =
-        JSON.parse(
-            localStorage.getItem("studyTasks")
-        ) || [];
+/* ==========================================
+   SAVE TASKS
+========================================== */
+
+function saveStudyTasks() {
+
+    localStorage.setItem(
+        "studyTasks",
+        JSON.stringify(studyTasks)
+    );
+
+}
 
 
-    function saveStudyTasks() {
+/* ==========================================
+   TODAY DATE
+========================================== */
 
-        localStorage.setItem(
-            "studyTasks",
-            JSON.stringify(studyTasks)
-        );
+function getTodayDate() {
 
+    const today = new Date();
+
+    const year = today.getFullYear();
+
+    const month = String(
+        today.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        today.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* ==========================================
+   CHECK OVERDUE
+========================================== */
+
+function isTaskOverdue(task) {
+
+    if (task.completed) {
+        return false;
     }
 
+    const today = getTodayDate();
 
-    function renderStudyTasks(tasks = studyTasks) {
+    if (task.date < today) {
+        return true;
+    }
 
-        if (!studyList) return;
+    if (
+        task.date === today &&
+        task.endTime
+    ) {
 
-        studyList.innerHTML = "";
+        const now = new Date();
 
+        const currentTime =
+            String(now.getHours()).padStart(2, "0") +
+            ":" +
+            String(now.getMinutes()).padStart(2, "0");
 
-        if (tasks.length === 0) {
+        return task.endTime < currentTime;
+    }
 
-            studyList.innerHTML =
-                "<p>No study tasks found.</p>";
-
-            updateStudyProgress();
-
-            return;
-        }
-
-
-        tasks.forEach(function (task) {
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "study-task-item";
+    return false;
+}
 
 
-            item.innerHTML = `
-                <div>
-                    <strong>
-                        ${task.subject}
-                    </strong>
+/* ==========================================
+   RENDER TASKS
+========================================== */
 
-                    <p>
-                        ${task.task}
-                    </p>
+function renderStudyTasks(tasks = studyTasks) {
 
-                    <small>
-                        Date: ${task.date}
-                    </small>
+    if (!studyList) return;
 
-                    <br>
-
-                    <small>
-                        Time:
-                        ${task.startTime || "--"}
-                        -
-                        ${task.endTime || "--"}
-                    </small>
-
-                    <br>
-
-                    <small>
-                        Priority:
-                        ${task.priority || "Medium"}
-                    </small>
-                </div>
-
-                <div>
-
-                    <button
-                        type="button"
-                        class="complete-study-task"
-                        data-id="${task.id}">
-                        ${task.completed
-                            ? "Completed"
-                            : "Complete"}
-                    </button>
-
-                    <button
-                        type="button"
-                        class="delete-study-task"
-                        data-id="${task.id}">
-                        Delete
-                    </button>
-
-                </div>
-            `;
+    studyList.innerHTML = "";
 
 
-            studyList.appendChild(item);
+    if (tasks.length === 0) {
 
-        });
-
+        studyList.innerHTML =
+            "<p>No study tasks found.</p>";
 
         updateStudyProgress();
 
+        updateTodayFocus();
+
+        return;
     }
 
 
-    /* ==========================================
-       ADD STUDY TASK
-    ========================================== */
+    tasks.forEach(function (task) {
 
-    if (addStudyBtn) {
+        const item =
+            document.createElement("div");
 
-        addStudyBtn.addEventListener(
-            "click",
-            function () {
-
-                const subject =
-                    studySubject.value.trim();
-
-                const taskText =
-                    studyTask.value.trim();
-
-                const date =
-                    studyDate.value;
-
-                const startTime =
-                    studyStartTime.value;
-
-                const endTime =
-                    studyEndTime.value;
-
-                const priority =
-                    studyPriority.value || "Medium";
+        item.className =
+            "study-task-item";
 
 
-                if (
-                    subject === "" ||
-                    taskText === "" ||
-                    date === ""
-                ) {
+        if (task.completed) {
+            item.classList.add("completed");
+        }
 
-                    alert(
-                        "Please fill Subject, Task and Date."
+
+        if (isTaskOverdue(task)) {
+            item.classList.add("overdue");
+        }
+
+
+        const overdueText =
+            isTaskOverdue(task)
+                ? "<strong>⚠️ Overdue</strong>"
+                : "";
+
+
+        item.innerHTML = `
+            <div>
+
+                <strong>
+                    ${task.subject}
+                </strong>
+
+                <p>
+                    ${task.task}
+                </p>
+
+                <small>
+                    Date: ${task.date}
+                </small>
+
+                <br>
+
+                <small>
+                    Time:
+                    ${task.startTime || "--"}
+                    -
+                    ${task.endTime || "--"}
+                </small>
+
+                <br>
+
+                <small>
+                    Priority:
+                    ${task.priority || "Medium"}
+                </small>
+
+                <br>
+
+                ${overdueText}
+
+            </div>
+
+            <div>
+
+                <button
+                    type="button"
+                    class="complete-study-task"
+                    data-id="${task.id}">
+                    ${
+                        task.completed
+                            ? "Undo"
+                            : "Complete"
+                    }
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-study-task"
+                    data-id="${task.id}">
+                    Delete
+                </button>
+
+            </div>
+        `;
+
+
+        studyList.appendChild(item);
+
+    });
+
+
+    updateStudyProgress();
+
+    updateTodayFocus();
+}
+
+
+/* ==========================================
+   ADD STUDY TASK
+========================================== */
+
+if (addStudyBtn) {
+
+    addStudyBtn.addEventListener(
+        "click",
+        function () {
+
+            const subject =
+                studySubject.value.trim();
+
+            const taskText =
+                studyTask.value.trim();
+
+            const date =
+                studyDate.value;
+
+            const startTime =
+                studyStartTime.value;
+
+            const endTime =
+                studyEndTime.value;
+
+            const priority =
+                studyPriority.value || "medium";
+
+
+            if (
+                subject === "" ||
+                taskText === "" ||
+                date === ""
+            ) {
+
+                alert(
+                    "Please fill Subject, Task and Date."
+                );
+
+                return;
+            }
+
+
+            if (
+                startTime &&
+                endTime &&
+                startTime >= endTime
+            ) {
+
+                alert(
+                    "End time must be after start time."
+                );
+
+                return;
+            }
+
+
+            const newTask = {
+
+                id: Date.now(),
+
+                subject: subject,
+
+                task: taskText,
+
+                date: date,
+
+                startTime: startTime,
+
+                endTime: endTime,
+
+                priority: priority,
+
+                completed: false
+
+            };
+
+
+            studyTasks.push(newTask);
+
+            saveStudyTasks();
+
+
+            currentStudyFilter = "all";
+
+            renderStudyTasks();
+
+
+            studySubject.value = "";
+
+            studyTask.value = "";
+
+            studyDate.value = "";
+
+            studyStartTime.value = "";
+
+            studyEndTime.value = "";
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   COMPLETE / DELETE
+========================================== */
+
+if (studyList) {
+
+    studyList.addEventListener(
+        "click",
+        function (event) {
+
+            const completeButton =
+                event.target.closest(
+                    ".complete-study-task"
+                );
+
+            const deleteButton =
+                event.target.closest(
+                    ".delete-study-task"
+                );
+
+
+            /* COMPLETE / UNDO */
+
+            if (completeButton) {
+
+                const id =
+                    Number(
+                        completeButton.dataset.id
                     );
 
-                    return;
-                }
 
-
-                if (
-                    startTime &&
-                    endTime &&
-                    startTime >= endTime
-                ) {
-
-                    alert(
-                        "End time must be after start time."
+                const task =
+                    studyTasks.find(
+                        function (item) {
+                            return item.id === id;
+                        }
                     );
 
-                    return;
+
+                if (task) {
+
+                    task.completed =
+                        !task.completed;
+
+                    saveStudyTasks();
+
+                    applyStudyFilter();
+
                 }
 
-
-                const newTask = {
-
-                    id:
-                        Date.now(),
-
-                    subject:
-                        subject,
-
-                    task:
-                        taskText,
-
-                    date:
-                        date,
-
-                    startTime:
-                        startTime,
-
-                    endTime:
-                        endTime,
-
-                    priority:
-                        priority,
-
-                    completed:
-                        false
-
-                };
+                return;
+            }
 
 
-                studyTasks.push(newTask);
+            /* DELETE */
+
+            if (deleteButton) {
+
+                const id =
+                    Number(
+                        deleteButton.dataset.id
+                    );
+
+
+                studyTasks =
+                    studyTasks.filter(
+                        function (item) {
+                            return item.id !== id;
+                        }
+                    );
 
 
                 saveStudyTasks();
 
-                renderStudyTasks();
-
-
-                studySubject.value = "";
-
-                studyTask.value = "";
-
-                studyDate.value = "";
-
-                studyStartTime.value = "";
-
-                studyEndTime.value = "";
+                applyStudyFilter();
 
             }
-        );
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   FILTER TASKS
+========================================== */
+
+function applyStudyFilter() {
+
+    let filteredTasks = studyTasks;
+
+
+    if (currentStudyFilter === "today") {
+
+        const today =
+            getTodayDate();
+
+        filteredTasks =
+            studyTasks.filter(
+                function (task) {
+                    return task.date === today;
+                }
+            );
 
     }
 
 
-    /* ==========================================
-       COMPLETE / DELETE TASK
-    ========================================== */
+    else if (
+        currentStudyFilter === "pending"
+    ) {
 
-    if (studyList) {
-
-        studyList.addEventListener(
-            "click",
-            function (event) {
-
-                const completeButton =
-                    event.target.closest(
-                        ".complete-study-task"
-                    );
-
-                const deleteButton =
-                    event.target.closest(
-                        ".delete-study-task"
-                    );
-
-
-                /* COMPLETE */
-
-                if (completeButton) {
-
-                    const id =
-                        Number(
-                            completeButton.dataset.id
-                        );
-
-
-                    const task =
-                        studyTasks.find(
-                            function (item) {
-                                return item.id === id;
-                            }
-                        );
-
-
-                    if (task) {
-
-                        task.completed =
-                            !task.completed;
-
-                        saveStudyTasks();
-
-                        renderStudyTasks();
-
-                    }
-
+        filteredTasks =
+            studyTasks.filter(
+                function (task) {
+                    return !task.completed;
                 }
-
-
-                /* DELETE */
-
-                if (deleteButton) {
-
-                    const id =
-                        Number(
-                            deleteButton.dataset.id
-                        );
-
-
-                    studyTasks =
-                        studyTasks.filter(
-                            function (item) {
-                                return item.id !== id;
-                            }
-                        );
-
-
-                    saveStudyTasks();
-
-                    renderStudyTasks();
-
-                }
-
-            }
-        );
+            );
 
     }
 
 
-    /* ==========================================
-       STUDY PROGRESS
-    ========================================== */
+    else if (
+        currentStudyFilter === "completed"
+    ) {
 
-    function updateStudyProgress() {
-
-        const total =
-            studyTasks.length;
-
-
-        const completed =
+        filteredTasks =
             studyTasks.filter(
                 function (task) {
                     return task.completed;
                 }
-            ).length;
-
-
-        const pending =
-            total - completed;
-
-
-        const progress =
-            total === 0
-                ? 0
-                : Math.round(
-                    (completed / total) * 100
-                );
-
-
-        const progressText =
-            document.getElementById(
-                "studyProgressText"
             );
-
-        const progressBar =
-            document.getElementById(
-                "studyProgress"
-            );
-
-        const totalCount =
-            document.getElementById(
-                "totalTasksCount"
-            );
-
-        const completedCount =
-            document.getElementById(
-                "completedTasksCount"
-            );
-
-        const pendingCount =
-            document.getElementById(
-                "pendingTasksCount"
-            );
-
-
-        if (progressText) {
-
-            progressText.innerText =
-                progress + "%";
-
-        }
-
-
-        if (progressBar) {
-
-            progressBar.value =
-                progress;
-
-        }
-
-
-        if (totalCount) {
-
-            totalCount.innerText =
-                total;
-
-        }
-
-
-        if (completedCount) {
-
-            completedCount.innerText =
-                completed;
-
-        }
-
-
-        if (pendingCount) {
-
-            pendingCount.innerText =
-                pending;
-
-        }
 
     }
 
 
-    /* ==========================================
-       INITIAL LOAD
-    ========================================== */
+    renderStudyTasks(filteredTasks);
 
-    renderStudyTasks();
+}
+
+
+/* ==========================================
+   ALL TASKS
+========================================== */
+
+if (showAllTasks) {
+
+    showAllTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "all";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   TODAY TASKS
+========================================== */
+
+if (showTodayTasks) {
+
+    showTodayTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "today";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   PENDING TASKS
+========================================== */
+
+if (showPendingTasks) {
+
+    showPendingTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "pending";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   COMPLETED TASKS
+========================================== */
+
+if (showCompletedTasks) {
+
+    showCompletedTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "completed";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   STUDY PROGRESS
+========================================== */
+
+function updateStudyProgress() {
+
+    const total =
+        studyTasks.length;
+
+
+    const completed =
+        studyTasks.filter(
+            function (task) {
+                return task.completed;
+            }
+        ).length;
+
+
+    const pending =
+        total - completed;
+
+
+    const overdue =
+        studyTasks.filter(
+            function (task) {
+                return isTaskOverdue(task);
+            }
+        ).length;
+
+
+    const progress =
+        total === 0
+            ? 0
+            : Math.round(
+                (completed / total) * 100
+            );
+
+
+        const progressText =
+        document.getElementById(
+            "studyProgressText"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "studyProgress"
+        );
+
+    const totalCount =
+        document.getElementById(
+            "totalTasksCount"
+        );
+
+    const completedCount =
+        document.getElementById(
+            "completedTasksCount"
+        );
+
+    const pendingCount =
+        document.getElementById(
+            "pendingTasksCount"
+        );
+
+    const overdueCount =
+        document.getElementById(
+            "overdueTasksCount"
+        );
+
+
+    if (progressText) {
+
+        progressText.innerText =
+            progress + "%";
+
+    }
+
+
+    if (progressBar) {
+
+        progressBar.value =
+            progress;
+
+    }
+
+
+    if (totalCount) {
+
+        totalCount.innerText =
+            total;
+
+    }
+
+
+    if (completedCount) {
+
+        completedCount.innerText =
+            completed;
+
+    }
+
+
+    if (pendingCount) {
+
+        pendingCount.innerText =
+            pending;
+
+    }
+
+
+    if (overdueCount) {
+
+        overdueCount.innerText =
+            overdue;
+
+    }
+
+}
+
+
+/* ==========================================
+   TODAY FOCUS
+========================================== */
+
+function updateTodayFocus() {
+
+    const todayFocusText =
+        document.getElementById(
+            "todayFocusText"
+        );
+
+    if (!todayFocusText) return;
+
+
+    const today =
+        getTodayDate();
+
+
+    const todayTasks =
+        studyTasks.filter(
+            function (task) {
+
+                return (
+                    task.date === today &&
+                    !task.completed
+                );
+
+            }
+        );
+
+
+    if (todayTasks.length === 0) {
+
+        todayFocusText.innerText =
+            "No pending tasks for today. 🎉";
+
+        return;
+    }
+
+
+    const highPriority =
+        todayTasks.filter(
+            function (task) {
+                return task.priority === "high";
+            }
+        );
+
+
+    if (highPriority.length > 0) {
+
+        todayFocusText.innerText =
+            `Focus on: ${highPriority[0].subject} - ${highPriority[0].task}`;
+
+    }
+
+    else {
+
+        todayFocusText.innerText =
+            `Today's focus: ${todayTasks[0].subject} - ${todayTasks[0].task}`;
+
+    }
+
+}
+
+
+/* ==========================================
+   INITIAL LOAD
+========================================== */
+
+renderStudyTasks();
 
 /* ==========================================
    UNIT CONVERTER
-   LENGTH + WEIGHT + TEMPERATURE + TIME + AREA
+   LENGTH + WEIGHT + TEMPERATURE + TIME + AREA + DATA
 ========================================== */
 
 const unitType = document.getElementById("unitType");
@@ -896,6 +1197,7 @@ const unitResult = document.getElementById("unitResult");
 
 const unitOptions = {
 
+    /* LENGTH */
     length: {
         meter: "Meter (m)",
         kilometer: "Kilometer (km)",
@@ -907,6 +1209,7 @@ const unitOptions = {
         inch: "Inch (in)"
     },
 
+    /* WEIGHT */
     weight: {
         kilogram: "Kilogram (kg)",
         gram: "Gram (g)",
@@ -915,12 +1218,14 @@ const unitOptions = {
         ounce: "Ounce (oz)"
     },
 
+    /* TEMPERATURE */
     temperature: {
         celsius: "Celsius (°C)",
         fahrenheit: "Fahrenheit (°F)",
         kelvin: "Kelvin (K)"
     },
 
+    /* AREA */
     area: {
         squareMeter: "Square Meter (m²)",
         squareKilometer: "Square Kilometer (km²)",
@@ -930,12 +1235,22 @@ const unitOptions = {
         hectare: "Hectare"
     },
 
+    /* TIME */
     time: {
         second: "Second",
         minute: "Minute",
         hour: "Hour",
         day: "Day",
         week: "Week"
+    },
+
+    /* DATA */
+    data: {
+        byte: "Byte (B)",
+        kilobyte: "Kilobyte (KB)",
+        megabyte: "Megabyte (MB)",
+        gigabyte: "Gigabyte (GB)",
+        terabyte: "Terabyte (TB)"
     }
 };
 
@@ -997,7 +1312,9 @@ function convertLength(value, from, to) {
         inch: 0.0254
     };
 
-    return value * meters[from] / meters[to];
+    return value *
+        meters[from] /
+        meters[to];
 }
 
 
@@ -1019,9 +1336,9 @@ function convertWeight(value, from, to) {
     return value *
         kilograms[from] /
         kilograms[to];
-}
+            }
 
-
+   
 /* ==========================================
    CONVERT TEMPERATURE
 ========================================== */
@@ -1032,27 +1349,33 @@ function convertTemperature(value, from, to) {
 
 
     if (from === "celsius") {
+
         celsius = value;
     }
 
     else if (from === "fahrenheit") {
+
         celsius = (value - 32) * 5 / 9;
     }
 
     else if (from === "kelvin") {
+
         celsius = value - 273.15;
     }
 
 
     if (to === "celsius") {
+
         return celsius;
     }
 
     if (to === "fahrenheit") {
+
         return (celsius * 9 / 5) + 32;
     }
 
     if (to === "kelvin") {
+
         return celsius + 273.15;
     }
 }
@@ -1102,18 +1425,49 @@ function convertTime(value, from, to) {
 
 
 /* ==========================================
+   CONVERT DATA
+========================================== */
+
+function convertData(value, from, to) {
+
+    const bytes = {
+
+        byte: 1,
+        kilobyte: 1024,
+        megabyte: 1024 ** 2,
+        gigabyte: 1024 ** 3,
+        terabyte: 1024 ** 4
+    };
+
+    return value *
+        bytes[from] /
+        bytes[to];
+}
+
+
+/* ==========================================
    MAIN CONVERTER
 ========================================== */
 
-if (unitType && unitValue && unitFrom &&
-    unitTo && convertUnitBtn && unitResult) {
+if (
+    unitType &&
+    unitValue &&
+    unitFrom &&
+    unitTo &&
+    convertUnitBtn &&
+    unitResult
+) {
 
+
+    /* CHANGE UNIT TYPE */
 
     unitType.addEventListener(
         "change",
         loadUnitOptions
     );
 
+
+    /* CONVERT */
 
     convertUnitBtn.addEventListener(
         "click",
@@ -1132,7 +1486,12 @@ if (unitType && unitValue && unitFrom &&
                 unitTo.value;
 
 
-            if (!Number.isFinite(value)) {
+            /* EMPTY / INVALID VALUE */
+
+            if (
+                unitValue.value.trim() === "" ||
+                !Number.isFinite(value)
+            ) {
 
                 unitResult.innerText =
                     "Please enter a valid number.";
@@ -1143,6 +1502,8 @@ if (unitType && unitValue && unitFrom &&
 
             let result;
 
+
+            /* LENGTH */
 
             if (type === "length") {
 
@@ -1155,6 +1516,8 @@ if (unitType && unitValue && unitFrom &&
             }
 
 
+            /* WEIGHT */
+
             else if (type === "weight") {
 
                 result =
@@ -1165,6 +1528,8 @@ if (unitType && unitValue && unitFrom &&
                     );
             }
 
+
+            /* TEMPERATURE */
 
             else if (type === "temperature") {
 
@@ -1177,6 +1542,8 @@ if (unitType && unitValue && unitFrom &&
             }
 
 
+            /* AREA */
+
             else if (type === "area") {
 
                 result =
@@ -1187,6 +1554,8 @@ if (unitType && unitValue && unitFrom &&
                     );
             }
 
+
+            /* TIME */
 
             else if (type === "time") {
 
@@ -1199,6 +1568,21 @@ if (unitType && unitValue && unitFrom &&
             }
 
 
+            /* DATA */
+
+            else if (type === "data") {
+
+                result =
+                    convertData(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* ERROR CHECK */
+
             if (!Number.isFinite(result)) {
 
                 unitResult.innerText =
@@ -1207,6 +1591,8 @@ if (unitType && unitValue && unitFrom &&
                 return;
             }
 
+
+            /* SHOW RESULT */
 
             unitResult.innerText =
                 `${value} ${unitFrom.options[unitFrom.selectedIndex].text}
@@ -1220,7 +1606,7 @@ if (unitType && unitValue && unitFrom &&
 
     loadUnitOptions();
 }
-
+  
   /* ==========================================
    WORD COUNTER
    WORDS + CHARACTERS + SENTENCES + READING TIME
@@ -1247,7 +1633,6 @@ const sentenceCount =
 const readingTime =
     document.getElementById("readingTime");
 
-    
 const clearWordText =
     document.getElementById("clearWordText");
 
@@ -1375,6 +1760,7 @@ if (clearWordText) {
 updateWordCounter();
 
 
+  
 });
 
-   
+                    
