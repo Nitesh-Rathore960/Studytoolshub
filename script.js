@@ -1030,7 +1030,7 @@ function updateStudyProgress() {
             );
 
 
-        const progressText =
+    const progressText =
         document.getElementById(
             "studyProgressText"
         );
@@ -1336,9 +1336,9 @@ function convertWeight(value, from, to) {
     return value *
         kilograms[from] /
         kilograms[to];
-            }
+}
 
-   
+
 /* ==========================================
    CONVERT TEMPERATURE
 ========================================== */
@@ -2932,7 +2932,7 @@ updateWordCounter();
 
 })();
 
-      /* ==========================================
+  /* ==========================================
    SCIENTIFIC CALCULATOR - PART 3
    EQN + STAT + MATRIX
 ========================================== */
@@ -3414,7 +3414,240 @@ updateWordCounter();
     }
 
 })();
-    
-});
 
-                    
+/* =========================================
+   C / C++ COMPILER PAGE
+========================================= */
+
+const compilerPage = document.getElementById("compilerPage");
+const openCompiler = document.getElementById("openCompiler");
+const closeCompiler = document.getElementById("closeCompiler");
+
+const compilerCode = document.getElementById("compilerCode");
+const compilerLanguage = document.getElementById("compilerLanguage");
+
+const runCompiler = document.getElementById("runCompiler");
+const clearCompiler = document.getElementById("clearCompiler");
+
+const compilerOutput = document.getElementById("compilerOutput");
+
+
+/* =========================================
+   OPEN COMPILER
+========================================= */
+
+if (openCompiler) {
+
+    openCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "block";
+
+        document.body.style.overflow = "hidden";
+
+    });
+
+}
+
+
+if (closeCompiler) {
+
+    closeCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "none";
+
+        document.body.style.overflow = "auto";
+
+    });
+
+}
+
+
+/* =========================================
+   CLOSE COMPILER
+========================================= */
+
+if (closeCompiler) {
+
+    closeCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "none";
+
+    });
+
+}
+
+
+/* =========================================
+   CLEAR
+========================================= */
+
+if (clearCompiler) {
+
+    clearCompiler.addEventListener("click", function () {
+
+        compilerCode.value = "";
+
+        compilerOutput.textContent =
+            "Output will appear here...";
+
+    });
+
+}
+
+/* =========================================
+   RUN C / C++ CODE
+========================================= */
+
+if (runCompiler) {
+
+    runCompiler.addEventListener("click", async function () {
+
+        const code = compilerCode.value.trim();
+        const language = compilerLanguage.value;
+
+        if (code === "") {
+            compilerOutput.textContent =
+                "⚠️ Please write some code first.";
+            return;
+        }
+
+        compilerOutput.textContent =
+            "⏳ Compiling and running...";
+
+        runCompiler.disabled = true;
+
+        try {
+
+            /*
+             * Language IDs:
+             * C   = 50
+             * C++ = 54
+             */
+
+            const languageId =
+                language === "c" ? 50 : 54;
+
+            const response = await fetch(
+                "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        source_code: code,
+                        language_id: languageId
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Compiler server error: " + response.status
+                );
+            }
+
+            const result = await response.json();
+
+            /* Compiler error */
+
+            if (result.compile_output) {
+
+                compilerOutput.textContent =
+                    "❌ Compilation Error\n\n" +
+                    result.compile_output;
+
+                return;
+            }
+
+            /* Runtime error */
+
+            if (result.stderr) {
+
+                compilerOutput.textContent =
+                    "❌ Runtime Error\n\n" +
+                    result.stderr;
+
+                return;
+            }
+
+            /* Normal output */
+
+            if (result.stdout !== null) {
+
+                compilerOutput.textContent =
+                    result.stdout || "Program finished with no output.";
+
+                return;
+            }
+
+            /* Other error */
+
+            compilerOutput.textContent =
+                result.message ||
+                "Program could not be executed.";
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            compilerOutput.textContent =
+                "❌ Unable to connect to compiler.";
+
+        }
+
+        finally {
+
+            runCompiler.disabled = false;
+
+        }
+
+    });
+
+}
+  
+/* =========================================
+   LANGUAGE CHANGE
+========================================= */
+
+if (compilerLanguage) {
+
+    compilerLanguage.addEventListener("change", function () {
+
+        const language = compilerLanguage.value;
+
+        if (language === "c") {
+
+            compilerCode.value =
+`#include <stdio.h>
+
+int main() {
+    printf("Hello, StudyToolsHub!");
+    return 0;
+}`;
+
+        } else {
+
+            compilerCode.value =
+`#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "Hello, StudyToolsHub!";
+    return 0;
+}`;
+
+        }
+
+        compilerOutput.textContent =
+            "Output will appear here...";
+
+    });
+
+}
+  
+});
