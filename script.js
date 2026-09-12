@@ -1,8 +1,8 @@
-/* =========================================
+/* =========================================================
    STUDYTOOLSHUB
    JAVASCRIPT — PART 1
-   Core Setup + Header + Theme + Loader
-   ========================================= */
+   Core + Loader + Header + Theme + Mobile + Toast
+   ========================================================= */
 
 "use strict";
 
@@ -17,31 +17,66 @@ const $$ = (selector, parent = document) =>
 const get = (id) =>
     document.getElementById(id);
 
-const show = (element) => {
-    if (element) element.style.display = "";
-};
 
-const hide = (element) => {
-    if (element) element.style.display = "none";
-};
+/* ---------- Result Helper ---------- */
+
+function setResult(id, message, type = "success") {
+
+    const element = get(id);
+
+    if (!element) return;
+
+    element.textContent = message;
+
+    element.classList.remove(
+        "success",
+        "error",
+        "warning"
+    );
+
+    element.classList.add(type);
+}
 
 
-/* ---------- DOM Ready ---------- */
+/* ---------- Toast ---------- */
 
-document.addEventListener("DOMContentLoaded", () => {
+function showToast(message, type = "info") {
 
-    initLoader();
-    initHeader();
-    initTheme();
-    initMobileMenu();
-    initBackToTop();
+    let toast = get("toast");
 
-});
+    if (!toast) return;
+
+    toast.textContent = message;
+
+    toast.classList.remove(
+        "show",
+        "success",
+        "error",
+        "warning",
+        "info"
+    );
+
+    toast.classList.add(type);
+
+    requestAnimationFrame(() => {
+        toast.classList.add("show");
+    });
+
+    clearTimeout(window.studyToastTimer);
+
+    window.studyToastTimer = setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
+}
+
+window.showToast = showToast;
 
 
-/* =========================================
+/* =========================================================
    PAGE LOADER
-   ========================================= */
+   ========================================================= */
 
 function initLoader() {
 
@@ -49,26 +84,38 @@ function initLoader() {
 
     if (!loader) return;
 
-    window.addEventListener("load", () => {
+    const hideLoader = () => {
+
+        loader.classList.add("hidden");
 
         setTimeout(() => {
 
-            loader.classList.add("hidden");
-
-            setTimeout(() => {
+            if (loader.parentNode) {
                 loader.remove();
-            }, 400);
+            }
 
-        }, 300);
+        }, 500);
+    };
 
-    });
+    if (document.readyState === "complete") {
 
+        setTimeout(hideLoader, 300);
+
+    } else {
+
+        window.addEventListener(
+            "load",
+            () => setTimeout(hideLoader, 300),
+            { once: true }
+        );
+
+    }
 }
 
 
-/* =========================================
+/* =========================================================
    HEADER
-   ========================================= */
+   ========================================================= */
 
 function initHeader() {
 
@@ -78,26 +125,26 @@ function initHeader() {
 
     const updateHeader = () => {
 
-        if (window.scrollY > 20) {
-            header.classList.add("scrolled");
-        } else {
-            header.classList.remove("scrolled");
-        }
+        header.classList.toggle(
+            "scrolled",
+            window.scrollY > 20
+        );
 
     };
 
     updateHeader();
 
-    window.addEventListener("scroll", updateHeader, {
-        passive: true
-    });
-
+    window.addEventListener(
+        "scroll",
+        updateHeader,
+        { passive: true }
+    );
 }
 
 
-/* =========================================
+/* =========================================================
    MOBILE MENU
-   ========================================= */
+   ========================================================= */
 
 function initMobileMenu() {
 
@@ -106,23 +153,28 @@ function initMobileMenu() {
 
     if (!menuToggle || !mainNav) return;
 
+    menuToggle.setAttribute(
+        "aria-expanded",
+        "false"
+    );
+
     menuToggle.addEventListener("click", () => {
 
-        mainNav.classList.toggle("active");
-        menuToggle.classList.toggle("active");
+        const active =
+            mainNav.classList.toggle("active");
 
-        const expanded =
-            menuToggle.classList.contains("active");
+        menuToggle.classList.toggle(
+            "active",
+            active
+        );
 
         menuToggle.setAttribute(
             "aria-expanded",
-            expanded
+            String(active)
         );
 
     });
 
-
-    /* Close menu after clicking a link */
 
     $$(".main-nav a").forEach(link => {
 
@@ -139,67 +191,69 @@ function initMobileMenu() {
         });
 
     });
-
 }
 
 
-/* =========================================
-   THEME SYSTEM
-   ========================================= */
+/* =========================================================
+   THEME
+   ========================================================= */
 
 function initTheme() {
 
     const savedTheme =
         localStorage.getItem("studytools-theme");
 
-    const systemDark =
-        window.matchMedia &&
-        window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches;
+    let theme = savedTheme;
 
-    const theme =
-        savedTheme ||
-        (systemDark ? "dark" : "light");
+    if (!theme) {
+
+        theme =
+            window.matchMedia &&
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches
+                ? "dark"
+                : "light";
+    }
 
     applyTheme(theme);
 
 
-    /* Theme buttons */
-
-    const themeButtons = $$(
+    const buttons = $$(
         "[data-theme-toggle], #themeToggle, .theme-toggle"
     );
 
-    themeButtons.forEach(button => {
+    buttons.forEach(button => {
 
-        button.addEventListener("click", toggleTheme);
+        button.addEventListener(
+            "click",
+            toggleTheme
+        );
 
     });
-
 }
 
 
-/* ---------- Apply Theme ---------- */
-
 function applyTheme(theme) {
+
+    const validTheme =
+        theme === "dark"
+            ? "dark"
+            : "light";
 
     document.documentElement.setAttribute(
         "data-theme",
-        theme
+        validTheme
     );
 
     localStorage.setItem(
         "studytools-theme",
-        theme
+        validTheme
     );
 
-    updateThemeIcons(theme);
-
+    updateThemeIcons(validTheme);
 }
 
-
-/* ---------- Toggle Theme ---------- */
 
 function toggleTheme() {
 
@@ -218,13 +272,11 @@ function toggleTheme() {
     showToast(
         next === "dark"
             ? "🌙 Dark mode enabled"
-            : "☀️ Light mode enabled"
+            : "☀️ Light mode enabled",
+        "success"
     );
-
 }
 
-
-/* ---------- Theme Icons ---------- */
 
 function updateThemeIcons(theme) {
 
@@ -236,13 +288,12 @@ function updateThemeIcons(theme) {
                 : "🌙";
 
     });
-
 }
 
 
-/* =========================================
+/* =========================================================
    BACK TO TOP
-   ========================================= */
+   ========================================================= */
 
 function initBackToTop() {
 
@@ -250,28 +301,22 @@ function initBackToTop() {
 
     if (!button) return;
 
-
     const update = () => {
 
-        if (window.scrollY > 500) {
-
-            button.classList.add("visible");
-
-        } else {
-
-            button.classList.remove("visible");
-
-        }
+        button.classList.toggle(
+            "visible",
+            window.scrollY > 500
+        );
 
     };
 
-
     update();
 
-    window.addEventListener("scroll", update, {
-        passive: true
-    });
-
+    window.addEventListener(
+        "scroll",
+        update,
+        { passive: true }
+    );
 
     button.addEventListener("click", () => {
 
@@ -281,190 +326,185 @@ function initBackToTop() {
         });
 
     });
-
 }
 
 
-/* =========================================
-   GLOBAL TOAST
-   ========================================= */
-
-function showToast(message, type = "info") {
-
-    let toast = get("toast");
-
-    if (!toast) return;
-
-    toast.textContent = message;
-
-    toast.classList.remove(
-        "success",
-        "error",
-        "warning",
-        "info"
-    );
-
-    toast.classList.add(type);
-    toast.classList.add("show");
-
-    clearTimeout(window.studyToastTimer);
-
-    window.studyToastTimer = setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    }, 2500);
-
-}
-
-
-/* Make Toast available to other JS parts */
-
-window.showToast = showToast;
-
-
-/* =========================================
+/* =========================================================
    SMOOTH ANCHOR SCROLL
-   ========================================= */
+   ========================================================= */
 
-document.addEventListener("click", event => {
+function initSmoothScroll() {
 
-    const link =
-        event.target.closest('a[href^="#"]');
+    document.addEventListener(
+        "click",
+        event => {
 
-    if (!link) return;
+            const link =
+                event.target.closest(
+                    'a[href^="#"]'
+                );
 
-    const targetId =
-        link.getAttribute("href");
+            if (!link) return;
 
-    if (!targetId || targetId === "#") return;
+            const targetId =
+                link.getAttribute("href");
 
-    const target =
-        document.querySelector(targetId);
+            if (
+                !targetId ||
+                targetId === "#"
+            ) {
+                return;
+            }
 
-    if (!target) return;
+            const target =
+                document.querySelector(targetId);
 
-    event.preventDefault();
+            if (!target) return;
 
-    target.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-    });
+            event.preventDefault();
 
-});
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-
-/* =========================================
-   KEYBOARD SHORTCUTS
-   ========================================= */
-
-document.addEventListener("keydown", event => {
-
-    /* Ctrl + K / Cmd + K → Search */
-
-    if (
-        (event.ctrlKey || event.metaKey) &&
-        event.key.toLowerCase() === "k"
-    ) {
-
-        event.preventDefault();
-
-        const search =
-            get("searchInput");
-
-        if (search) {
-
-            search.focus();
-            search.select();
-
-        }
-
-    }
-
-
-    /* Escape → close menus/modals */
-
-    if (event.key === "Escape") {
-
-        const mainNav = $(".main-nav");
-        const menuToggle = get("menuToggle");
-
-        if (mainNav) {
-            mainNav.classList.remove("active");
-        }
-
-        if (menuToggle) {
-            menuToggle.classList.remove("active");
-            menuToggle.setAttribute(
-                "aria-expanded",
-                "false"
+            history.replaceState(
+                null,
+                "",
+                targetId
             );
         }
+    );
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+function initKeyboardShortcuts() {
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            /* Ctrl + K / Cmd + K */
+
+            if (
+                (event.ctrlKey || event.metaKey) &&
+                event.key.toLowerCase() === "k"
+            ) {
+
+                event.preventDefault();
+
+                const search =
+                    get("searchInput");
+
+                if (search) {
+
+                    search.focus();
+                    search.select();
+
+                }
+            }
+
+
+            /* Escape */
+
+            if (event.key === "Escape") {
+
+                const nav = $(".main-nav");
+                const menu = get("menuToggle");
+
+                nav?.classList.remove("active");
+                menu?.classList.remove("active");
+
+                menu?.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   ONLINE / OFFLINE
+   ========================================================= */
+
+function initConnectionStatus() {
+
+    window.addEventListener(
+        "offline",
+        () => {
+
+            showToast(
+                "📡 You are offline.",
+                "warning"
+            );
+
+        }
+    );
+
+
+    window.addEventListener(
+        "online",
+        () => {
+
+            showToast(
+                "🌐 Internet connection restored.",
+                "success"
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   DOM INITIALIZATION
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initLoader();
+        initHeader();
+        initMobileMenu();
+        initTheme();
+        initBackToTop();
+        initSmoothScroll();
+        initKeyboardShortcuts();
+        initConnectionStatus();
 
     }
+);
 
-});
-
-
-/* =========================================
-   ONLINE / OFFLINE STATUS
-   ========================================= */
-
-window.addEventListener("offline", () => {
-
-    showToast(
-        "📡 You are offline. Some features may be unavailable.",
-        "warning"
-    );
-
-});
-
-window.addEventListener("online", () => {
-
-    showToast(
-        "🌐 Internet connection restored.",
-        "success"
-    );
-   
-   
- /* =========================================
-   JS PART 2
-   SEARCH + BASIC CALCULATORS
-   ========================================= */
+ /* =========================================================
+   JAVASCRIPT — PART 2
+   Search + Basic Calculators
+   ========================================================= */
 
 
-/* =========================================
-   GLOBAL CALCULATOR HELPERS
-   ========================================= */
+/* =========================================================
+   NUMBER HELPER
+   ========================================================= */
 
 function getNumber(id) {
-    const element = document.getElementById(id);
+
+    const element = get(id);
+
     if (!element) return NaN;
 
     return parseFloat(element.value);
 }
 
 
-function setResult(id, message, type = "success") {
-
-    const element = document.getElementById(id);
-
-    if (!element) return;
-
-    element.textContent = message;
-
-    element.classList.remove(
-        "success",
-        "error"
-    );
-
-    element.classList.add(type);
-}
-
-
-/* =========================================
+/* =========================================================
    SEARCH SYSTEM
-   ========================================= */
+   ========================================================= */
 
 function initSearch() {
 
@@ -473,24 +513,18 @@ function initSearch() {
 
     if (!input) return;
 
-    const searchableItems = $$(
+    const items = $$(
         ".tool-card, .resource-card, .feature-card"
     );
 
-
-    function performSearch() {
+    const performSearch = () => {
 
         const query =
             input.value.trim().toLowerCase();
 
-        input.classList.toggle(
-            "search-active",
-            query.length > 0
-        );
-
         let found = 0;
 
-        searchableItems.forEach(item => {
+        items.forEach(item => {
 
             const text =
                 item.textContent.toLowerCase();
@@ -505,7 +539,6 @@ function initSearch() {
 
         });
 
-
         if (query && found === 0) {
 
             showToast(
@@ -514,8 +547,7 @@ function initSearch() {
             );
 
         }
-
-    }
+    };
 
 
     input.addEventListener(
@@ -524,507 +556,508 @@ function initSearch() {
     );
 
 
-    if (button) {
-
-        button.addEventListener(
-            "click",
-            performSearch
-        );
-
-    }
+    button?.addEventListener(
+        "click",
+        performSearch
+    );
 
 
-    input.addEventListener("keydown", event => {
+    input.addEventListener(
+        "keydown",
+        event => {
 
-        if (event.key === "Enter") {
-            performSearch();
+            if (event.key === "Enter") {
+                performSearch();
+            }
+
+            if (
+                event.key === "Escape" &&
+                input.value
+            ) {
+
+                input.value = "";
+                performSearch();
+
+            }
+
         }
-
-        if (
-            event.key === "Escape" &&
-            input.value
-        ) {
-
-            input.value = "";
-            performSearch();
-
-        }
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initSearch
-);
-
-
-/* =========================================
+/* =========================================================
    PERCENTAGE CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initPercentageCalculator() {
 
-    const obtained = get("obtainedMarks");
-    const total = get("totalMarks");
-    const button = get("calculatePercentage");
-    const result = get("percentageResult");
+    const button =
+        get("calculatePercentage");
 
     if (!button) return;
 
-
-    function calculate() {
-
-        const obtainedValue =
-            parseFloat(obtained?.value);
-
-        const totalValue =
-            parseFloat(total?.value);
-
-
-        if (
-            isNaN(obtainedValue) ||
-            isNaN(totalValue)
-        ) {
-
-            setResult(
-                "percentageResult",
-                "Please enter valid marks.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (totalValue <= 0) {
-
-            setResult(
-                "percentageResult",
-                "Total marks must be greater than 0.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            obtainedValue < 0 ||
-            obtainedValue > totalValue
-        ) {
-
-            setResult(
-                "percentageResult",
-                "Obtained marks must be between 0 and total marks.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const percentage =
-            (obtainedValue / totalValue) * 100;
-
-
-        setResult(
-            "percentageResult",
-            `${percentage.toFixed(2)}%`,
-            "success"
-        );
-
-    }
-
-
     button.addEventListener(
         "click",
-        calculate
-    );
+        () => {
 
+            const obtained =
+                getNumber("obtainedMarks");
+
+            const total =
+                getNumber("totalMarks");
+
+
+            if (
+                !Number.isFinite(obtained) ||
+                !Number.isFinite(total)
+            ) {
+
+                setResult(
+                    "percentageResult",
+                    "Please enter valid marks.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (total <= 0) {
+
+                setResult(
+                    "percentageResult",
+                    "Total marks must be greater than 0.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                obtained < 0 ||
+                obtained > total
+            ) {
+
+                setResult(
+                    "percentageResult",
+                    "Obtained marks must be between 0 and total marks.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const percentage =
+                (obtained / total) * 100;
+
+
+            setResult(
+                "percentageResult",
+                `Percentage: ${percentage.toFixed(2)}%`,
+                "success"
+            );
+
+        }
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initPercentageCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    CGPA CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initCGPACalculator() {
-
-    const gradePoints =
-        get("gradePoints");
-
-    const subjects =
-        get("subjects");
 
     const button =
         get("calculateCGPA");
 
     if (!button) return;
 
+    button.addEventListener(
+        "click",
+        () => {
 
-    button.addEventListener("click", () => {
+            const input =
+                get("gradePoints");
 
-        const points =
-            gradePoints?.value
-                .split(",")
-                .map(value => parseFloat(value.trim()))
-                .filter(value => !isNaN(value));
-
-        const subjectCount =
-            parseInt(subjects?.value);
+            const subjects =
+                parseInt(
+                    get("subjects")?.value,
+                    10
+                );
 
 
-        if (
-            !points ||
-            points.length === 0
-        ) {
+            const points =
+                input?.value
+                    .split(",")
+                    .map(value =>
+                        parseFloat(value.trim())
+                    )
+                    .filter(value =>
+                        Number.isFinite(value)
+                    );
+
+
+            if (
+                !points ||
+                points.length === 0
+            ) {
+
+                setResult(
+                    "cgpaResult",
+                    "Enter grade points separated by commas.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                !Number.isInteger(subjects) ||
+                subjects <= 0
+            ) {
+
+                setResult(
+                    "cgpaResult",
+                    "Enter a valid number of subjects.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (points.length !== subjects) {
+
+                setResult(
+                    "cgpaResult",
+                    `Enter exactly ${subjects} grade points.`,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (
+                points.some(
+                    point =>
+                        point < 0 ||
+                        point > 10
+                )
+            ) {
+
+                setResult(
+                    "cgpaResult",
+                    "Each grade point must be between 0 and 10.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const total =
+                points.reduce(
+                    (sum, point) =>
+                        sum + point,
+                    0
+                );
+
+
+            const cgpa =
+                total / subjects;
+
 
             setResult(
                 "cgpaResult",
-                "Enter grade points separated by commas.",
-                "error"
+                `CGPA: ${cgpa.toFixed(2)}`,
+                "success"
             );
 
-            return;
         }
-
-
-        if (
-            isNaN(subjectCount) ||
-            subjectCount <= 0
-        ) {
-
-            setResult(
-                "cgpaResult",
-                "Enter a valid number of subjects.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (points.length !== subjectCount) {
-
-            setResult(
-                "cgpaResult",
-                `Enter exactly ${subjectCount} grade points.`,
-                "error"
-            );
-
-            return;
-        }
-
-
-        if (
-            points.some(
-                point => point < 0 || point > 10
-            )
-        ) {
-
-            setResult(
-                "cgpaResult",
-                "Grade points must be between 0 and 10.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const total =
-            points.reduce(
-                (sum, point) => sum + point,
-                0
-            );
-
-
-        const cgpa =
-            total / subjectCount;
-
-
-        setResult(
-            "cgpaResult",
-            `CGPA: ${cgpa.toFixed(2)}`,
-            "success"
-        );
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initCGPACalculator
-);
-
-
-/* =========================================
+/* =========================================================
    AGE CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initAgeCalculator() {
-
-    const birthDate =
-        get("birthDate");
 
     const button =
         get("calculateAge");
 
     if (!button) return;
 
+    button.addEventListener(
+        "click",
+        () => {
 
-    button.addEventListener("click", () => {
+            const value =
+                get("birthDate")?.value;
 
-        if (!birthDate?.value) {
+            if (!value) {
 
-            setResult(
-                "ageResult",
-                "Please select your birth date.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const birth =
-            new Date(birthDate.value);
-
-        const today =
-            new Date();
-
-
-        if (birth > today) {
-
-            setResult(
-                "ageResult",
-                "Birth date cannot be in the future.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        let years =
-            today.getFullYear() -
-            birth.getFullYear();
-
-        let months =
-            today.getMonth() -
-            birth.getMonth();
-
-        let days =
-            today.getDate() -
-            birth.getDate();
-
-
-        if (days < 0) {
-
-            months--;
-
-            const previousMonth =
-                new Date(
-                    today.getFullYear(),
-                    today.getMonth(),
-                    0
+                setResult(
+                    "ageResult",
+                    "Please select your birth date.",
+                    "error"
                 );
 
-            days +=
-                previousMonth.getDate();
+                return;
+            }
+
+
+            const birth =
+                new Date(`${value}T00:00:00`);
+
+            const today =
+                new Date();
+
+
+            if (
+                Number.isNaN(birth.getTime()) ||
+                birth > today
+            ) {
+
+                setResult(
+                    "ageResult",
+                    "Please enter a valid past date.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            let years =
+                today.getFullYear() -
+                birth.getFullYear();
+
+            let months =
+                today.getMonth() -
+                birth.getMonth();
+
+            let days =
+                today.getDate() -
+                birth.getDate();
+
+
+            if (days < 0) {
+
+                months--;
+
+                const previousMonth =
+                    new Date(
+                        today.getFullYear(),
+                        today.getMonth(),
+                        0
+                    );
+
+                days +=
+                    previousMonth.getDate();
+
+            }
+
+
+            if (months < 0) {
+
+                years--;
+                months += 12;
+
+            }
+
+
+            setResult(
+                "ageResult",
+                `${years} Years, ${months} Months, ${days} Days`,
+                "success"
+            );
 
         }
-
-
-        if (months < 0) {
-
-            years--;
-            months += 12;
-
-        }
-
-
-        setResult(
-            "ageResult",
-            `${years} Years, ${months} Months, ${days} Days`,
-            "success"
-        );
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initAgeCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    AVERAGE CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initAverageCalculator() {
-
-    const input =
-        get("averageNumbers");
 
     const button =
         get("calculateAverage");
 
     if (!button) return;
 
+    button.addEventListener(
+        "click",
+        () => {
 
-    button.addEventListener("click", () => {
+            const numbers =
+                get("averageNumbers")
+                    ?.value
+                    .split(",")
+                    .map(value =>
+                        parseFloat(value.trim())
+                    )
+                    .filter(value =>
+                        Number.isFinite(value)
+                    );
 
-        const numbers =
-            input?.value
-                .split(",")
-                .map(value => parseFloat(value.trim()))
-                .filter(value => !isNaN(value));
+
+            if (!numbers?.length) {
+
+                setResult(
+                    "averageResult",
+                    "Enter numbers separated by commas.",
+                    "error"
+                );
+
+                return;
+            }
 
 
-        if (!numbers.length) {
+            const sum =
+                numbers.reduce(
+                    (total, number) =>
+                        total + number,
+                    0
+                );
+
+
+            const average =
+                sum / numbers.length;
+
 
             setResult(
                 "averageResult",
-                "Enter numbers separated by commas.",
-                "error"
+                `Average: ${average.toFixed(2)}`,
+                "success"
             );
 
-            return;
         }
-
-
-        const sum =
-            numbers.reduce(
-                (total, number) =>
-                    total + number,
-                0
-            );
-
-
-        const average =
-            sum / numbers.length;
-
-
-        setResult(
-            "averageResult",
-            `Average: ${average.toFixed(2)}`,
-            "success"
-        );
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initAverageCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    MARKS & GRADE
-   ========================================= */
+   ========================================================= */
 
 function initMarksGradeCalculator() {
-
-    const marks =
-        get("marksInput");
 
     const button =
         get("calculateGrade");
 
     if (!button) return;
 
+    button.addEventListener(
+        "click",
+        () => {
 
-    button.addEventListener("click", () => {
-
-        const value =
-            parseFloat(marks?.value);
+            const marks =
+                getNumber("marksInput");
 
 
-        if (
-            isNaN(value) ||
-            value < 0 ||
-            value > 100
-        ) {
+            if (
+                !Number.isFinite(marks) ||
+                marks < 0 ||
+                marks > 100
+            ) {
+
+                setResult(
+                    "gradeResult",
+                    "Enter marks between 0 and 100.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            let grade;
+            let message;
+
+
+            if (marks >= 90) {
+
+                grade = "A+";
+                message = "Excellent";
+
+            } else if (marks >= 80) {
+
+                grade = "A";
+                message = "Very Good";
+
+            } else if (marks >= 70) {
+
+                grade = "B";
+                message = "Good";
+
+            } else if (marks >= 60) {
+
+                grade = "C";
+                message = "Average";
+
+            } else if (marks >= 50) {
+
+                grade = "D";
+                message = "Pass";
+
+            } else {
+
+                grade = "F";
+                message = "Needs Improvement";
+
+            }
+
 
             setResult(
                 "gradeResult",
-                "Enter marks between 0 and 100.",
-                "error"
+                `Grade: ${grade} — ${message}`,
+                marks >= 50
+                    ? "success"
+                    : "error"
             );
 
-            return;
         }
-
-
-        let grade;
-        let message;
-
-
-        if (value >= 90) {
-            grade = "A+";
-            message = "Excellent";
-        } else if (value >= 80) {
-            grade = "A";
-            message = "Very Good";
-        } else if (value >= 70) {
-            grade = "B";
-            message = "Good";
-        } else if (value >= 60) {
-            grade = "C";
-            message = "Average";
-        } else if (value >= 50) {
-            grade = "D";
-            message = "Pass";
-        } else {
-            grade = "F";
-            message = "Needs Improvement";
-        }
-
-
-        setResult(
-            "gradeResult",
-            `Grade: ${grade} — ${message}`,
-            value >= 50 ? "success" : "error"
-        );
-
-    });
-
+    );
 }
 
 
+/* =========================================================
+   INITIALIZE PART 2
+   ========================================================= */
+
 document.addEventListener(
     "DOMContentLoaded",
-    initMarksGradeCalculator
+    () => {
+
+        initSearch();
+        initPercentageCalculator();
+        initCGPACalculator();
+        initAgeCalculator();
+        initAverageCalculator();
+        initMarksGradeCalculator();
+
+    }
 );
 
-  /* =========================================
-   JS PART 3
-   ADVANCED CALCULATORS
-   Scientific + Unit + Discount + Interest + BMI
-   ========================================= */
+ /* =========================================================
+   JAVASCRIPT — PART 3
+   Advanced Calculators
+   ========================================================= */
 
 
-/* =========================================
+/* =========================================================
    SCIENTIFIC CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initScientificCalculator() {
 
@@ -1035,17 +1068,18 @@ function initScientificCalculator() {
 
     let expression = "";
 
-    function updateDisplay() {
+    const updateDisplay = () => {
         display.value = expression || "0";
-    }
+    };
 
-    function calculateExpression() {
+
+    const calculate = () => {
 
         try {
 
             let exp = expression
                 .replace(/π/g, "Math.PI")
-                .replace(/e/g, "Math.E")
+                .replace(/\be\b/g, "Math.E")
                 .replace(/√/g, "Math.sqrt")
                 .replace(/\^/g, "**")
                 .replace(/sin\(/g, "Math.sin(")
@@ -1054,105 +1088,151 @@ function initScientificCalculator() {
                 .replace(/log\(/g, "Math.log10(")
                 .replace(/ln\(/g, "Math.log(");
 
-            const result = Function(
-                `"use strict"; return (${exp})`
-            )();
 
-            if (!Number.isFinite(result)) {
-                throw new Error();
+            if (!exp.trim()) return;
+
+            /*
+             * Only calculator-generated expressions are evaluated.
+             * Basic character validation prevents unexpected input.
+             */
+
+            if (!/^[0-9+\-*/().,\sA-Za-z_]+$/.test(exp)) {
+                throw new Error("Invalid expression");
             }
 
+
+            const result =
+                Function(
+                    `"use strict"; return (${exp})`
+                )();
+
+
+            if (!Number.isFinite(result)) {
+                throw new Error("Invalid result");
+            }
+
+
             expression =
-                Number(result.toFixed(10)).toString();
+                Number(
+                    result.toFixed(10)
+                ).toString();
 
             updateDisplay();
 
+
         } catch {
+
             display.value = "Error";
             expression = "";
+
         }
-    }
+    };
+
 
     keys.forEach(key => {
 
-        key.addEventListener("click", () => {
+        key.addEventListener(
+            "click",
+            () => {
 
-            const value =
-                key.dataset.value ||
-                key.textContent.trim();
+                const value =
+                    key.dataset.value ??
+                    key.textContent.trim();
 
-            if (
-                value === "=" ||
-                value === "Calculate"
-            ) {
-                calculateExpression();
-                return;
-            }
 
-            if (
-                value === "C" ||
-                value === "AC"
-            ) {
-                expression = "";
+                if (
+                    value === "=" ||
+                    value === "Calculate"
+                ) {
+
+                    calculate();
+                    return;
+
+                }
+
+
+                if (
+                    value === "C" ||
+                    value === "AC"
+                ) {
+
+                    expression = "";
+                    updateDisplay();
+                    return;
+
+                }
+
+
+                if (
+                    value === "⌫" ||
+                    value === "DEL"
+                ) {
+
+                    expression =
+                        expression.slice(0, -1);
+
+                    updateDisplay();
+                    return;
+
+                }
+
+
+                if (value === "x²") {
+
+                    expression += "^2";
+
+                } else {
+
+                    expression += value;
+
+                }
+
+
                 updateDisplay();
-                return;
-            }
 
-            if (
-                value === "⌫" ||
-                value === "DEL"
-            ) {
-                expression =
-                    expression.slice(0, -1);
-
-                updateDisplay();
-                return;
             }
+        );
 
-            if (value === "x²") {
-                expression += "^2";
-            } else {
-                expression += value;
-            }
+    });
+
+
+    display.addEventListener(
+        "input",
+        () => {
+
+            expression =
+                display.value
+                    .replace(/[^0-9+\-*/().^]/g, "");
 
             updateDisplay();
 
-        });
+        }
+    );
 
-    });
 
     updateDisplay();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initScientificCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    UNIT CONVERTER
-   ========================================= */
+   ========================================================= */
 
 function initUnitConverter() {
 
-    const category =
-        get("unitCategory");
+    const category = get("unitCategory");
+    const from = get("fromUnit");
+    const to = get("toUnit");
+    const value = get("unitValue");
+    const button = get("convertUnit");
 
-    const from =
-        get("fromUnit");
-
-    const to =
-        get("toUnit");
-
-    const input =
-        get("unitValue");
-
-    const button =
-        get("convertUnit");
-
-    if (!category || !from || !to || !button) return;
+    if (
+        !category ||
+        !from ||
+        !to ||
+        !value ||
+        !button
+    ) return;
 
 
     const units = {
@@ -1163,7 +1243,6 @@ function initUnitConverter() {
             centimeter: 0.01,
             millimeter: 0.001,
             mile: 1609.344,
-            yard: 0.9144,
             foot: 0.3048,
             inch: 0.0254
         },
@@ -1172,8 +1251,13 @@ function initUnitConverter() {
             kilogram: 1,
             gram: 0.001,
             milligram: 0.000001,
-            pound: 0.45359237,
-            ounce: 0.0283495
+            pound: 0.45359237
+        },
+
+        temperature: {
+            celsius: "celsius",
+            fahrenheit: "fahrenheit",
+            kelvin: "kelvin"
         },
 
         time: {
@@ -1181,56 +1265,163 @@ function initUnitConverter() {
             minute: 60,
             hour: 3600,
             day: 86400
+        }
+    };
+
+
+    const labels = {
+        length: {
+            meter: "Meter",
+            kilometer: "Kilometer",
+            centimeter: "Centimeter",
+            millimeter: "Millimeter",
+            mile: "Mile",
+            foot: "Foot",
+            inch: "Inch"
         },
 
-        data: {
-            bit: 1,
-            byte: 8,
-            kilobyte: 8192,
-            megabyte: 8388608,
-            gigabyte: 8589934592
+        weight: {
+            kilogram: "Kilogram",
+            gram: "Gram",
+            milligram: "Milligram",
+            pound: "Pound"
+        },
+
+        temperature: {
+            celsius: "Celsius",
+            fahrenheit: "Fahrenheit",
+            kelvin: "Kelvin"
+        },
+
+        time: {
+            second: "Second",
+            minute: "Minute",
+            hour: "Hour",
+            day: "Day"
+        }
+    };
+
+
+    const loadUnits = () => {
+
+        const selected =
+            category.value;
+
+        const data =
+            units[selected];
+
+        if (!data) return;
+
+        from.innerHTML = "";
+        to.innerHTML = "";
+
+        Object.keys(data).forEach(unit => {
+
+            const label =
+                labels[selected]?.[unit] || unit;
+
+            const option1 =
+                new Option(label, unit);
+
+            const option2 =
+                new Option(label, unit);
+
+            from.add(option1);
+            to.add(option2);
+
+        });
+
+        if (to.options.length > 1) {
+            to.selectedIndex = 1;
         }
 
     };
 
 
-    function loadUnits() {
+    const convertTemperature =
+        (amount, source, target) => {
 
-        const type =
-            category.value;
+            let celsius;
 
-        const list =
-            units[type];
+            if (source === "celsius") {
+                celsius = amount;
+            }
 
-        if (!list) return;
+            if (source === "fahrenheit") {
+                celsius =
+                    (amount - 32) * 5 / 9;
+            }
 
-        from.innerHTML = "";
-        to.innerHTML = "";
+            if (source === "kelvin") {
+                celsius =
+                    amount - 273.15;
+            }
 
-        Object.keys(list).forEach(unit => {
 
-            const option1 =
-                document.createElement("option");
+            if (target === "celsius") {
+                return celsius;
+            }
 
-            const option2 =
-                document.createElement("option");
+            if (target === "fahrenheit") {
+                return celsius * 9 / 5 + 32;
+            }
 
-            option1.value = unit;
-            option2.value = unit;
+            return celsius + 273.15;
+        };
 
-            option1.textContent = unit;
-            option2.textContent = unit;
 
-            from.appendChild(option1);
-            to.appendChild(option2);
+    const convert = () => {
 
-        });
+        const amount =
+            parseFloat(value.value);
 
-        if (Object.keys(list).length > 1) {
-            to.selectedIndex = 1;
+        if (!Number.isFinite(amount)) {
+
+            setResult(
+                "unitResult",
+                "Enter a valid value.",
+                "error"
+            );
+
+            return;
         }
 
-    }
+
+        const selected =
+            category.value;
+
+        let result;
+
+
+        if (selected === "temperature") {
+
+            result =
+                convertTemperature(
+                    amount,
+                    from.value,
+                    to.value
+                );
+
+        } else {
+
+            const data =
+                units[selected];
+
+            result =
+                amount *
+                data[from.value] /
+                data[to.value];
+
+        }
+
+
+        setResult(
+            "unitResult",
+            `${amount} ${from.options[from.selectedIndex].text} = ${result.toFixed(6).replace(/\.?0+$/, "")} ${to.options[to.selectedIndex].text}`,
+            "success"
+        );
+
+    };
 
 
     category.addEventListener(
@@ -1238,63 +1429,20 @@ function initUnitConverter() {
         loadUnits
     );
 
-
-    button.addEventListener("click", () => {
-
-        const value =
-            parseFloat(input?.value);
-
-        if (isNaN(value)) {
-
-            setResult(
-                "unitResult",
-                "Enter a valid number.",
-                "error"
-            );
-
-            return;
-        }
-
-        const list =
-            units[category.value];
-
-        const base =
-            value * list[from.value];
-
-        const result =
-            base / list[to.value];
-
-        setResult(
-            "unitResult",
-            `${value} ${from.value} = ${Number(result.toFixed(8))} ${to.value}`,
-            "success"
-        );
-
-    });
-
+    button.addEventListener(
+        "click",
+        convert
+    );
 
     loadUnits();
-
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initUnitConverter
-);
-
-
-/* =========================================
+/* =========================================================
    DISCOUNT CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initDiscountCalculator() {
-
-    const price =
-        get("originalPrice");
-
-    const discount =
-        get("discountPercent");
 
     const button =
         get("calculateDiscount");
@@ -1302,71 +1450,58 @@ function initDiscountCalculator() {
     if (!button) return;
 
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        const original =
-            parseFloat(price?.value);
+            const price =
+                getNumber("originalPrice");
 
-        const percent =
-            parseFloat(discount?.value);
+            const discount =
+                getNumber("discountPercent");
 
 
-        if (
-            isNaN(original) ||
-            isNaN(percent) ||
-            original < 0 ||
-            percent < 0 ||
-            percent > 100
-        ) {
+            if (
+                !Number.isFinite(price) ||
+                !Number.isFinite(discount) ||
+                price < 0 ||
+                discount < 0 ||
+                discount > 100
+            ) {
+
+                setResult(
+                    "discountResult",
+                    "Enter valid price and discount.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const saved =
+                price * discount / 100;
+
+            const finalPrice =
+                price - saved;
+
 
             setResult(
                 "discountResult",
-                "Enter valid price and discount.",
-                "error"
+                `You save ₹${saved.toFixed(2)} | Final Price: ₹${finalPrice.toFixed(2)}`,
+                "success"
             );
 
-            return;
         }
-
-
-        const saved =
-            original * percent / 100;
-
-        const finalPrice =
-            original - saved;
-
-
-        setResult(
-            "discountResult",
-            `You save ₹${saved.toFixed(2)} | Final Price: ₹${finalPrice.toFixed(2)}`,
-            "success"
-        );
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initDiscountCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    SIMPLE INTEREST
-   ========================================= */
+   ========================================================= */
 
 function initInterestCalculator() {
-
-    const principal =
-        get("principalAmount");
-
-    const rate =
-        get("interestRate");
-
-    const time =
-        get("interestTime");
 
     const button =
         get("calculateInterest");
@@ -1374,72 +1509,62 @@ function initInterestCalculator() {
     if (!button) return;
 
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        const p =
-            parseFloat(principal?.value);
+            const principal =
+                getNumber("principalAmount");
 
-        const r =
-            parseFloat(rate?.value);
+            const rate =
+                getNumber("interestRate");
 
-        const t =
-            parseFloat(time?.value);
+            const time =
+                getNumber("interestTime");
 
 
-        if (
-            isNaN(p) ||
-            isNaN(r) ||
-            isNaN(t) ||
-            p < 0 ||
-            r < 0 ||
-            t < 0
-        ) {
+            if (
+                !Number.isFinite(principal) ||
+                !Number.isFinite(rate) ||
+                !Number.isFinite(time) ||
+                principal < 0 ||
+                rate < 0 ||
+                time < 0
+            ) {
+
+                setResult(
+                    "interestResult",
+                    "Enter valid values.",
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const interest =
+                principal * rate * time / 100;
+
+            const total =
+                principal + interest;
+
 
             setResult(
                 "interestResult",
-                "Enter valid values.",
-                "error"
+                `Interest: ₹${interest.toFixed(2)} | Total: ₹${total.toFixed(2)}`,
+                "success"
             );
 
-            return;
         }
-
-
-        const interest =
-            (p * r * t) / 100;
-
-        const total =
-            p + interest;
-
-
-        setResult(
-            "interestResult",
-            `Interest: ₹${interest.toFixed(2)} | Total: ₹${total.toFixed(2)}`,
-            "success"
-        );
-
-    });
-
+    );
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initInterestCalculator
-);
-
-
-/* =========================================
+/* =========================================================
    BMI CALCULATOR
-   ========================================= */
+   ========================================================= */
 
 function initBMICalculator() {
-
-    const weight =
-        get("bmiWeight");
-
-    const height =
-        get("bmiHeight");
 
     const button =
         get("calculateBMI");
@@ -1447,1116 +1572,620 @@ function initBMICalculator() {
     if (!button) return;
 
 
-    button.addEventListener("click", () => {
+    button.addEventListener(
+        "click",
+        () => {
 
-        const kg =
-            parseFloat(weight?.value);
+            const weight =
+                getNumber("bmiWeight");
 
-        const cm =
-            parseFloat(height?.value);
-
-
-        if (
-            isNaN(kg) ||
-            isNaN(cm) ||
-            kg <= 0 ||
-            cm <= 0
-        ) {
-
-            setResult(
-                "bmiResult",
-                "Enter valid height and weight.",
-                "error"
-            );
-
-            return;
-        }
+            const heightCm =
+                getNumber("bmiHeight");
 
 
-        const meters =
-            cm / 100;
+            if (
+                !Number.isFinite(weight) ||
+                !Number.isFinite(heightCm) ||
+                weight <= 0 ||
+                heightCm <= 0
+            ) {
 
-        const bmi =
-            kg / (meters * meters);
-
-
-        let category;
-
-
-        if (bmi < 18.5) {
-            category = "Underweight";
-        } else if (bmi < 25) {
-            category = "Normal range";
-        } else if (bmi < 30) {
-            category = "Overweight";
-        } else {
-            category = "Obesity range";
-        }
-
-
-        setResult(
-            "bmiResult",
-            `BMI: ${bmi.toFixed(1)} — ${category}`,
-            "success"
-        );
-
-    });
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initBMICalculator
-);
-
-  /* =========================================
-   JS PART 4
-   STUDY TOOLS
-   Timer + Todo + Word Counter + Notes
-   ========================================= */
-
-
-/* =========================================
-   POMODORO / STUDY TIMER
-   ========================================= */
-
-function initStudyTimer() {
-
-    const display =
-        get("timerDisplay");
-
-    const start =
-        get("startTimer");
-
-    const pause =
-        get("pauseTimer");
-
-    const reset =
-        get("resetTimer");
-
-    if (!display || !start) return;
-
-
-    let totalSeconds = 25 * 60;
-    let timer = null;
-
-
-    function updateTimer() {
-
-        const minutes =
-            Math.floor(totalSeconds / 60);
-
-        const seconds =
-            totalSeconds % 60;
-
-        display.textContent =
-            `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-
-    }
-
-
-    function startTimer() {
-
-        if (timer) return;
-
-        timer = setInterval(() => {
-
-            if (totalSeconds <= 0) {
-
-                clearInterval(timer);
-                timer = null;
-
-                showToast(
-                    "🎉 Study session completed!",
-                    "success"
+                setResult(
+                    "bmiResult",
+                    "Enter valid weight and height.",
+                    "error"
                 );
 
                 return;
             }
 
-            totalSeconds--;
-            updateTimer();
 
-        }, 1000);
+            const height =
+                heightCm / 100;
 
-        showToast(
-            "⏱️ Study timer started",
-            "success"
-        );
-
-    }
+            const bmi =
+                weight / (height * height);
 
 
-    function pauseTimer() {
-
-        if (!timer) return;
-
-        clearInterval(timer);
-        timer = null;
-
-        showToast(
-            "⏸️ Timer paused"
-        );
-
-    }
+            let category;
 
 
-    function resetTimer() {
-
-        clearInterval(timer);
-        timer = null;
-
-        totalSeconds = 25 * 60;
-
-        updateTimer();
-
-        showToast(
-            "🔄 Timer reset"
-        );
-
-    }
+            if (bmi < 18.5) {
+                category = "Underweight";
+            } else if (bmi < 25) {
+                category = "Normal range";
+            } else if (bmi < 30) {
+                category = "Overweight";
+            } else {
+                category = "Obesity range";
+            }
 
 
-    start.addEventListener(
-        "click",
-        startTimer
+            setResult(
+                "bmiResult",
+                `BMI: ${bmi.toFixed(2)} — ${category}`,
+                "success"
+            );
+
+        }
     );
-
-    pause?.addEventListener(
-        "click",
-        pauseTimer
-    );
-
-    reset?.addEventListener(
-        "click",
-        resetTimer
-    );
-
-
-    updateTimer();
-
 }
 
 
+/* =========================================================
+   INITIALIZE PART 3
+   ========================================================= */
+
 document.addEventListener(
     "DOMContentLoaded",
-    initStudyTimer
-);
+    () => {
 
-
-/* =========================================
-   TODO LIST
-   ========================================= */
-
-function initTodoList() {
-
-    const input =
-        get("todoInput");
-
-    const addButton =
-        get("addTodo");
-
-    const list =
-        get("todoList");
-
-    if (!input || !addButton || !list) return;
-
-
-    let todos =
-        JSON.parse(
-            localStorage.getItem("studyTodos") || "[]"
-        );
-
-
-    function saveTodos() {
-
-        localStorage.setItem(
-            "studyTodos",
-            JSON.stringify(todos)
-        );
+        initScientificCalculator();
+        initUnitConverter();
+        initDiscountCalculator();
+        initInterestCalculator();
+        initBMICalculator();
 
     }
+);
+
+// ===============================
+// PART 4 — STUDY TOOLS
+// ===============================
+
+function initStudyTimer() {
+    const display = get("timerDisplay");
+    const startBtn = get("startTimer");
+    const pauseBtn = get("pauseTimer");
+    const resetBtn = get("resetTimer");
+
+    if (!display) return;
+
+    let totalSeconds = 25 * 60;
+    let timer = null;
+
+    function updateDisplay() {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        display.textContent =
+            String(minutes).padStart(2, "0") +
+            ":" +
+            String(seconds).padStart(2, "0");
+    }
+
+    function start() {
+        if (timer) return;
+
+        timer = setInterval(() => {
+            if (totalSeconds > 0) {
+                totalSeconds--;
+                updateDisplay();
+            } else {
+                clearInterval(timer);
+                timer = null;
+                showToast("🎉 Study session complete!");
+            }
+        }, 1000);
+
+        showToast("▶ Timer started");
+    }
+
+    function pause() {
+        clearInterval(timer);
+        timer = null;
+        showToast("⏸ Timer paused");
+    }
+
+    function reset() {
+        clearInterval(timer);
+        timer = null;
+        totalSeconds = 25 * 60;
+        updateDisplay();
+        showToast("↻ Timer reset");
+    }
+
+    startBtn?.addEventListener("click", start);
+    pauseBtn?.addEventListener("click", pause);
+    resetBtn?.addEventListener("click", reset);
+
+    updateDisplay();
+}
 
 
-    function renderTodos() {
+function initTodoList() {
+    const input = get("todoInput");
+    const addBtn = get("addTodo");
+    const list = get("todoList");
 
+    if (!input || !addBtn || !list) return;
+
+    let todos = JSON.parse(localStorage.getItem("studytools-todos") || "[]");
+
+    function save() {
+        localStorage.setItem("studytools-todos", JSON.stringify(todos));
+    }
+
+    function render() {
         list.innerHTML = "";
 
-
         if (!todos.length) {
-
-            list.innerHTML = `
-                <div class="empty-state">
-                    📝 No tasks yet. Add your first task!
-                </div>
-            `;
-
+            list.innerHTML = "<li>No tasks yet 📚</li>";
             return;
         }
 
-
         todos.forEach((todo, index) => {
+            const li = document.createElement("li");
 
-            const item =
-                document.createElement("div");
-
-            item.className =
-                `todo-item ${todo.done ? "completed" : ""}`;
-
-
-            item.innerHTML = `
-                <input
-                    type="checkbox"
-                    ${todo.done ? "checked" : ""}
-                    data-index="${index}"
-                    class="todo-check"
-                >
-
-                <span class="todo-text">
+            li.innerHTML = `
+                <span class="${todo.done ? "done" : ""}">
                     ${escapeHTML(todo.text)}
                 </span>
 
-                <button
-                    type="button"
-                    class="delete-todo"
-                    data-index="${index}"
-                    aria-label="Delete task"
-                >
-                    🗑️
-                </button>
+                <div>
+                    <button type="button" data-complete="${index}">
+                        ${todo.done ? "↩" : "✓"}
+                    </button>
+
+                    <button type="button" data-delete="${index}">
+                        🗑
+                    </button>
+                </div>
             `;
 
-
-            list.appendChild(item);
-
+            list.appendChild(li);
         });
-
     }
 
-
     function addTodo() {
-
-        const text =
-            input.value.trim();
+        const text = input.value.trim();
 
         if (!text) {
-
-            showToast(
-                "✍️ Enter a task first.",
-                "warning"
-            );
-
+            showToast("Enter a task first");
             return;
         }
 
-
         todos.push({
             text,
-            done: false,
-            createdAt: Date.now()
+            done: false
         });
 
-
         input.value = "";
-
-        saveTodos();
-        renderTodos();
-
+        save();
+        render();
     }
 
+    addBtn.addEventListener("click", addTodo);
 
-    addButton.addEventListener(
-        "click",
-        addTodo
-    );
-
-
-    input.addEventListener("keydown", event => {
-
-        if (event.key === "Enter") {
-            addTodo();
-        }
-
+    input.addEventListener("keydown", e => {
+        if (e.key === "Enter") addTodo();
     });
 
+    list.addEventListener("click", e => {
+        const complete = e.target.closest("[data-complete]");
+        const del = e.target.closest("[data-delete]");
 
-    list.addEventListener("click", event => {
-
-        const checkbox =
-            event.target.closest(".todo-check");
-
-        const deleteButton =
-            event.target.closest(".delete-todo");
-
-
-        if (checkbox) {
-
-            const index =
-                Number(checkbox.dataset.index);
-
-            todos[index].done =
-                checkbox.checked;
-
-            saveTodos();
-            renderTodos();
-
+        if (complete) {
+            const index = Number(complete.dataset.complete);
+            todos[index].done = !todos[index].done;
+            save();
+            render();
         }
 
-
-        if (deleteButton) {
-
-            const index =
-                Number(deleteButton.dataset.index);
-
+        if (del) {
+            const index = Number(del.dataset.delete);
             todos.splice(index, 1);
-
-            saveTodos();
-            renderTodos();
-
+            save();
+            render();
         }
-
     });
 
-
-    renderTodos();
-
+    render();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initTodoList
-);
-
-
-/* =========================================
-   WORD COUNTER
-   ========================================= */
-
 function initWordCounter() {
-
-    const input =
-        get("wordCounterInput");
+    const input = get("wordCounterInput");
 
     if (!input) return;
 
+    const word = get("wordCount");
+    const character = get("characterCount");
+    const sentence = get("sentenceCount");
+    const paragraph = get("paragraphCount");
 
-    const words =
-        get("wordCount");
+    function update() {
+        const text = input.value;
 
-    const characters =
-        get("characterCount");
+        const words = text.trim()
+            ? text.trim().split(/\s+/).length
+            : 0;
 
-    const sentences =
-        get("sentenceCount");
+        const sentences = text.trim()
+            ? text.split(/[.!?]+/).filter(x => x.trim()).length
+            : 0;
 
-    const paragraphs =
-        get("paragraphCount");
+        const paragraphs = text.trim()
+            ? text.split(/\n\s*\n/).filter(x => x.trim()).length
+            : 0;
 
-
-    function updateCounter() {
-
-        const text =
-            input.value;
-
-
-        const trimmed =
-            text.trim();
-
-
-        const wordCount =
-            trimmed
-                ? trimmed.split(/\s+/).length
-                : 0;
-
-
-        const characterCount =
-            text.length;
-
-
-        const sentenceCount =
-            trimmed
-                ? (trimmed.match(/[.!?]+/g) || []).length
-                : 0;
-
-
-        const paragraphCount =
-            trimmed
-                ? trimmed.split(/\n\s*\n/).length
-                : 0;
-
-
-        if (words) {
-            words.textContent = wordCount;
-        }
-
-        if (characters) {
-            characters.textContent = characterCount;
-        }
-
-        if (sentences) {
-            sentences.textContent = sentenceCount;
-        }
-
-        if (paragraphs) {
-            paragraphs.textContent = paragraphCount;
-        }
-
+        if (word) word.textContent = words;
+        if (character) character.textContent = text.length;
+        if (sentence) sentence.textContent = sentences;
+        if (paragraph) paragraph.textContent = paragraphs;
     }
 
-
-    input.addEventListener(
-        "input",
-        updateCounter
-    );
-
-
-    updateCounter();
-
+    input.addEventListener("input", update);
+    update();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initWordCounter
-);
-
-
-/* =========================================
-   QUICK NOTES
-   ========================================= */
-
 function initQuickNotes() {
-
-    const notes =
-        get("quickNotes");
+    const notes = get("quickNotes");
+    const clearBtn = get("clearNotes");
 
     if (!notes) return;
 
+    const savedNotes =
+        localStorage.getItem("studytools-notes");
 
-    const saved =
-        localStorage.getItem(
-            "studyQuickNotes"
-        );
-
-
-    if (saved !== null) {
-        notes.value = saved;
+    if (savedNotes !== null) {
+        notes.value = savedNotes;
     }
 
+    notes.addEventListener("input", () => {
+        localStorage.setItem(
+            "studytools-notes",
+            notes.value
+        );
+    });
 
-    notes.addEventListener(
-        "input",
-        () => {
+    clearBtn?.addEventListener("click", () => {
+        if (!notes.value) return;
 
-            localStorage.setItem(
-                "studyQuickNotes",
-                notes.value
-            );
+        notes.value = "";
+        localStorage.removeItem("studytools-notes");
 
-        }
-    );
-
-
-    const clearButton =
-        get("clearNotes");
-
-
-    clearButton?.addEventListener(
-        "click",
-        () => {
-
-            notes.value = "";
-
-            localStorage.removeItem(
-                "studyQuickNotes"
-            );
-
-            showToast(
-                "🗑️ Notes cleared"
-            );
-
-        }
-    );
-
+        showToast("🗑 Notes cleared");
+    });
 }
 
 
-/* =========================================
-   HTML SAFE TEXT
-   ========================================= */
-
-function escapeHTML(text) {
-
-    const div =
-        document.createElement("div");
-
-    div.textContent = text;
-
+function escapeHTML(value) {
+    const div = document.createElement("div");
+    div.textContent = value;
     return div.innerHTML;
-
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initQuickNotes
-);
+document.addEventListener("DOMContentLoaded", () => {
+    initStudyTimer();
+    initTodoList();
+    initWordCounter();
+    initQuickNotes();
+});
 
-    /* =========================================
-   JS PART 5
-   QUIZ + FLASHCARDS + STUDY PROGRESS
-   ========================================= */
-
-
-/* =========================================
-   QUIZ SYSTEM
-   ========================================= */
+// ===============================
+// PART 5 — QUIZ + FLASHCARDS + PROGRESS
+// ===============================
 
 function initQuiz() {
-
-    const question =
-        get("quizQuestion");
-
-    const options =
-        get("quizOptions");
-
-    const nextButton =
-        get("nextQuiz");
-
-    const scoreElement =
-        get("quizScore");
+    const question = get("quizQuestion");
+    const options = get("quizOptions");
+    const nextBtn = get("nextQuiz");
+    const scoreBox = get("quizScore");
 
     if (!question || !options) return;
 
-
-    const questions = [
+    const quizData = [
         {
-            q: "Which language is mainly used to structure a web page?",
-            options: ["CSS", "HTML", "JavaScript", "C++"],
-            answer: 1
-        },
-        {
-            q: "Which language is used for styling web pages?",
-            options: ["HTML", "CSS", "C", "Python"],
-            answer: 1
-        },
-        {
-            q: "Which symbol is used for a single-line comment in JavaScript?",
-            options: ["//", "##", "<!--", "**"],
-            answer: 0
-        },
-        {
-            q: "What does CPU stand for?",
+            q: "HTML ka full form kya hai?",
             options: [
-                "Central Processing Unit",
-                "Computer Personal Unit",
-                "Central Program Utility",
-                "Control Processing User"
+                "Hyper Text Markup Language",
+                "High Text Machine Language",
+                "Hyper Tool Multi Language",
+                "Home Text Markup Language"
             ],
             answer: 0
         },
         {
-            q: "Which data structure follows FIFO?",
+            q: "CSS ka use kisliye hota hai?",
             options: [
-                "Stack",
-                "Queue",
-                "Tree",
-                "Graph"
+                "Database ke liye",
+                "Website styling ke liye",
+                "Server banane ke liye",
+                "File download ke liye"
+            ],
+            answer: 1
+        },
+        {
+            q: "JavaScript kis type ki language hai?",
+            options: [
+                "Programming language",
+                "Markup language",
+                "Style sheet",
+                "Database"
+            ],
+            answer: 0
+        },
+        {
+            q: "C++ me output ke liye commonly kya use hota hai?",
+            options: [
+                "print()",
+                "cout",
+                "echo",
+                "output()"
             ],
             answer: 1
         }
     ];
-
 
     let current = 0;
     let score = 0;
     let answered = false;
 
+    function renderQuiz() {
+        const quiz = quizData[current];
 
-    function renderQuestion() {
-
-        const item =
-            questions[current];
-
+        question.textContent = quiz.q;
+        options.innerHTML = "";
         answered = false;
 
-        question.textContent =
-            `${current + 1}. ${item.q}`;
-
-        options.innerHTML = "";
-
-
-        item.options.forEach((option, index) => {
-
-            const button =
-                document.createElement("button");
+        quiz.options.forEach((option, index) => {
+            const button = document.createElement("button");
 
             button.type = "button";
-            button.className = "quiz-option";
             button.textContent = option;
 
-            button.addEventListener(
-                "click",
-                () => checkAnswer(
-                    button,
-                    index
-                )
-            );
+            button.addEventListener("click", () => {
+                if (answered) return;
+
+                answered = true;
+
+                if (index === quiz.answer) {
+                    button.classList.add("correct");
+                    score++;
+                    showToast("✅ Correct!");
+                } else {
+                    button.classList.add("wrong");
+
+                    const correctBtn =
+                        options.children[quiz.answer];
+
+                    correctBtn?.classList.add("correct");
+
+                    showToast("❌ Wrong answer");
+                }
+
+                if (scoreBox) {
+                    scoreBox.textContent =
+                        `Score: ${score}/${current + 1}`;
+                }
+            });
 
             options.appendChild(button);
-
         });
 
-
-        if (scoreElement) {
-
-            scoreElement.textContent =
-                `Score: ${score}/${questions.length}`;
-
+        if (nextBtn) {
+            nextBtn.textContent =
+                current === quizData.length - 1
+                    ? "Restart Quiz"
+                    : "Next Question";
         }
-
     }
 
-
-    function checkAnswer(button, index) {
-
-        if (answered) return;
-
-        answered = true;
-
-        const correct =
-            questions[current].answer;
-
-
-        const allOptions =
-            $$(".quiz-option", options);
-
-
-        allOptions.forEach((item, i) => {
-
-            item.disabled = true;
-
-            if (i === correct) {
-                item.classList.add("correct");
-            }
-
-        });
-
-
-        if (index === correct) {
-
-            score++;
-
-            button.classList.add("correct");
-
-            showToast(
-                "✅ Correct answer!",
-                "success"
-            );
-
+    nextBtn?.addEventListener("click", () => {
+        if (current === quizData.length - 1) {
+            current = 0;
+            score = 0;
         } else {
-
-            button.classList.add("wrong");
-
-            showToast(
-                "❌ Wrong answer",
-                "error"
-            );
-
-        }
-
-
-        if (scoreElement) {
-
-            scoreElement.textContent =
-                `Score: ${score}/${questions.length}`;
-
-        }
-
-    }
-
-
-    nextButton?.addEventListener(
-        "click",
-        () => {
-
             current++;
-
-            if (current >= questions.length) {
-
-                question.textContent =
-                    `🎉 Quiz Complete! Final Score: ${score}/${questions.length}`;
-
-                options.innerHTML = "";
-
-                nextButton.textContent =
-                    "Restart Quiz";
-
-                current = -1;
-
-                return;
-
-            }
-
-            nextButton.textContent =
-                "Next Question";
-
-            renderQuestion();
-
         }
-    );
 
+        renderQuiz();
+    });
 
-    renderQuestion();
-
+    renderQuiz();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initQuiz
-);
-
-
-/* =========================================
-   FLASHCARDS
-   ========================================= */
-
 function initFlashcards() {
-
-    const container =
-        get("flashcardsContainer");
+    const container = get("flashcardsContainer");
 
     if (!container) return;
 
-
     const cards = [
         {
-            front: "What is HTML?",
-            back: "HTML is used to structure web pages."
+            question: "What is HTML?",
+            answer: "HTML is used to create the structure of web pages."
         },
         {
-            front: "What is CSS?",
-            back: "CSS is used to style and design web pages."
+            question: "What is CSS?",
+            answer: "CSS is used to style and design web pages."
         },
         {
-            front: "What is JavaScript?",
-            back: "JavaScript adds logic and interactivity to web pages."
+            question: "What is JavaScript?",
+            answer: "JavaScript adds logic and interactivity to websites."
         },
         {
-            front: "What is an Algorithm?",
-            back: "A step-by-step procedure for solving a problem."
+            question: "What is C++?",
+            answer: "C++ is a general-purpose programming language."
         }
     ];
 
-
     container.innerHTML = "";
 
-
     cards.forEach(card => {
+        const element = document.createElement("div");
 
-        const element =
-            document.createElement("div");
-
-        element.className =
-            "flashcard";
-
+        element.className = "flashcard";
 
         element.innerHTML = `
-            <div class="flashcard-inner">
+            <div class="flashcard-front">
+                ${escapeHTML(card.question)}
+            </div>
 
-                <div class="flashcard-front">
-                    <strong>${escapeHTML(card.front)}</strong>
-                    <small>Tap to reveal</small>
-                </div>
-
-                <div class="flashcard-back">
-                    <span>${escapeHTML(card.back)}</span>
-                </div>
-
+            <div class="flashcard-back">
+                ${escapeHTML(card.answer)}
             </div>
         `;
 
-
-        element.addEventListener(
-            "click",
-            () => {
-
-                element.classList.toggle(
-                    "flipped"
-                );
-
-            }
-        );
-
-
-        container.appendChild(element);
-
-    });
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initFlashcards
-);
-
-
-/* =========================================
-   STUDY PROGRESS
-   ========================================= */
-
-function initStudyProgress() {
-
-    const input =
-        get("studyProgressInput");
-
-    const updateButton =
-        get("updateProgress");
-
-    const progressBar =
-        get("studyProgressBar");
-
-    const progressText =
-        get("studyProgressText");
-
-
-    if (!input || !updateButton) return;
-
-
-    const saved =
-        localStorage.getItem(
-            "studyProgress"
-        );
-
-
-    if (saved !== null) {
-
-        input.value = saved;
-
-        updateProgress(
-            Number(saved)
-        );
-
-    }
-
-
-    updateButton.addEventListener(
-        "click",
-        () => {
-
-            let value =
-                parseFloat(input.value);
-
-
-            if (
-                isNaN(value) ||
-                value < 0 ||
-                value > 100
-            ) {
-
-                showToast(
-                    "Enter progress between 0 and 100.",
-                    "warning"
-                );
-
-                return;
-            }
-
-
-            value =
-                Math.round(value);
-
-
-            localStorage.setItem(
-                "studyProgress",
-                value
-            );
-
-
-            updateProgress(value);
-
-            showToast(
-                `📈 Progress updated to ${value}%`,
-                "success"
-            );
-
-        }
-    );
-
-
-    function updateProgress(value) {
-
-        if (progressBar) {
-
-            progressBar.style.width =
-                `${value}%`;
-
-        }
-
-        if (progressText) {
-
-            progressText.textContent =
-                `${value}%`;
-
-        }
-
-    }
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initStudyProgress
-);
-
-
-/* =========================================
-   STUDY SESSION COUNTER
-   ========================================= */
-
-function initStudySessionCounter() {
-
-    const counter =
-        get("studySessionCount");
-
-    const button =
-        get("completeStudySession");
-
-    if (!counter || !button) return;
-
-
-    let sessions =
-        Number(
-            localStorage.getItem(
-                "studySessions"
-            ) || 0
-        );
-
-
-    counter.textContent =
-        sessions;
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            sessions++;
-
-            localStorage.setItem(
-                "studySessions",
-                sessions
-            );
-
-            counter.textContent =
-                sessions;
-
-            showToast(
-                "🔥 Study session completed!",
-                "success"
-            );
-
-        }
-    );
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initStudySessionCounter
-);
-
-   /* =========================================
-   JS PART 6
-   HTML / CSS / JS EDITOR
-   ========================================= */
-
-function initCodeEditor() {
-
-    const editorPage = get("editorPage");
-
-    const htmlCode = get("htmlCode");
-    const cssCode = get("cssCode");
-    const jsCode = get("jsCode");
-
-    const preview = get("codePreview");
-
-    const runButton = get("runCode");
-    const clearButton = get("clearCode");
-    const copyButton = get("copyCode");
-    const downloadButton = get("downloadCode");
-
-    if (
-        !editorPage ||
-        !htmlCode ||
-        !cssCode ||
-        !jsCode ||
-        !preview
-    ) return;
-
-
-    /* ---------- Open Editor ---------- */
-
-    const openEditor = get("openEditor");
-
-    openEditor?.addEventListener("click", () => {
-
-        editorPage.style.display = "block";
-
-        document.body.classList.add(
-            "tool-page-open"
-        );
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
+        element.addEventListener("click", () => {
+            element.classList.toggle("flipped");
         });
 
-        runCode();
+        container.appendChild(element);
+    });
+}
 
+
+function initStudyProgress() {
+    const input = get("studyProgressInput");
+    const updateBtn = get("updateProgress");
+    const bar = get("studyProgressBar");
+    const text = get("studyProgressText");
+
+    if (!input || !updateBtn) return;
+
+    let saved =
+        Number(localStorage.getItem("studytools-progress"));
+
+    if (Number.isNaN(saved)) saved = 0;
+
+    function update(value) {
+        value = Math.max(0, Math.min(100, Number(value)));
+
+        input.value = value;
+
+        if (bar) {
+            bar.style.width = value + "%";
+        }
+
+        if (text) {
+            text.textContent = value + "% Complete";
+        }
+
+        localStorage.setItem(
+            "studytools-progress",
+            value
+        );
+    }
+
+    updateBtn.addEventListener("click", () => {
+        const value = Number(input.value);
+
+        if (Number.isNaN(value)) {
+            showToast("Enter progress percentage");
+            return;
+        }
+
+        update(value);
+        showToast("📈 Progress updated");
     });
 
-
-    /* ---------- Close Editor ---------- */
-
-    const closeEditor =
-        get("closeEditor");
-
-    closeEditor?.addEventListener(
-        "click",
-        () => {
-
-            editorPage.style.display = "none";
-
-            document.body.classList.remove(
-                "tool-page-open"
-            );
-
-        }
-    );
+    update(saved);
+}
 
 
-    /* ---------- Run Code ---------- */
+function initStudySessionCounter() {
+    const countBox = get("studySessionCount");
+    const completeBtn = get("completeStudySession");
+
+    if (!countBox || !completeBtn) return;
+
+    let count =
+        Number(localStorage.getItem("studytools-sessions"));
+
+    if (Number.isNaN(count)) count = 0;
+
+    function render() {
+        countBox.textContent = count;
+    }
+
+    completeBtn.addEventListener("click", () => {
+        count++;
+
+        localStorage.setItem(
+            "studytools-sessions",
+            count
+        );
+
+        render();
+
+        showToast("🎉 Study session completed!");
+    });
+
+    render();
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    initQuiz();
+    initFlashcards();
+    initStudyProgress();
+    initStudySessionCounter();
+});
+
+       // ===============================
+// PART 6 — ADVANCED CODE EDITOR
+// ===============================
+
+function initCodeEditor() {
+    const editorPage = get("editorPage");
+    const openBtn = get("openEditor");
+    const closeBtn = get("closeEditor");
+
+    const htmlInput = get("htmlCode");
+    const cssInput = get("cssCode");
+    const jsInput = get("jsCode");
+
+    const preview = get("codePreview");
+    const runBtn = get("runCode");
+    const clearBtn = get("clearCode");
+    const downloadBtn = get("downloadCode");
+    const copyBtn = get("copyCode");
+
+    if (!editorPage) return;
+
+    function openEditor() {
+        editorPage.style.display = "block";
+        document.body.classList.add("editor-open");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function closeEditor() {
+        editorPage.style.display = "none";
+        document.body.classList.remove("editor-open");
+    }
 
     function runCode() {
+        if (!preview) return;
 
-        const html =
-            htmlCode.value;
+        const html = htmlInput?.value || "";
+        const css = cssInput?.value || "";
+        const js = jsInput?.value || "";
 
-        const css =
-            cssCode.value;
-
-        const js =
-            jsCode.value;
-
-
-        const fullCode = `
+        preview.srcdoc = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -2576,121 +2205,114 @@ ${html}
 try {
 ${js}
 } catch(error) {
-    document.body.insertAdjacentHTML(
-        "beforeend",
-        "<pre style='color:red;padding:15px;'>" +
-        error.message +
-        "</pre>"
-    );
+    document.body.innerHTML +=
+    '<pre style="color:red;padding:15px;">' +
+    error.message +
+    '</pre>';
 }
 <\/script>
 
 </body>
 </html>
-`;
+        `;
 
-
-        preview.srcdoc =
-            fullCode;
-
+        saveEditorData();
+        showToast("▶ Code executed");
     }
 
+    function clearEditor() {
+        if (htmlInput) htmlInput.value = "";
+        if (cssInput) cssInput.value = "";
+        if (jsInput) jsInput.value = "";
 
-    runButton?.addEventListener(
-        "click",
-        runCode
-    );
-
-
-    /* ---------- Clear Editor ---------- */
-
-    clearButton?.addEventListener(
-        "click",
-        () => {
-
-            if (
-                !confirm(
-                    "Clear all editor code?"
-                )
-            ) return;
-
-
-            htmlCode.value = "";
-            cssCode.value = "";
-            jsCode.value = "";
-
+        if (preview) {
             preview.srcdoc = "";
-
-            showToast(
-                "🗑️ Editor cleared"
-            );
-
         }
-    );
 
+        localStorage.removeItem("studytools-editor-html");
+        localStorage.removeItem("studytools-editor-css");
+        localStorage.removeItem("studytools-editor-js");
 
-    /* ---------- Copy Code ---------- */
+        showToast("🗑 Editor cleared");
+    }
 
-    copyButton?.addEventListener(
-        "click",
-        async () => {
+    function saveEditorData() {
+        localStorage.setItem(
+            "studytools-editor-html",
+            htmlInput?.value || ""
+        );
 
-            const combined =
-                `${htmlCode.value}\n\n${cssCode.value}\n\n${jsCode.value}`;
+        localStorage.setItem(
+            "studytools-editor-css",
+            cssInput?.value || ""
+        );
 
+        localStorage.setItem(
+            "studytools-editor-js",
+            jsInput?.value || ""
+        );
+    }
 
-            try {
-
-                await navigator.clipboard.writeText(
-                    combined
-                );
-
-                showToast(
-                    "📋 Code copied!",
-                    "success"
-                );
-
-            } catch {
-
-                showToast(
-                    "Unable to copy code.",
-                    "error"
-                );
-
-            }
-
+    function loadEditorData() {
+        if (htmlInput) {
+            htmlInput.value =
+                localStorage.getItem(
+                    "studytools-editor-html"
+                ) || htmlInput.value;
         }
-    );
 
+        if (cssInput) {
+            cssInput.value =
+                localStorage.getItem(
+                    "studytools-editor-css"
+                ) || cssInput.value;
+        }
 
-    /* ---------- Download Code ---------- */
+        if (jsInput) {
+            jsInput.value =
+                localStorage.getItem(
+                    "studytools-editor-js"
+                ) || jsInput.value;
+        }
+    }
 
-    downloadButton?.addEventListener(
-        "click",
-        () => {
+    async function copyCode() {
+        const html = htmlInput?.value || "";
+        const css = cssInput?.value || "";
+        const js = jsInput?.value || "";
 
-            const html =
-                htmlCode.value;
+        const combined = `
+HTML:
+${html}
 
-            const css =
-                cssCode.value;
+CSS:
+${css}
 
-            const js =
-                jsCode.value;
+JavaScript:
+${js}
+        `.trim();
 
+        try {
+            await navigator.clipboard.writeText(combined);
+            showToast("📋 Code copied");
+        } catch {
+            showToast("Copy not supported");
+        }
+    }
 
-            const finalHTML = `
+    function downloadCode() {
+        const html = htmlInput?.value || "";
+        const css = cssInput?.value || "";
+        const js = jsInput?.value || "";
+
+        const completeHTML = `
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>My StudyToolsHub Project</title>
 
@@ -2709,1635 +2331,876 @@ ${js}
 <\/script>
 
 </body>
-
 </html>
-`;
+        `.trim();
 
+        const blob = new Blob(
+            [completeHTML],
+            { type: "text/html" }
+        );
 
-            const blob =
-                new Blob(
-                    [finalHTML],
-                    {
-                        type: "text/html"
-                    }
-                );
+        const url = URL.createObjectURL(blob);
 
+        const link = document.createElement("a");
 
-            const url =
-                URL.createObjectURL(blob);
+        link.href = url;
+        link.download = "studytoolshub-project.html";
 
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
 
-            const link =
-                document.createElement("a");
+        URL.revokeObjectURL(url);
 
-            link.href = url;
+        showToast("💾 HTML file downloaded");
+    }
 
-            link.download =
-                "studytoolshub-project.html";
+    openBtn?.addEventListener("click", openEditor);
+    closeBtn?.addEventListener("click", closeEditor);
 
-            document.body.appendChild(link);
+    runBtn?.addEventListener("click", runCode);
+    clearBtn?.addEventListener("click", clearEditor);
 
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-
-
-            showToast(
-                "⬇️ HTML file downloaded!",
-                "success"
-            );
-
-        }
+    downloadBtn?.addEventListener(
+        "click",
+        downloadCode
     );
 
+    copyBtn?.addEventListener(
+        "click",
+        copyCode
+    );
 
-    /* ---------- Auto Save ---------- */
-
-    const editorData =
-        JSON.parse(
-            localStorage.getItem(
-                "studyEditorData"
-            ) || "{}"
+    [htmlInput, cssInput, jsInput].forEach(input => {
+        input?.addEventListener(
+            "input",
+            saveEditorData
         );
+    });
 
-
-    if (editorData.html !== undefined) {
-        htmlCode.value = editorData.html;
-    }
-
-    if (editorData.css !== undefined) {
-        cssCode.value = editorData.css;
-    }
-
-    if (editorData.js !== undefined) {
-        jsCode.value = editorData.js;
-    }
-
-
-    function saveEditor() {
-
-        localStorage.setItem(
-            "studyEditorData",
-            JSON.stringify({
-                html: htmlCode.value,
-                css: cssCode.value,
-                js: jsCode.value
-            })
-        );
-
-    }
-
-
-    [htmlCode, cssCode, jsCode]
-        .forEach(textarea => {
-
-            textarea.addEventListener(
-                "input",
-                saveEditor
-            );
-
-        });
-
-
-    /* ---------- Tab Key Support ---------- */
-
-    [htmlCode, cssCode, jsCode]
-        .forEach(textarea => {
-
-            textarea.addEventListener(
-                "keydown",
-                event => {
-
-                    if (event.key !== "Tab") return;
-
-                    event.preventDefault();
-
-                    const start =
-                        textarea.selectionStart;
-
-                    const end =
-                        textarea.selectionEnd;
-
-
-                    textarea.value =
-                        textarea.value.substring(
-                            0,
-                            start
-                        ) +
-                        "    " +
-                        textarea.value.substring(
-                            end
-                        );
-
-
-                    textarea.selectionStart =
-                        textarea.selectionEnd =
-                        start + 4;
-
-                    saveEditor();
-
-                }
-            );
-
-        });
-
+    loadEditorData();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initCodeEditor
-);
+// Start Editor
+document.addEventListener("DOMContentLoaded", () => {
+    initCodeEditor();
+});
 
-    /* =========================================
-   JS PART 7
-   C / C++ COMPILER
-   ========================================= */
+// ===============================
+// PART 7 — C / C++ COMPILER
+// ===============================
 
 function initCompiler() {
+    const page = get("compilerPage");
+    const openBtn = get("openCompiler");
+    const closeBtn = get("closeCompiler");
 
-    const compilerPage =
-        get("compilerPage");
+    const language = get("compilerLanguage");
+    const code = get("compilerCode");
+    const runBtn = get("runCompiler");
+    const clearBtn = get("clearCompiler");
 
-    const compilerCode =
-        get("compilerCode");
+    const output = get("compilerOutput");
+    const lineCount = get("compilerLineCount");
+    const clearOutputBtn = get("clearCompilerOutput");
+    const downloadBtn = get("downloadCompilerCode");
 
-    const compilerOutput =
-        get("compilerOutput");
+    if (!page) return;
 
-    const language =
-        get("compilerLanguage");
+    const defaultCode = {
+        c: `#include <stdio.h>
 
-    const runButton =
-        get("runCompiler");
+int main() {
+    printf("Hello, StudyToolsHub!");
+    return 0;
+}`,
+        cpp: `#include <iostream>
+using namespace std;
 
-    const clearButton =
-        get("clearCompiler");
+int main() {
+    cout << "Hello, StudyToolsHub!";
+    return 0;
+}`
+    };
 
-    const downloadButton =
-        get("downloadCompilerCode");
+    function openCompiler() {
+        page.style.display = "block";
+        document.body.classList.add("compiler-open");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-    const lineCount =
-        get("compilerLineCount");
-
-    const clearOutput =
-        get("clearCompilerOutput");
-
-
-    if (
-        !compilerPage ||
-        !compilerCode ||
-        !compilerOutput
-    ) return;
-
-
-    /* ---------- Open Compiler ---------- */
-
-    const openCompiler =
-        get("openCompiler");
-
-    openCompiler?.addEventListener(
-        "click",
-        () => {
-
-            compilerPage.style.display =
-                "block";
-
-            document.body.classList.add(
-                "tool-page-open"
-            );
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-            updateLineCount();
-
-        }
-    );
-
-
-    /* ---------- Close Compiler ---------- */
-
-    const closeCompiler =
-        get("closeCompiler");
-
-    closeCompiler?.addEventListener(
-        "click",
-        () => {
-
-            compilerPage.style.display =
-                "none";
-
-            document.body.classList.remove(
-                "tool-page-open"
-            );
-
-        }
-    );
-
-
-    /* ---------- Line Counter ---------- */
+    function closeCompiler() {
+        page.style.display = "none";
+        document.body.classList.remove("compiler-open");
+    }
 
     function updateLineCount() {
+        if (!code || !lineCount) return;
 
-        if (!lineCount) return;
-
-        const lines =
-            compilerCode.value.split("\n").length;
+        const lines = code.value.split("\n").length;
 
         lineCount.textContent =
-            `${lines} line${lines === 1 ? "" : "s"}`;
-
+            `${lines} line${lines !== 1 ? "s" : ""}`;
     }
 
+    function saveCode() {
+        if (!code || !language) return;
 
-    compilerCode.addEventListener(
-        "input",
-        updateLineCount
-    );
+        localStorage.setItem(
+            `studytools-compiler-${language.value}`,
+            code.value
+        );
+    }
 
+    function loadCode() {
+        if (!code || !language) return;
 
-    /* ---------- Tab Support ---------- */
-
-    compilerCode.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key !== "Tab") return;
-
-            event.preventDefault();
-
-            const start =
-                compilerCode.selectionStart;
-
-            const end =
-                compilerCode.selectionEnd;
-
-
-            compilerCode.value =
-                compilerCode.value.substring(
-                    0,
-                    start
-                ) +
-                "    " +
-                compilerCode.value.substring(
-                    end
-                );
-
-
-            compilerCode.selectionStart =
-                compilerCode.selectionEnd =
-                start + 4;
-
-
-            updateLineCount();
-
-        }
-    );
-
-
-    /* ---------- Auto Save ---------- */
-
-    const savedCode =
-        localStorage.getItem(
-            "studyCompilerCode"
+        const saved = localStorage.getItem(
+            `studytools-compiler-${language.value}`
         );
 
+        code.value =
+            saved !== null
+                ? saved
+                : defaultCode[language.value];
 
-    if (
-        savedCode &&
-        compilerCode.value.trim() === ""
-    ) {
-
-        compilerCode.value =
-            savedCode;
-
+        updateLineCount();
     }
 
+    function changeLanguage() {
+        saveCode();
+        loadCode();
 
-    compilerCode.addEventListener(
-        "input",
-        () => {
-
-            localStorage.setItem(
-                "studyCompilerCode",
-                compilerCode.value
-            );
-
+        if (output) {
+            output.textContent =
+                "Ready to run " +
+                language.value.toUpperCase() +
+                " code.";
         }
-    );
+    }
 
+    function runCompilerCode() {
+        if (!code || !output) return;
 
-    /* ---------- Run ---------- */
+        const source = code.value.trim();
 
-    runButton?.addEventListener(
+        if (!source) {
+            output.textContent =
+                "⚠️ Please write some code first.";
+            return;
+        }
+
+        saveCode();
+
+        output.textContent =
+`C/C++ compiler backend is not connected yet.
+
+Your ${language.value.toUpperCase()} code is ready.
+
+Lines: ${source.split("\n").length}
+
+Next step:
+Connect a secure server-side compiler API to execute this code.`;
+
+        showToast("▶ Code sent to compiler panel");
+    }
+
+    function clearCode() {
+        if (!code) return;
+
+        code.value = "";
+        localStorage.removeItem(
+            `studytools-compiler-${language.value}`
+        );
+
+        updateLineCount();
+
+        showToast("🗑 Compiler code cleared");
+    }
+
+    function clearOutput() {
+        if (!output) return;
+
+        output.textContent =
+            "Output will appear here...";
+
+        showToast("Output cleared");
+    }
+
+    function downloadCode() {
+        if (!code || !language) return;
+
+        const extension =
+            language.value === "c"
+                ? "c"
+                : "cpp";
+
+        const blob = new Blob(
+            [code.value],
+            { type: "text/plain" }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link =
+            document.createElement("a");
+
+        link.href = url;
+        link.download =
+            `studytoolshub-code.${extension}`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        showToast("💾 Code downloaded");
+    }
+
+    openBtn?.addEventListener(
         "click",
-        () => {
-
-            const code =
-                compilerCode.value.trim();
-
-            if (!code) {
-
-                compilerOutput.textContent =
-                    "⚠️ Write some C/C++ code first.";
-
-                return;
-            }
-
-
-            /*
-             * Browser cannot directly compile
-             * C/C++ source code.
-             */
-
-            compilerOutput.textContent =
-                "▶ Code submitted.\n\n" +
-                "Language: " +
-                (
-                    language?.value === "cpp"
-                        ? "C++"
-                        : "C"
-                ) +
-                "\n\n" +
-                "⚠️ Online execution backend is required " +
-                "for real compilation.\n\n" +
-                "Your code is ready to be connected " +
-                "to a secure compiler API.";
-
-            showToast(
-                "⚡ Compiler request prepared",
-                "success"
-            );
-
-        }
+        openCompiler
     );
 
-
-    /* ---------- Clear Code ---------- */
-
-    clearButton?.addEventListener(
+    closeBtn?.addEventListener(
         "click",
-        () => {
-
-            compilerCode.value = "";
-
-            localStorage.removeItem(
-                "studyCompilerCode"
-            );
-
-            updateLineCount();
-
-            showToast(
-                "🗑️ Compiler code cleared"
-            );
-
-        }
+        closeCompiler
     );
 
+    language?.addEventListener(
+        "change",
+        changeLanguage
+    );
 
-    /* ---------- Clear Output ---------- */
-
-    clearOutput?.addEventListener(
+    runBtn?.addEventListener(
         "click",
-        () => {
-
-            compilerOutput.textContent =
-                "Output will appear here...";
-
-        }
+        runCompilerCode
     );
 
-
-    /* ---------- Download Code ---------- */
-
-    downloadButton?.addEventListener(
+    clearBtn?.addEventListener(
         "click",
-        () => {
-
-            const code =
-                compilerCode.value;
-
-            if (!code.trim()) {
-
-                showToast(
-                    "⚠️ No code to download.",
-                    "warning"
-                );
-
-                return;
-            }
-
-
-            const extension =
-                language?.value === "cpp"
-                    ? "cpp"
-                    : "c";
-
-
-            const blob =
-                new Blob(
-                    [code],
-                    {
-                        type: "text/plain"
-                    }
-                );
-
-
-            const url =
-                URL.createObjectURL(blob);
-
-
-            const link =
-                document.createElement("a");
-
-            link.href = url;
-
-            link.download =
-                `study-code.${extension}`;
-
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            link.remove();
-
-            URL.revokeObjectURL(url);
-
-
-            showToast(
-                "⬇️ Code downloaded!",
-                "success"
-            );
-
-        }
+        clearCode
     );
 
+    clearOutputBtn?.addEventListener(
+        "click",
+        clearOutput
+    );
 
-    updateLineCount();
+    downloadBtn?.addEventListener(
+        "click",
+        downloadCode
+    );
 
+    code?.addEventListener("input", () => {
+        updateLineCount();
+        saveCode();
+    });
+
+    loadCode();
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initCompiler
-);
+// Start Compiler
+document.addEventListener("DOMContentLoaded", () => {
+    initCompiler();
+});
 
-    /* =========================================
-   JS PART 8
-   RESOURCES + MODALS + QUICK ACCESS
-   ========================================= */
-
-
-/* =========================================
-   GENERIC TOOL MODAL
-   ========================================= */
+// ===============================
+// PART 8 — MODALS + RESOURCES
+// ===============================
 
 function initToolModal() {
-
-    const modal =
-        get("toolModal");
-
-    const overlay =
-        get("toolModalOverlay");
-
-    const content =
-        get("toolModalContent");
-
-    const close =
-        get("closeToolModal");
-
-    if (!modal || !content) return;
-
-
-    function openTool(title, text) {
-
-        content.innerHTML = `
-            <div class="modal-tool-content">
-
-                <h2>${escapeHTML(title)}</h2>
-
-                <p>${escapeHTML(text)}</p>
-
-                <div class="modal-actions">
-
-                    <button
-                        type="button"
-                        class="primary-btn"
-                        id="modalGotIt"
-                    >
-                        Got it
-                    </button>
-
-                </div>
-
-            </div>
-        `;
-
-        modal.classList.add("active");
-
-        if (overlay) {
-            overlay.classList.add("active");
-        }
-
-
-        get("modalGotIt")?.addEventListener(
-            "click",
-            closeTool
-        );
-
-    }
-
-
-    function closeTool() {
-
-        modal.classList.remove("active");
-
-        overlay?.classList.remove("active");
-
-    }
-
-
-    close?.addEventListener(
-        "click",
-        closeTool
-    );
-
-    overlay?.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target === overlay
-            ) {
-                closeTool();
-            }
-
-        }
-    );
-
-
-    /* Resource buttons */
-
-    get("resourceNotes")?.addEventListener(
-        "click",
-        () => openTool(
-            "📚 Notes",
-            "Organize your subject notes and revision material here."
-        )
-    );
-
-
-    get("importantQuestions")?.addEventListener(
-        "click",
-        () => openTool(
-            "❓ Important Questions",
-            "Keep important exam questions organized subject-wise."
-        )
-    );
-
-
-    get("previousQuestions")?.addEventListener(
-        "click",
-        () => openTool(
-            "📝 Previous Year Questions",
-            "Use previous year papers for focused exam preparation."
-        )
-    );
-
-
-    get("studyMaterial")?.addEventListener(
-        "click",
-        () => openTool(
-            "📖 Study Material",
-            "Your study material hub can be organized here."
-        )
-    );
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initToolModal
-);
-
-
-/* =========================================
-   ACCOUNT MODAL
-   ========================================= */
-
-function initAccountModal() {
-
-    const modal =
-        get("accountModal");
-
-    const overlay =
-        get("accountModalOverlay");
-
-    const close =
-        get("closeAccountModal");
-
-    const accountButton =
-        get("accountButton");
-
-    const loginButton =
-        get("loginButton");
+    const modal = get("toolModal");
+    const overlay = get("toolModalOverlay");
+    const content = get("toolModalContent");
+    const closeBtn = get("closeToolModal");
 
     if (!modal) return;
 
+    function closeModal() {
+        modal.style.display = "none";
+        overlay && (overlay.style.display = "none");
+    }
+
+    document.querySelectorAll("[data-tool]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const title =
+                btn.dataset.tool || "Study Tool";
+
+            if (content) {
+                content.innerHTML = `
+                    <h2>${escapeHTML(title)}</h2>
+                    <p>
+                        This tool is ready for StudyToolsHub.
+                        More advanced features can be connected here.
+                    </p>
+                `;
+            }
+
+            modal.style.display = "flex";
+
+            if (overlay) {
+                overlay.style.display = "block";
+            }
+        });
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    overlay?.addEventListener("click", closeModal);
+}
+
+
+function initAccountModal() {
+    const modal = get("accountModal");
+    const overlay = get("accountModalOverlay");
+    const closeBtn = get("closeAccountModal");
+    const loginBtn = get("loginButton");
+    const accountBtn = get("accountButton");
+
+    if (!modal) return;
 
     function openAccount() {
+        modal.style.display = "flex";
 
-        modal.classList.add("active");
-
-        overlay?.classList.add(
-            "active"
-        );
-
+        if (overlay) {
+            overlay.style.display = "block";
+        }
     }
-
 
     function closeAccount() {
+        modal.style.display = "none";
 
-        modal.classList.remove(
-            "active"
-        );
-
-        overlay?.classList.remove(
-            "active"
-        );
-
+        if (overlay) {
+            overlay.style.display = "none";
+        }
     }
 
-
-    accountButton?.addEventListener(
+    accountBtn?.addEventListener(
         "click",
         openAccount
     );
 
-
-    loginButton?.addEventListener(
+    loginBtn?.addEventListener(
         "click",
         openAccount
     );
 
-
-    close?.addEventListener(
+    closeBtn?.addEventListener(
         "click",
         closeAccount
     );
 
-
     overlay?.addEventListener(
         "click",
-        event => {
-
-            if (
-                event.target === overlay
-            ) {
-                closeAccount();
-            }
-
-        }
+        closeAccount
     );
+}
 
 
+function initResources() {
+    const resources = {
+        resourceNotes: {
+            title: "📚 Study Notes",
+            text:
+                "Useful notes for students. " +
+                "Subject-wise notes can be added here."
+        },
+
+        importantQuestions: {
+            title: "⭐ Important Questions",
+            text:
+                "Important exam questions and " +
+                "practice questions can be added here."
+        },
+
+        previousQuestions: {
+            title: "📝 Previous Questions",
+            text:
+                "Previous year question papers " +
+                "can be organized here."
+        },
+
+        studyMaterial: {
+            title: "📖 Study Material",
+            text:
+                "Study material, PDFs and useful " +
+                "learning resources can be added here."
+        }
+    };
+
+    Object.keys(resources).forEach(id => {
+        const button = get(id);
+
+        if (!button) return;
+
+        button.addEventListener("click", () => {
+            const data = resources[id];
+
+            showResourceModal(
+                data.title,
+                data.text
+            );
+        });
+    });
+}
+
+
+function showResourceModal(title, text) {
+    let modal =
+        document.getElementById(
+            "resourcePopup"
+        );
+
+    if (!modal) {
+        modal = document.createElement("div");
+
+        modal.id = "resourcePopup";
+
+        modal.innerHTML = `
+            <div class="resource-popup-box">
+
+                <button
+                    type="button"
+                    class="resource-popup-close"
+                    id="resourcePopupClose"
+                >
+                    ×
+                </button>
+
+                <h2 id="resourcePopupTitle"></h2>
+
+                <p id="resourcePopupText"></p>
+
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+    }
+
+    const titleBox =
+        document.getElementById(
+            "resourcePopupTitle"
+        );
+
+    const textBox =
+        document.getElementById(
+            "resourcePopupText"
+        );
+
+    if (titleBox) {
+        titleBox.textContent = title;
+    }
+
+    if (textBox) {
+        textBox.textContent = text;
+    }
+
+    modal.style.display = "flex";
+
+    document
+        .getElementById("resourcePopupClose")
+        ?.addEventListener(
+            "click",
+            () => {
+                modal.style.display = "none";
+            },
+            { once: true }
+        );
+}
+
+
+function initQuickAccess() {
+    document.querySelectorAll(
+        ".feature-card, .resource-card"
+    ).forEach(card => {
+        card.addEventListener("click", () => {
+            card.classList.add("tool-active");
+
+            setTimeout(() => {
+                card.classList.remove(
+                    "tool-active"
+                );
+            }, 300);
+        });
+    });
+}
+
+
+function initEscapeClose() {
     document.addEventListener(
         "keydown",
         event => {
+            if (event.key !== "Escape") return;
 
-            if (
-                event.key === "Escape" &&
-                modal.classList.contains("active")
-            ) {
-                closeAccount();
+            const toolModal = get("toolModal");
+            const accountModal = get("accountModal");
+            const resourcePopup =
+                get("resourcePopup");
+
+            if (toolModal) {
+                toolModal.style.display = "none";
             }
 
+            if (accountModal) {
+                accountModal.style.display = "none";
+            }
+
+            if (resourcePopup) {
+                resourcePopup.style.display = "none";
+            }
         }
     );
-
 }
 
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initAccountModal
-);
+// Start Part 8
+document.addEventListener("DOMContentLoaded", () => {
+    initToolModal();
+    initAccountModal();
+    initResources();
+    initQuickAccess();
+    initEscapeClose();
+});
 
-
-/* =========================================
-   QUICK ACCESS BUTTONS
-   ========================================= */
-
-function initQuickAccess() {
-
-    $$(".quick-access-card, .quick-card")
-        .forEach(card => {
-
-            card.addEventListener(
-                "click",
-                () => {
-
-                    const target =
-                        card.dataset.target;
-
-                    if (!target) return;
-
-                    const element =
-                        document.getElementById(
-                            target
-                        );
-
-                    element?.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
-                }
-            );
-
-        });
-
-}
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    initQuickAccess
-);
-
-
-/* =========================================
-   FAVORITES
-   ========================================= */
+// ===============================
+// PART 9 — FAVORITES + RECENT TOOLS
+// ===============================
 
 function initFavorites() {
+    const buttons = document.querySelectorAll(
+        "[data-favorite]"
+    );
 
-    const cards =
-        $$(".tool-card");
+    let favorites = JSON.parse(
+        localStorage.getItem(
+            "studytools-favorites"
+        ) || "[]"
+    );
 
-    if (!cards.length) return;
-
-
-    let favorites =
-        JSON.parse(
-            localStorage.getItem(
-                "studyFavorites"
-            ) || "[]"
+    function save() {
+        localStorage.setItem(
+            "studytools-favorites",
+            JSON.stringify(favorites)
         );
 
+        updateFavoriteCount();
+    }
 
-    cards.forEach((card, index) => {
+    buttons.forEach(button => {
+        const id =
+            button.dataset.favorite;
 
-        const title =
-            card.querySelector("h3")
-                ?.textContent
-                .trim() ||
-            `tool-${index}`;
-
-
-        const button =
-            card.querySelector(
-                ".favorite-btn"
-            );
-
-
-        if (!button) return;
-
-
-        if (
-            favorites.includes(title)
-        ) {
-            button.classList.add(
-                "active"
-            );
+        if (favorites.includes(id)) {
+            button.classList.add("favorite-active");
+            button.textContent = "★";
         }
 
+        button.addEventListener("click", event => {
+            event.stopPropagation();
 
-        button.addEventListener(
-            "click",
-            event => {
-
-                event.preventDefault();
-                event.stopPropagation();
-
-
-                if (
-                    favorites.includes(title)
-                ) {
-
-                    favorites =
-                        favorites.filter(
-                            item =>
-                                item !== title
-                        );
-
-                    button.classList.remove(
-                        "active"
+            if (favorites.includes(id)) {
+                favorites =
+                    favorites.filter(
+                        item => item !== id
                     );
 
-                    showToast(
-                        "☆ Removed from favorites"
-                    );
-
-                } else {
-
-                    favorites.push(title);
-
-                    button.classList.add(
-                        "active"
-                    );
-
-                    showToast(
-                        "⭐ Added to favorites",
-                        "success"
-                    );
-
-                }
-
-
-                localStorage.setItem(
-                    "studyFavorites",
-                    JSON.stringify(favorites)
+                button.classList.remove(
+                    "favorite-active"
                 );
 
-            }
-        );
+                button.textContent = "☆";
 
-    });
+                showToast("☆ Removed from favorites");
+            } else {
+                favorites.push(id);
 
-}
+                button.classList.add(
+                    "favorite-active"
+                );
 
+                button.textContent = "★";
 
-document.addEventListener(
-    "DOMContentLoaded",
-    initFavorites
-);
-
-
-/* =========================================
-   COPY BUTTONS
-   ========================================= */
-
-document.addEventListener(
-    "click",
-    async event => {
-
-        const button =
-            event.target.closest(
-                "[data-copy]"
-            );
-
-        if (!button) return;
-
-
-        const text =
-            button.dataset.copy;
-
-
-        if (!text) return;
-
-
-        try {
-
-            await navigator.clipboard.writeText(
-                text
-            );
-
-            showToast(
-                "📋 Copied!",
-                "success"
-            );
-
-        } catch {
-
-            showToast(
-                "Copy failed.",
-                "error"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   GENERIC TOOL OPENING
-   ========================================= */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        const button =
-            event.target.closest(
-                "[data-tool]"
-            );
-
-        if (!button) return;
-
-
-        const target =
-            button.dataset.tool;
-
-
-        const section =
-            document.getElementById(
-                target
-            );
-
-
-        if (!section) return;
-
-
-        section.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }
-);
-
-    /* =========================================================
-   STUDYTOOLSHUB - JS PART 9
-   Code Snippets + Programming Notes + Recent Tools
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* ---------- Recent Tools ---------- */
-
-    const recentToolsKey = "studyRecentTools";
-
-    function saveRecentTool(name) {
-        let recent = JSON.parse(localStorage.getItem(recentToolsKey) || "[]");
-
-        recent = recent.filter(item => item !== name);
-        recent.unshift(name);
-
-        if (recent.length > 6) {
-            recent = recent.slice(0, 6);
-        }
-
-        localStorage.setItem(recentToolsKey, JSON.stringify(recent));
-    }
-
-    document.querySelectorAll(".tool-card").forEach(card => {
-        card.addEventListener("click", () => {
-            const title = card.querySelector("h3");
-
-            if (title) {
-                saveRecentTool(title.textContent.trim());
-            }
-        });
-    });
-
-
-    /* ---------- Code Snippets ---------- */
-
-    const snippetData = {
-
-        "html-basic": {
-            title: "HTML Basic Structure",
-            code:
-`<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-</head>
-<body>
-
-    <h1>Hello World!</h1>
-
-</body>
-</html>`
-        },
-
-        "css-card": {
-            title: "CSS Card",
-            code:
-`.card {
-    width: 300px;
-    padding: 20px;
-    border-radius: 15px;
-    background: white;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-}
-
-.card h2 {
-    margin-bottom: 10px;
-}`
-        },
-
-        "js-button": {
-            title: "JavaScript Button",
-            code:
-`const button = document.querySelector("#myButton");
-
-button.addEventListener("click", () => {
-    alert("Button clicked!");
-});`
-        },
-
-        "cpp-input": {
-            title: "C++ User Input",
-            code:
-`#include <iostream>
-using namespace std;
-
-int main() {
-
-    int number;
-
-    cout << "Enter number: ";
-    cin >> number;
-
-    cout << "You entered: "
-         << number;
-
-    return 0;
-}`
-        },
-
-        "cpp-loop": {
-            title: "C++ For Loop",
-            code:
-`#include <iostream>
-using namespace std;
-
-int main() {
-
-    for(int i = 1; i <= 10; i++) {
-        cout << i << endl;
-    }
-
-    return 0;
-}`
-        }
-    };
-
-
-    function openSnippet(key) {
-
-        const snippet = snippetData[key];
-
-        if (!snippet) return;
-
-        const modal = document.getElementById("toolModal");
-        const overlay = document.getElementById("toolModalOverlay");
-        const content = document.getElementById("toolModalContent");
-
-        if (!modal || !overlay || !content) return;
-
-        content.innerHTML = `
-            <div class="snippet-view">
-                <h2>${escapeHTML(snippet.title)}</h2>
-
-                <pre class="snippet-code"><code>${escapeHTML(
-                    snippet.code
-                )}</code></pre>
-
-                <div class="modal-actions">
-                    <button class="primary-btn" id="copySnippet">
-                        📋 Copy Code
-                    </button>
-
-                    <button class="secondary-btn" id="closeSnippet">
-                        Close
-                    </button>
-                </div>
-            </div>
-        `;
-
-        modal.classList.add("active");
-        overlay.classList.add("active");
-
-        document.getElementById("copySnippet")
-            ?.addEventListener("click", async () => {
-
-                try {
-                    await navigator.clipboard.writeText(snippet.code);
-                    showToast("Code copied successfully!");
-                } catch {
-                    showToast("Copy failed");
-                }
-
-            });
-
-        document.getElementById("closeSnippet")
-            ?.addEventListener("click", closeToolModal);
-    }
-
-
-    /* ---------- Snippet Buttons ---------- */
-
-    document.querySelectorAll("[data-snippet]").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            const key = button.dataset.snippet;
-
-            openSnippet(key);
-
-            saveRecentTool(
-                button.textContent.trim() || "Code Snippet"
-            );
-        });
-
-    });
-
-
-    /* ---------- Programming Notes ---------- */
-
-    const programmingNotes = {
-
-        cpp: `
-            <h2>💻 C++ Programming Notes</h2>
-
-            <h3>Variables</h3>
-            <p>
-                Variables store data that can be used by a program.
-            </p>
-
-            <pre><code>int age = 20;
-float marks = 85.5;
-char grade = 'A';</code></pre>
-
-            <h3>Conditions</h3>
-
-            <pre><code>if(age >= 18) {
-    cout << "Adult";
-} else {
-    cout << "Minor";
-}</code></pre>
-
-            <h3>Loops</h3>
-
-            <pre><code>for(int i = 1; i <= 5; i++) {
-    cout << i << endl;
-}</code></pre>
-
-            <h3>Functions</h3>
-
-            <pre><code>int add(int a, int b) {
-    return a + b;
-}</code></pre>
-        `,
-
-        html: `
-            <h2>🌐 HTML Notes</h2>
-
-            <h3>HTML Basics</h3>
-
-            <p>
-                HTML is used to create the structure of a webpage.
-            </p>
-
-            <pre><code>&lt;h1&gt;Heading&lt;/h1&gt;
-&lt;p&gt;Paragraph&lt;/p&gt;
-&lt;button&gt;Click Me&lt;/button&gt;</code></pre>
-
-            <h3>Links</h3>
-
-            <pre><code>&lt;a href="https://example.com"&gt;
-    Visit Website
-&lt;/a&gt;</code></pre>
-        `,
-
-        css: `
-            <h2>🎨 CSS Notes</h2>
-
-            <h3>Selectors</h3>
-
-            <pre><code>p {
-    color: red;
-}
-
-.card {
-    padding: 20px;
-}
-
-#title {
-    font-size: 30px;
-}</code></pre>
-
-            <h3>Flexbox</h3>
-
-            <pre><code>.container {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    align-items: center;
-}</code></pre>
-        `,
-
-        javascript: `
-            <h2>⚡ JavaScript Notes</h2>
-
-            <h3>Variables</h3>
-
-            <pre><code>let name = "Nitesh";
-const age = 20;</code></pre>
-
-            <h3>Function</h3>
-
-            <pre><code>function greet() {
-    console.log("Hello!");
-}
-
-greet();</code></pre>
-
-            <h3>Event</h3>
-
-            <pre><code>button.addEventListener("click", () => {
-    alert("Hello!");
-});</code></pre>
-        `
-    };
-
-
-    function openProgrammingNotes(type) {
-
-        const content = document.getElementById("toolModalContent");
-        const modal = document.getElementById("toolModal");
-        const overlay = document.getElementById("toolModalOverlay");
-
-        if (!content || !modal || !overlay) return;
-
-        const note = programmingNotes[type];
-
-        if (!note) return;
-
-        content.innerHTML = `
-            <div class="programming-notes">
-                ${note}
-
-                <div class="modal-actions">
-                    <button class="secondary-btn" id="closeNotes">
-                        Close
-                    </button>
-                </div>
-            </div>
-        `;
-
-        modal.classList.add("active");
-        overlay.classList.add("active");
-
-        document.getElementById("closeNotes")
-            ?.addEventListener("click", closeToolModal);
-
-        saveRecentTool(type.toUpperCase() + " Notes");
-    }
-
-
-    /* ---------- Note Buttons ---------- */
-
-    document.querySelectorAll("[data-notes]").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            openProgrammingNotes(button.dataset.notes);
-
-        });
-
-    });
-
-
-    /* ---------- Global Data Tool Support ---------- */
-
-    document.querySelectorAll("[data-open-notes]").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            openProgrammingNotes(
-                button.dataset.openNotes
-            );
-
-        });
-
-    });
-
-
-    /* ---------- Resource Buttons ---------- */
-
-    const resourceContent = {
-
-        notes: `
-            <h2>📚 Study Notes</h2>
-            <p>
-                Subject-wise notes can be added here for students.
-            </p>
-            <ul>
-                <li>Computer Science</li>
-                <li>Programming</li>
-                <li>Data Structures</li>
-                <li>Database</li>
-                <li>Operating System</li>
-            </ul>
-        `,
-
-        important: `
-            <h2>⭐ Important Questions</h2>
-            <p>
-                Important exam questions can be organized
-                subject-wise here.
-            </p>
-        `,
-
-        previous: `
-            <h2>📝 Previous Year Questions</h2>
-            <p>
-                Previous year question papers can be organized
-                by semester and subject.
-            </p>
-        `,
-
-        material: `
-            <h2>📖 Study Material</h2>
-            <p>
-                Study material, references and learning resources
-                can be added here.
-            </p>
-        `
-    };
-
-
-    function openResource(type) {
-
-        const content = document.getElementById("toolModalContent");
-        const modal = document.getElementById("toolModal");
-        const overlay = document.getElementById("toolModalOverlay");
-
-        if (!content || !modal || !overlay) return;
-
-        content.innerHTML = `
-            <div class="resource-view">
-                ${resourceContent[type] || `
-                    <h2>Resource</h2>
-                    <p>Content coming soon.</p>
-                `}
-
-                <div class="modal-actions">
-                    <button class="secondary-btn" id="closeResource">
-                        Close
-                    </button>
-                </div>
-            </div>
-        `;
-
-        modal.classList.add("active");
-        overlay.classList.add("active");
-
-        document.getElementById("closeResource")
-            ?.addEventListener("click", closeToolModal);
-    }
-
-
-    document.getElementById("resourceNotes")
-        ?.addEventListener("click", () => openResource("notes"));
-
-    document.getElementById("importantQuestions")
-        ?.addEventListener("click", () => openResource("important"));
-
-    document.getElementById("previousQuestions")
-        ?.addEventListener("click", () => openResource("previous"));
-
-    document.getElementById("studyMaterial")
-        ?.addEventListener("click", () => openResource("material"));
-
-
-    /* ---------- Escape Key ---------- */
-
-    document.addEventListener("keydown", event => {
-
-        if (event.key === "Escape") {
-
-            const modal = document.getElementById("toolModal");
-
-            if (modal?.classList.contains("active")) {
-                closeToolModal();
+                showToast("★ Added to favorites");
             }
 
-        }
-
+            save();
+        });
     });
-
-       /* =========================================================
-   STUDYTOOLSHUB - JS PART 10
-   Advanced Integration + Settings + Smart UI
-   ========================================================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* ---------- Safe Error Protection ---------- */
-
-    window.addEventListener("error", event => {
-        console.warn("StudyToolsHub:", event.message);
-    });
-
-
-    /* ---------- Smart Tool Counter ---------- */
-
-    const toolCount = document.querySelectorAll(
-        ".tool-card"
-    ).length;
-
-    const toolCountElements = document.querySelectorAll(
-        "[data-tool-count]"
-    );
-
-    toolCountElements.forEach(element => {
-        element.textContent = toolCount;
-    });
-
-
-    /* ---------- Recently Used Tools ---------- */
-
-    function showRecentTools() {
-
-        const container = document.querySelector(
-            "[data-recent-tools]"
-        );
-
-        if (!container) return;
-
-        const recent = JSON.parse(
-            localStorage.getItem("studyRecentTools") || "[]"
-        );
-
-        if (!recent.length) {
-            container.innerHTML = `
-                <p class="empty-state">
-                    No recently used tools.
-                </p>
-            `;
-            return;
-        }
-
-        container.innerHTML = recent.map(tool => `
-            <div class="recent-tool-item">
-                <span>🕘 ${escapeHTML(tool)}</span>
-            </div>
-        `).join("");
-    }
-
-    showRecentTools();
-
-
-    /* ---------- Favorite Count ---------- */
-
-    function updateFavoriteCount() {
-
-        const favorites = JSON.parse(
-            localStorage.getItem("studyFavorites") || "[]"
-        );
-
-        document
-            .querySelectorAll("[data-favorite-count]")
-            .forEach(element => {
-                element.textContent = favorites.length;
-            });
-    }
 
     updateFavoriteCount();
+}
 
 
-    /* ---------- Online Status ---------- */
+function updateFavoriteCount() {
+    const countBox =
+        get("favoriteCount");
 
-    function updateOnlineStatus() {
+    if (!countBox) return;
 
-        const status = document.querySelector(
-            "[data-online-status]"
-        );
-
-        if (!status) return;
-
-        if (navigator.onLine) {
-            status.textContent = "🟢 Online";
-            status.classList.remove("offline");
-        } else {
-            status.textContent = "🔴 Offline";
-            status.classList.add("offline");
-        }
-    }
-
-    updateOnlineStatus();
-
-    window.addEventListener(
-        "online",
-        updateOnlineStatus
+    const favorites = JSON.parse(
+        localStorage.getItem(
+            "studytools-favorites"
+        ) || "[]"
     );
 
-    window.addEventListener(
-        "offline",
-        updateOnlineStatus
+    countBox.textContent =
+        favorites.length;
+}
+
+
+function initRecentTools() {
+    const toolButtons =
+        document.querySelectorAll(
+            "[data-tool], .tool-card"
+        );
+
+    let recent = JSON.parse(
+        localStorage.getItem(
+            "studytools-recent"
+        ) || "[]"
     );
 
-
-    /* ---------- Auto Save Indicator ---------- */
-
-    function showSaved() {
-
-        const indicator = document.querySelector(
-            "[data-save-status]"
+    function save() {
+        localStorage.setItem(
+            "studytools-recent",
+            JSON.stringify(recent)
         );
-
-        if (!indicator) return;
-
-        indicator.textContent = "✓ Saved";
-
-        clearTimeout(
-            indicator.saveTimer
-        );
-
-        indicator.saveTimer = setTimeout(() => {
-            indicator.textContent = "";
-        }, 2000);
     }
 
-    window.showSaved = showSaved;
+    toolButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            const name =
+                button.dataset.tool ||
+                button.querySelector("h3")
+                    ?.textContent ||
+                button.textContent.trim();
 
+            if (!name) return;
 
-    /* ---------- Keyboard Shortcuts ---------- */
-
-    document.addEventListener("keydown", event => {
-
-        /* Ctrl + S */
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            event.key.toLowerCase() === "s"
-        ) {
-            event.preventDefault();
-
-            showSaved();
-            showToast("Changes saved locally");
-        }
-
-
-        /* Ctrl + Shift + F */
-        if (
-            (event.ctrlKey || event.metaKey) &&
-            event.shiftKey &&
-            event.key.toLowerCase() === "f"
-        ) {
-            event.preventDefault();
-
-            const search = document.getElementById(
-                "searchInput"
+            recent = recent.filter(
+                item => item !== name
             );
 
-            search?.focus();
-        }
+            recent.unshift(name);
 
+            recent = recent.slice(0, 6);
+
+            save();
+        });
     });
 
+    showRecentTools();
+}
 
-    /* ---------- Lazy Image Loading ---------- */
 
-    document.querySelectorAll("img").forEach(image => {
+function showRecentTools() {
+    const box =
+        get("recentTools");
 
-        if (!image.hasAttribute("loading")) {
-            image.setAttribute(
-                "loading",
-                "lazy"
+    if (!box) return;
+
+    const recent = JSON.parse(
+        localStorage.getItem(
+            "studytools-recent"
+        ) || "[]"
+    );
+
+    if (!recent.length) {
+        box.innerHTML =
+            "<p>No recently used tools.</p>";
+        return;
+    }
+
+    box.innerHTML = `
+        <h3>🕘 Recent Tools</h3>
+        <div class="recent-tools-list">
+            ${recent.map(item => `
+                <span>
+                    ${escapeHTML(item)}
+                </span>
+            `).join("")}
+        </div>
+    `;
+}
+
+
+function initSaveShortcut() {
+    document.addEventListener(
+        "keydown",
+        event => {
+            if (
+                (event.ctrlKey ||
+                    event.metaKey) &&
+                event.key.toLowerCase() === "s"
+            ) {
+                event.preventDefault();
+
+                const editor =
+                    get("editorPage");
+
+                const compiler =
+                    get("compilerPage");
+
+                if (
+                    editor &&
+                    editor.style.display !== "none"
+                ) {
+                    showToast("💾 Editor auto-saved");
+                    return;
+                }
+
+                if (
+                    compiler &&
+                    compiler.style.display !== "none"
+                ) {
+                    showToast("💾 Compiler code saved");
+                    return;
+                }
+
+                showToast("✓ Saved");
+            }
+        }
+    );
+}
+
+
+function initLazyImages() {
+    const images =
+        document.querySelectorAll(
+            "img[data-src]"
+        );
+
+    if (!images.length) return;
+
+    if ("IntersectionObserver" in window) {
+        const observer =
+            new IntersectionObserver(
+                entries => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting)
+                            return;
+
+                        const img =
+                            entry.target;
+
+                        img.src =
+                            img.dataset.src;
+
+                        img.removeAttribute(
+                            "data-src"
+                        );
+
+                        observer.unobserve(img);
+                    });
+                }
             );
+
+        images.forEach(img =>
+            observer.observe(img)
+        );
+    } else {
+        images.forEach(img => {
+            img.src = img.dataset.src;
+        });
+    }
+}
+
+
+function initScrollProgress() {
+    const bar =
+        get("scrollProgress");
+
+    if (!bar) return;
+
+    function update() {
+        const scrollTop =
+            window.scrollY;
+
+        const height =
+            document.documentElement
+                .scrollHeight -
+            window.innerHeight;
+
+        const progress =
+            height > 0
+                ? (scrollTop / height) * 100
+                : 0;
+
+        bar.style.width =
+            progress + "%";
+    }
+
+    window.addEventListener(
+        "scroll",
+        update,
+        { passive: true }
+    );
+
+    update();
+}
+
+
+function initPageVisibility() {
+    const originalTitle =
+        document.title;
+
+    document.addEventListener(
+        "visibilitychange",
+        () => {
+            if (document.hidden) {
+                document.title =
+                    "Come back 👋 | StudyToolsHub";
+            } else {
+                document.title =
+                    originalTitle;
+            }
         }
+    );
+}
 
-    });
+
+function initAppReady() {
+    setTimeout(() => {
+        document.body.classList.add(
+            "app-ready"
+        );
+    }, 100);
+}
 
 
-    /* ---------- External Links Safety ---------- */
+// Start Part 9
+document.addEventListener("DOMContentLoaded", () => {
+    initFavorites();
+    initRecentTools();
+    initSaveShortcut();
+    initLazyImages();
+    initScrollProgress();
+    initPageVisibility();
+    initAppReady();
+});
 
+// ===============================
+// PART 10 — FINAL JS SETUP
+// ===============================
+
+function initFinalSetup() {
+
+    // -------------------------------
+    // External links safety
+    // -------------------------------
     document.querySelectorAll(
         'a[target="_blank"]'
     ).forEach(link => {
-
-        const current =
-            link.getAttribute("rel") || "";
-
-        if (!current.includes("noopener")) {
-            link.setAttribute(
-                "rel",
-                `${current} noopener noreferrer`.trim()
-            );
-        }
-
+        link.rel = "noopener noreferrer";
     });
 
 
-    /* ---------- Prevent Empty Form Submission ---------- */
-
+    // -------------------------------
+    // Required form validation
+    // -------------------------------
     document.querySelectorAll("form").forEach(form => {
 
         form.addEventListener("submit", event => {
@@ -4350,10 +3213,11 @@ document.addEventListener("DOMContentLoaded", () => {
             requiredFields.forEach(field => {
 
                 if (!field.value.trim()) {
-                    valid = false;
                     field.classList.add(
                         "input-error"
                     );
+
+                    valid = false;
                 } else {
                     field.classList.remove(
                         "input-error"
@@ -4365,7 +3229,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!valid) {
                 event.preventDefault();
                 showToast(
-                    "Please fill all required fields"
+                    "⚠️ Please fill required fields"
                 );
             }
 
@@ -4374,88 +3238,178 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /* ---------- Clear Input Error ---------- */
-
-    document.addEventListener("input", event => {
-
-        if (
-            event.target.classList.contains(
-                "input-error"
-            )
-        ) {
-            event.target.classList.remove(
-                "input-error"
-            );
-        }
-
-    });
-
-
-    /* ---------- Scroll Progress ---------- */
-
-    const progressBar =
-        document.createElement("div");
-
-    progressBar.className =
-        "page-scroll-progress";
-
-    document.body.appendChild(progressBar);
-
-    function updateScrollProgress() {
-
-        const scrollTop =
-            window.scrollY;
-
-        const height =
-            document.documentElement.scrollHeight -
-            window.innerHeight;
-
-        const progress =
-            height > 0
-                ? (scrollTop / height) * 100
-                : 0;
-
-        progressBar.style.width =
-            `${progress}%`;
-    }
-
-    window.addEventListener(
-        "scroll",
-        updateScrollProgress,
-        { passive: true }
-    );
-
-    updateScrollProgress();
-
-
-    /* ---------- Page Visibility ---------- */
-
+    // -------------------------------
+    // Search shortcut
+    // Ctrl + K / Cmd + K
+    // -------------------------------
     document.addEventListener(
-        "visibilitychange",
-        () => {
+        "keydown",
+        event => {
 
             if (
-                document.visibilityState === "visible"
+                (event.ctrlKey ||
+                    event.metaKey) &&
+                event.key.toLowerCase() === "k"
             ) {
-                document.title =
-                    "StudyToolsHub - Smart Tools for Students";
-            } else {
-                document.title =
-                    "Come back to StudyToolsHub";
+
+                event.preventDefault();
+
+                const search =
+                    get("searchInput");
+
+                search?.focus();
             }
 
         }
     );
 
 
-    /* ---------- Final Initialization ---------- */
+    // -------------------------------
+    // Escape closes menus
+    // -------------------------------
+    document.addEventListener(
+        "keydown",
+        event => {
 
-    setTimeout(() => {
+            if (event.key !== "Escape")
+                return;
 
-        document.body.classList.add(
-            "app-ready"
+            document
+                .querySelectorAll(
+                    ".main-nav.active"
+                )
+                .forEach(nav => {
+                    nav.classList.remove(
+                        "active"
+                    );
+                });
+
+        }
+    );
+
+
+    // -------------------------------
+    // Online / Offline status
+    // -------------------------------
+    function updateOnlineStatus() {
+
+        if (navigator.onLine) {
+            document.body.classList.remove(
+                "offline-mode"
+            );
+        } else {
+            document.body.classList.add(
+                "offline-mode"
+            );
+        }
+
+    }
+
+    window.addEventListener(
+        "online",
+        () => {
+            updateOnlineStatus();
+            showToast("🟢 Back online");
+        }
+    );
+
+    window.addEventListener(
+        "offline",
+        () => {
+            updateOnlineStatus();
+            showToast("🔴 You are offline");
+        }
+    );
+
+    updateOnlineStatus();
+
+
+    // -------------------------------
+    // Prevent broken buttons
+    // -------------------------------
+    document.querySelectorAll(
+        "button"
+    ).forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    button.disabled
+                ) {
+                    return;
+                }
+
+            }
         );
 
-    }, 100);
+    });
 
-}); 
+
+    // -------------------------------
+    // Page loaded
+    // -------------------------------
+    document.body.classList.add(
+        "js-loaded"
+    );
+
+    setTimeout(() => {
+        document.body.classList.add(
+            "fully-loaded"
+        );
+    }, 300);
+
+}
+
+
+// ===============================
+// GLOBAL ERROR HANDLER
+// ===============================
+
+window.addEventListener(
+    "error",
+    event => {
+
+        console.error(
+            "StudyToolsHub Error:",
+            event.error || event.message
+        );
+
+    }
+);
+
+
+// ===============================
+// UNHANDLED PROMISE ERRORS
+// ===============================
+
+window.addEventListener(
+    "unhandledrejection",
+    event => {
+
+        console.error(
+            "StudyToolsHub Promise Error:",
+            event.reason
+        );
+
+    }
+);
+
+
+// ===============================
+// FINAL START
+// ===============================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initFinalSetup();
+
+        console.log(
+            "StudyToolsHub JS loaded successfully 🚀"
+        );
+
+    }
+);
