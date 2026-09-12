@@ -425,11 +425,6 @@ window.addEventListener("online", () => {
         "🌐 Internet connection restored.",
         "success"
     );
-
-  /* Emergency loader fix */
-#pageLoader {
-    display: none !important;
-}
    
    
  /* =========================================
