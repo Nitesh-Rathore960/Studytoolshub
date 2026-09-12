@@ -12,17 +12,7 @@
 
     <meta
         name="description"
-        content="StudyToolsHub - Smart Tools for Students"
-    >
-
-    <meta
-        name="keywords"
-        content="student tools, study tools, calculators, coding tools, C compiler, C++ compiler, notes, quiz"
-    >
-
-    <meta
-        name="author"
-        content="StudyToolsHub"
+        content="StudyToolsHub - Smart tools for students including calculators, study tools, coding tools and learning resources."
     >
 
     <meta
@@ -30,14 +20,7 @@
         content="#0f172a"
     >
 
-    <title>
-        StudyToolsHub - Smart Tools for Students
-    </title>
-
-    <!--
-        CSS will be added later.
-        Do not add another HTML document around the next parts.
-    -->
+    <title>StudyToolsHub | Smart Tools for Students</title>
 
     <link
         rel="stylesheet"
@@ -50,87 +33,50 @@
 <body>
 
 
-    <!-- =====================================================
-         WEBSITE LOADER
-    ====================================================== -->
+<!-- ==================================================
+     APPLICATION
+================================================== -->
 
-    <div
-        id="pageLoader"
-        class="page-loader"
-    >
-
-        <div class="loader-content">
-
-            <div class="loader-icon">
-                🎓
-            </div>
-
-            <div class="loader-spinner"></div>
-
-            <p>
-                Loading StudyToolsHub...
-            </p>
-
-        </div>
-
-    </div>
+<div id="app">
 
 
-
-    <!-- =====================================================
+    <!-- ==================================================
          HEADER
-    ====================================================== -->
+    ================================================== -->
 
     <header
-        id="mainHeader"
-        class="main-header"
+        id="siteHeader"
+        class="site-header"
     >
 
-        <div class="header-container">
+        <div class="container header-container">
 
 
-            <!-- LOGO -->
+            <!-- BRAND -->
 
             <a
                 href="#home"
-                class="site-logo"
+                class="brand"
                 aria-label="StudyToolsHub Home"
             >
 
-                <span class="logo-icon">
+                <span class="brand-icon">
                     🎓
                 </span>
 
-                <span class="logo-text">
-                    StudyToolsHub
+                <span class="brand-name">
+                    StudyTools<span>Hub</span>
                 </span>
 
             </a>
 
 
-
-            <!-- MOBILE MENU BUTTON -->
-
-            <button
-                type="button"
-                id="menuToggle"
-                class="menu-toggle"
-                aria-label="Open Menu"
-                aria-expanded="false"
-            >
-
-                ☰
-
-            </button>
-
-
-
-            <!-- NAVIGATION -->
+            <!-- DESKTOP NAVIGATION -->
 
             <nav
                 id="mainNav"
                 class="main-nav"
-                aria-label="Main Navigation"
+                aria-label="Main navigation"
             >
 
                 <a
@@ -148,14 +94,14 @@
                 </a>
 
                 <a
-                    href="#study-tools"
+                    href="#studyTools"
                     class="nav-link"
                 >
                     Study Tools
                 </a>
 
                 <a
-                    href="#coding-tools"
+                    href="#codingTools"
                     class="nav-link"
                 >
                     Coding
@@ -168,57 +114,86 @@
                     Resources
                 </a>
 
-
-
-                <!-- THEME BUTTON -->
-
-                <button
-                    type="button"
-                    id="themeToggle"
-                    class="theme-toggle"
-                    aria-label="Toggle Theme"
-                    title="Toggle Dark / Light Mode"
-                >
-
-                    🌙
-
-                </button>
-
-
-
-                <!-- USER BUTTON -->
-
-                <button
-                    type="button"
-                    id="accountButton"
-                    class="account-button"
-                >
-
-                    👤
-                    <span>
-                        Account
-                    </span>
-
-                </button>
-
             </nav>
 
+
+            <!-- HEADER ACTIONS -->
+
+            <div class="header-actions">
+
+                <button
+                    id="themeToggle"
+                    class="header-action"
+                    type="button"
+                    aria-label="Toggle theme"
+                >
+                    <span id="themeIcon">🌙</span>
+                </button>
+
+
+                <button
+                    id="menuToggle"
+                    class="menu-toggle"
+                    type="button"
+                    aria-label="Open menu"
+                    aria-expanded="false"
+                >
+
+                    <span></span>
+                    <span></span>
+                    <span></span>
+
+                </button>
+
+            </div>
+
         </div>
+
+
+        <!-- MOBILE NAVIGATION -->
+
+        <nav
+            id="mobileNav"
+            class="mobile-nav"
+            aria-label="Mobile navigation"
+        >
+
+            <a href="#home">
+                🏠 Home
+            </a>
+
+            <a href="#calculators">
+                🧮 Calculators
+            </a>
+
+            <a href="#studyTools">
+                📚 Study Tools
+            </a>
+
+            <a href="#codingTools">
+                💻 Coding
+            </a>
+
+            <a href="#resources">
+                📖 Resources
+            </a>
+
+        </nav>
 
     </header>
 
 
-
-    <!-- =====================================================
-         MAIN WEBSITE
-    ====================================================== -->
+    <!-- ==================================================
+         MAIN CONTENT
+================================================== -->
 
     <main id="mainContent">
 
 
-
-        <!-- =================================================
-             HOME / HERO
+        <!-- ==================================================
+             HERO SECTION
+             
+             PART 2 STARTS EXACTLY HERE
         ================================================== -->
 
         <section
@@ -226,187 +201,225 @@
             class="hero-section"
         >
 
-            <div class="hero-container">
+                    <div class="container hero-container">
 
 
-                <!-- HERO BADGE -->
+                <!-- HERO CONTENT -->
 
-                <div class="hero-badge">
+                <div class="hero-content">
 
-                    <span>
-                        🎓
-                    </span>
-
-                    <span>
+                    <div class="hero-badge">
+                        <span>🎓</span>
                         Made for Students
-                    </span>
-
-                </div>
+                    </div>
 
 
-
-                <!-- HERO TITLE -->
-
-                <h1 class="hero-title">
-
-                    All Student Tools
-
-                    <span>
-                        in One Place
-                    </span>
-
-                </h1>
+                    <h1>
+                        All Student Tools
+                        <span>in One Place</span>
+                    </h1>
 
 
-
-                <!-- HERO DESCRIPTION -->
-
-                <p class="hero-description">
-
-                    Calculate, study, code and organize
-                    your academic work with powerful
-                    student-friendly tools.
-
-                </p>
+                    <p class="hero-description">
+                        Calculate, study, practice and code with
+                        powerful tools designed especially for students.
+                    </p>
 
 
+                    <!-- SEARCH -->
 
-                <!-- =================================================
-                     SEARCH
-                ================================================== -->
+                    <div class="hero-search">
 
-                <div
-                    class="hero-search"
-                    role="search"
-                >
-
-                    <div class="search-input-wrapper">
-
-                        <span
-                            class="search-icon"
-                            aria-hidden="true"
-                        >
+                        <span class="search-icon">
                             🔍
                         </span>
 
                         <input
                             type="search"
                             id="searchInput"
-                            class="search-input"
-                            placeholder="Search for a tool..."
+                            placeholder="Search calculators, study tools, coding tools..."
                             autocomplete="off"
                             aria-label="Search StudyToolsHub"
                         >
 
                         <button
+                            id="searchButton"
                             type="button"
-                            id="clearSearch"
-                            class="clear-search"
-                            aria-label="Clear Search"
-                            title="Clear"
+                            aria-label="Search"
                         >
-                            ×
+                            Search
                         </button>
 
                     </div>
 
 
-                    <button
-                        type="button"
-                        id="searchButton"
-                        class="search-button"
-                    >
+                    <!-- SEARCH RESULTS -->
 
-                        Search
+                    <div
+                        id="searchResults"
+                        class="search-results"
+                    ></div>
 
-                    </button>
+
+                    <!-- HERO ACTIONS -->
+
+                    <div class="hero-actions">
+
+                        <a
+                            href="#calculators"
+                            class="primary-button"
+                        >
+                            Explore Tools
+                            <span>→</span>
+                        </a>
+
+                        <a
+                            href="#codingTools"
+                            class="secondary-button"
+                        >
+                            Start Coding
+                            <span>⌨</span>
+                        </a>
+
+                    </div>
 
                 </div>
 
 
+                <!-- HERO VISUAL -->
 
-                <!-- SEARCH RESULTS -->
+                <div class="hero-visual">
 
-                <div
-                    id="searchResults"
-                    class="search-results"
-                    aria-live="polite"
-                ></div>
+                    <div class="hero-dashboard">
 
 
+                        <!-- DASHBOARD TOP -->
 
-                <!-- =================================================
-                     QUICK ACCESS
-                ================================================== -->
+                        <div class="dashboard-top">
 
-                <div class="quick-access">
+                            <div>
 
+                                <span class="dashboard-label">
+                                    STUDENT DASHBOARD
+                                </span>
 
-                    <a
-                        href="#calculators"
-                        class="quick-access-card"
-                    >
+                                <h3>
+                                    Study smarter 🚀
+                                </h3>
 
-                        <span class="quick-icon">
-                            🧮
-                        </span>
+                            </div>
 
-                        <span class="quick-title">
-                            Calculators
-                        </span>
+                            <span class="dashboard-status">
+                                ● Online
+                            </span>
 
-                    </a>
-
+                        </div>
 
 
-                    <a
-                        href="#study-tools"
-                        class="quick-access-card"
-                    >
+                        <!-- DASHBOARD CARDS -->
 
-                        <span class="quick-icon">
-                            📚
-                        </span>
-
-                        <span class="quick-title">
-                            Study Tools
-                        </span>
-
-                    </a>
+                        <div class="dashboard-grid">
 
 
+                            <div class="dashboard-card">
 
-                    <a
-                        href="#coding-tools"
-                        class="quick-access-card"
-                    >
+                                <span class="dashboard-card-icon">
+                                    🧮
+                                </span>
 
-                        <span class="quick-icon">
-                            💻
-                        </span>
+                                <strong>
+                                    Calculators
+                                </strong>
 
-                        <span class="quick-title">
-                            Coding
-                        </span>
+                                <small>
+                                    Quick calculations
+                                </small>
 
-                    </a>
-
+                            </div>
 
 
-                    <a
-                        href="#resources"
-                        class="quick-access-card"
-                    >
+                            <div class="dashboard-card">
 
-                        <span class="quick-icon">
-                            📖
-                        </span>
+                                <span class="dashboard-card-icon">
+                                    📚
+                                </span>
 
-                        <span class="quick-title">
-                            Resources
-                        </span>
+                                <strong>
+                                    Study Tools
+                                </strong>
 
-                    </a>
+                                <small>
+                                    Focus & productivity
+                                </small>
+
+                            </div>
+
+
+                            <div class="dashboard-card">
+
+                                <span class="dashboard-card-icon">
+                                    💻
+                                </span>
+
+                                <strong>
+                                    Coding
+                                </strong>
+
+                                <small>
+                                    Practice & build
+                                </small>
+
+                            </div>
+
+
+                            <div class="dashboard-card">
+
+                                <span class="dashboard-card-icon">
+                                    🎯
+                                </span>
+
+                                <strong>
+                                    Progress
+                                </strong>
+
+                                <small>
+                                    Track your goals
+                                </small>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- DASHBOARD PROGRESS -->
+
+                        <div class="dashboard-progress">
+
+                            <div class="progress-heading">
+
+                                <span>
+                                    Today's Progress
+                                </span>
+
+                                <strong>
+                                    75%
+                                </strong>
+
+                            </div>
+
+                            <div class="progress-track">
+
+                                <div
+                                    class="progress-fill"
+                                    style="width: 75%;"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
 
                 </div>
 
@@ -415,9 +428,443 @@
         </section>
 
 
+        <!-- ==================================================
+             QUICK ACCESS SECTION
+        ================================================== -->
 
-        <!-- =================================================
-             CALCULATORS SECTION
+        <section
+            class="quick-access-section"
+            aria-label="Quick access"
+        >
+
+            <div class="container">
+
+
+                <div class="quick-access-grid">
+
+
+                    <a
+                        href="#calculators"
+                        class="quick-card"
+                    >
+
+                        <span class="quick-icon">
+                            🧮
+                        </span>
+
+                        <span class="quick-content">
+
+                            <strong>
+                                Calculators
+                            </strong>
+
+                            <small>
+                                10+ useful calculators
+                            </small>
+
+                        </span>
+
+                        <span class="quick-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="#studyTools"
+                        class="quick-card"
+                    >
+
+                        <span class="quick-icon">
+                            ⏱️
+                        </span>
+
+                        <span class="quick-content">
+
+                            <strong>
+                                Study Timer
+                            </strong>
+
+                            <small>
+                                Focus your study
+                            </small>
+
+                        </span>
+
+                        <span class="quick-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="#codingTools"
+                        class="quick-card"
+                    >
+
+                        <span class="quick-icon">
+                            💻
+                        </span>
+
+                        <span class="quick-content">
+
+                            <strong>
+                                C / C++ Compiler
+                            </strong>
+
+                            <small>
+                                Code on your phone
+                            </small>
+
+                        </span>
+
+                        <span class="quick-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                    <a
+                        href="#codingTools"
+                        class="quick-card"
+                    >
+
+                        <span class="quick-icon">
+                            🌐
+                        </span>
+
+                        <span class="quick-content">
+
+                            <strong>
+                                Web Editor
+                            </strong>
+
+                            <small>
+                                HTML, CSS & JS
+                            </small>
+
+                        </span>
+
+                        <span class="quick-arrow">
+                            →
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PART 3 STARTS HERE
+        ================================================== -->
+
+        <section
+            class="overview-section"
+            aria-label="StudyToolsHub overview"
+        >
+
+                    <div class="container overview-container">
+
+
+                <!-- SECTION HEADING -->
+
+                <div class="section-heading">
+
+                    <span class="section-badge">
+                        ✨ Everything You Need
+                    </span>
+
+                    <h2>
+                        Your Student Toolkit
+                    </h2>
+
+                    <p>
+                        One place for calculations, study planning,
+                        coding practice and exam preparation.
+                    </p>
+
+                </div>
+
+
+                <!-- OVERVIEW GRID -->
+
+                <div class="overview-grid">
+
+
+                    <!-- CALCULATORS -->
+
+                    <article class="overview-card">
+
+                        <div class="overview-icon calculator-icon">
+                            🧮
+                        </div>
+
+                        <div class="overview-content">
+
+                            <h3>
+                                Smart Calculators
+                            </h3>
+
+                            <p>
+                                Percentage, CGPA, age, average,
+                                discount, interest and more.
+                            </p>
+
+                            <a href="#calculators">
+                                Explore Calculators
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- STUDY -->
+
+                    <article class="overview-card">
+
+                        <div class="overview-icon study-icon">
+                            📚
+                        </div>
+
+                        <div class="overview-content">
+
+                            <h3>
+                                Study Productivity
+                            </h3>
+
+                            <p>
+                                Focus timer, planner, notes,
+                                quiz, flashcards and progress tracking.
+                            </p>
+
+                            <a href="#studyTools">
+                                Explore Study Tools
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- CODING -->
+
+                    <article class="overview-card">
+
+                        <div class="overview-icon coding-icon">
+                            💻
+                        </div>
+
+                        <div class="overview-content">
+
+                            <h3>
+                                Coding Workspace
+                            </h3>
+
+                            <p>
+                                Practice web development and
+                                C/C++ programming from your phone.
+                            </p>
+
+                            <a href="#codingTools">
+                                Explore Coding
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+
+                    <!-- RESOURCES -->
+
+                    <article class="overview-card">
+
+                        <div class="overview-icon resource-icon">
+                            📖
+                        </div>
+
+                        <div class="overview-content">
+
+                            <h3>
+                                Learning Resources
+                            </h3>
+
+                            <p>
+                                Notes, important questions,
+                                previous questions and study material.
+                            </p>
+
+                            <a href="#resources">
+                                Explore Resources
+                                <span>→</span>
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- WHY STUDYTOOLSHUB -->
+
+                <div class="why-section">
+
+
+                    <div class="why-content">
+
+                        <span class="section-badge">
+                            🚀 Built for Students
+                        </span>
+
+                        <h2>
+                            Everything in one workspace.
+                        </h2>
+
+                        <p>
+                            StudyToolsHub combines the tools students
+                            use every day into one clean, fast and
+                            mobile-friendly workspace.
+                        </p>
+
+
+                        <div class="feature-list">
+
+                            <div class="feature-item">
+
+                                <span class="feature-check">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    Mobile-first experience
+                                </span>
+
+                            </div>
+
+
+                            <div class="feature-item">
+
+                                <span class="feature-check">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    Fast and easy to use
+                                </span>
+
+                            </div>
+
+
+                            <div class="feature-item">
+
+                                <span class="feature-check">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    Student-focused tools
+                                </span>
+
+                            </div>
+
+
+                            <div class="feature-item">
+
+                                <span class="feature-check">
+                                    ✓
+                                </span>
+
+                                <span>
+                                    Coding practice workspace
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- MINI STATS -->
+
+                    <div class="why-stats">
+
+
+                        <div class="mini-stat">
+
+                            <strong>
+                                20+
+                            </strong>
+
+                            <span>
+                                Tools
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <strong>
+                                4
+                            </strong>
+
+                            <span>
+                                Categories
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <strong>
+                                100%
+                            </strong>
+
+                            <span>
+                                Student Focus
+                            </span>
+
+                        </div>
+
+
+                        <div class="mini-stat">
+
+                            <strong>
+                                ∞
+                            </strong>
+
+                            <span>
+                                Practice
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================================
+             PART 4 STARTS HERE
         ================================================== -->
 
         <section
@@ -425,938 +872,333 @@
             class="content-section calculators-section"
         >
 
-            <div class="section-container">
-
-
-                <!-- SECTION HEADER -->
-
-                <div class="section-header">
-
-                    <span class="section-badge">
-                        🧮 Calculate
-                    </span>
-
-                    <h2>
-                        Student Calculators
-                    </h2>
-
-                    <p>
-                        Useful calculators for marks,
-                        grades, age and everyday calculations.
-                    </p>
-
+                    <div class="container">
+                <div class="section-heading">
+                    <span class="section-badge">🧮 Smart Calculators</span>
+                    <h2>Calculate Everything Easily</h2>
+                    <p>Fast, accurate and student-friendly calculators for everyday academic needs.</p>
                 </div>
 
+                <div class="calculator-grid">
 
-
-                <!-- CALCULATOR GRID -->
-
-                <div class="tools-grid">
-
-
-                    <!-- =========================================
-                         PERCENTAGE CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="percentage calculator marks percentage"
-                    >
-
+                    <!-- Percentage Calculator -->
+                    <article class="tool-card calculator-card">
                         <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📊
-                            </div>
-
-                            <span class="tool-tag">
-                                Popular
-                            </span>
-
+                            <div class="tool-icon">📊</div>
+                            <span class="tool-tag">Popular</span>
                         </div>
 
-                        <h3>
-                            Percentage Calculator
-                        </h3>
+                        <h3>Percentage Calculator</h3>
+                        <p>Calculate percentage from obtained and total marks.</p>
 
-                        <p>
-                            Calculate your marks percentage
-                            quickly and accurately.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="percentageObtained"
-                                >
-                                    Obtained Marks
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="percentageObtained"
-                                    placeholder="e.g. 450"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="percentageTotal"
-                                >
-                                    Total Marks
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="percentageTotal"
-                                    placeholder="e.g. 500"
-                                    min="1"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-
-                            <button
-                                type="button"
-                                id="calculatePercentage"
-                                class="primary-tool-button"
+                        <div class="input-group">
+                            <label for="percentageObtained">Obtained Marks</label>
+                            <input
+                                type="number"
+                                id="percentageObtained"
+                                placeholder="e.g. 450"
+                                min="0"
                             >
-                                Calculate
-                            </button>
+                        </div>
 
-
-
-                            <div
-                                id="percentageResult"
-                                class="result-box"
-                                aria-live="polite"
+                        <div class="input-group">
+                            <label for="percentageTotal">Total Marks</label>
+                            <input
+                                type="number"
+                                id="percentageTotal"
+                                placeholder="e.g. 500"
+                                min="1"
                             >
-                                Result will appear here
-                            </div>
-
                         </div>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         CGPA CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="cgpa calculator gpa grade points"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🎓
-                            </div>
-
-                            <span class="tool-tag">
-                                Student
-                            </span>
-
-                        </div>
-
-                        <h3>
-                            CGPA Calculator
-                        </h3>
-
-                        <p>
-                            Calculate CGPA using your
-                            subject grade points.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="gradePoints"
-                                >
-                                    Grade Points
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="gradePoints"
-                                    placeholder="8, 7.5, 9, 8.5"
-                                >
-
-                            </div>
-
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="subjectCount"
-                                >
-                                    Number of Subjects
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="subjectCount"
-                                    placeholder="e.g. 5"
-                                    min="1"
-                                >
-
-                            </div>
-
-
-
-                            <button
-                                type="button"
-                                id="calculateCGPA"
-                                class="primary-tool-button"
-                            >
-                                Calculate CGPA
-                            </button>
-
-
-
-                            <div
-                                id="cgpaResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         AGE CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="age calculator date of birth"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🎂
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Age Calculator
-                        </h3>
-
-                        <p>
-                            Calculate your age from
-                            your date of birth.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="birthDate"
-                                >
-                                    Date of Birth
-                                </label>
-
-                                <input
-                                    type="date"
-                                    id="birthDate"
-                                >
-
-                            </div>
-
-
-
-                            <button
-                                type="button"
-                                id="calculateAge"
-                                class="primary-tool-button"
-                            >
-                                Calculate Age
-                            </button>
-
-
-
-                            <div
-                                id="ageResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         AVERAGE CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="average calculator numbers"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📈
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Average Calculator
-                        </h3>
-
-                        <p>
-                            Find the average of
-                            multiple numbers.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label
-                                    for="averageNumbers"
-                                >
-                                    Numbers
-                                </label>
-
-                                <input
-                                    type="text"
-                                    id="averageNumbers"
-                                    placeholder="10, 20, 30, 40"
-                                >
-
-                            </div>
-
-
-
-                            <button
-                                type="button"
-                                id="calculateAverage"
-                                class="primary-tool-button"
-                            >
-                                Calculate Average
-                            </button>
-
-
-
-                            <div
-                                id="averageResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-                    
-
-    <!-- =========================================
-                    MARKS & GRADE CALCULATOR
-    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="marks grade calculator"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📝
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Marks & Grade Calculator
-                        </h3>
-
-                        <p>
-                            Calculate percentage and
-                            academic grade.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label for="marksObtained">
-                                    Obtained Marks
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="marksObtained"
-                                    placeholder="e.g. 85"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label for="marksTotal">
-                                    Total Marks
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="marksTotal"
-                                    placeholder="e.g. 100"
-                                    min="1"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                id="calculateGrade"
-                                class="primary-tool-button"
-                            >
-                                Calculate Grade
-                            </button>
-
-
-                            <div
-                                id="gradeResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-    </article>
-
-                        <!-- =========================================
-                         SCIENTIFIC CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="scientific calculator math"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🔢
-                            </div>
-
-                            <span class="tool-tag">
-                                Advanced
-                            </span>
-
-                        </div>
-
-                        <h3>
-                            Scientific Calculator
-                        </h3>
-
-                        <p>
-                            Perform advanced mathematical
-                            calculations easily.
-                        </p>
 
                         <button
                             type="button"
-                            id="openScientificCalculator"
-                            class="primary-tool-button"
+                            id="percentageBtn"
+                            class="tool-button"
                         >
-                            Open Calculator
+                            Calculate Percentage
                         </button>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         UNIT CONVERTER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="unit converter length weight temperature"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📐
-                            </div>
-
-                            <span class="tool-tag">
-                                Useful
-                            </span>
-
-                        </div>
-
-                        <h3>
-                            Unit Converter
-                        </h3>
-
-                        <p>
-                            Convert length, weight, temperature
-                            and other common units.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="openUnitConverter"
-                            class="primary-tool-button"
-                        >
-                            Open Converter
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         DISCOUNT CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="discount calculator price discount"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                💰
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Discount Calculator
-                        </h3>
-
-                        <p>
-                            Calculate discount amount and
-                            final price.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label for="discountPrice">
-                                    Original Price
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="discountPrice"
-                                    placeholder="e.g. 1000"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label for="discountPercent">
-                                    Discount (%)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="discountPercent"
-                                    placeholder="e.g. 20"
-                                    min="0"
-                                    max="100"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                id="calculateDiscount"
-                                class="primary-tool-button"
-                            >
-                                Calculate Discount
-                            </button>
-
-
-                            <div
-                                id="discountResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         SIMPLE INTEREST CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="simple interest calculator"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                💵
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Simple Interest Calculator
-                        </h3>
-
-                        <p>
-                            Calculate simple interest and
-                            total amount.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label for="interestPrincipal">
-                                    Principal Amount
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="interestPrincipal"
-                                    placeholder="e.g. 10000"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label for="interestRate">
-                                    Rate (% per year)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="interestRate"
-                                    placeholder="e.g. 5"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label for="interestTime">
-                                    Time (Years)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="interestTime"
-                                    placeholder="e.g. 2"
-                                    min="0"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                id="calculateInterest"
-                                class="primary-tool-button"
-                            >
-                                Calculate Interest
-                            </button>
-
-
-                            <div
-                                id="interestResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         BMI CALCULATOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card calculator-card"
-                        data-tool="bmi calculator body mass index"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                ⚖️
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            BMI Calculator
-                        </h3>
-
-                        <p>
-                            Calculate BMI using height
-                            and weight.
-                        </p>
-
-
-                        <div class="tool-form">
-
-
-                            <div class="form-group">
-
-                                <label for="bmiHeight">
-                                    Height (cm)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="bmiHeight"
-                                    placeholder="e.g. 170"
-                                    min="1"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <div class="form-group">
-
-                                <label for="bmiWeight">
-                                    Weight (kg)
-                                </label>
-
-                                <input
-                                    type="number"
-                                    id="bmiWeight"
-                                    placeholder="e.g. 65"
-                                    min="1"
-                                    step="any"
-                                >
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                id="calculateBMI"
-                                class="primary-tool-button"
-                            >
-                                Calculate BMI
-                            </button>
-
-
-                            <div
-                                id="bmiResult"
-                                class="result-box"
-                                aria-live="polite"
-                            >
-                                Result will appear here
-                            </div>
-
-                        </div>
-
-                    </article>
-
-
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             STUDY TOOLS SECTION
-        ====================================================== -->
-
-        <section
-            id="study-tools"
-            class="content-section study-tools-section"
-        >
-
-            <div class="section-container">
-
-
-                <!-- SECTION HEADER -->
-
-                <div class="section-header">
-
-                    <span class="section-badge">
-                        📚 Study
-                    </span>
-
-                    <h2>
-                        Study Tools
-                    </h2>
-
-                    <p>
-                        Powerful tools to help you study,
-                        plan and stay organized.
-                    </p>
-
-                </div>
-
-
-
-                <!-- STUDY TOOLS GRID -->
-
-                <div class="tools-grid">
-
-
-                    <!-- =========================================
-                         POMODORO TIMER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card featured-card"
-                        data-tool="study timer pomodoro focus timer"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                ⏱️
-                            </div>
-
-                            <span class="tool-tag">
-                                Focus
-                            </span>
-
-                        </div>
-
-                        <h3>
-                            Study Timer
-                        </h3>
-
-                        <p>
-                            Focus with a simple
-                            Pomodoro study timer.
-                        </p>
-
 
                         <div
-                            id="timerDisplay"
-                            class="timer-display"
+                            id="percentageResult"
+                            class="tool-result"
+                            aria-live="polite"
                         >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                    <!-- CGPA Calculator -->
+                    <article class="tool-card calculator-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">🎓</div>
+                            <span class="tool-tag">Academic</span>
+                        </div>
+
+                        <h3>CGPA Calculator</h3>
+                        <p>Calculate your average CGPA from grade points.</p>
+
+                        <div class="input-group">
+                            <label for="cgpaPoints">Grade Points</label>
+                            <input
+                                type="text"
+                                id="cgpaPoints"
+                                placeholder="e.g. 8, 7.5, 9, 8.5"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="cgpaBtn"
+                            class="tool-button"
+                        >
+                            Calculate CGPA
+                        </button>
+
+                        <div
+                            id="cgpaResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                    <!-- Age Calculator -->
+                    <article class="tool-card calculator-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">🎂</div>
+                            <span class="tool-tag">Useful</span>
+                        </div>
+
+                        <h3>Age Calculator</h3>
+                        <p>Find your exact age from your date of birth.</p>
+
+                        <div class="input-group">
+                            <label for="birthDate">Date of Birth</label>
+                            <input
+                                type="date"
+                                id="birthDate"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="ageBtn"
+                            class="tool-button"
+                        >
+                            Calculate Age
+                        </button>
+
+                        <div
+                            id="ageResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Your age will appear here
+                        </div>
+                    </article>
+
+                    <!-- Average Calculator -->
+                    <article class="tool-card calculator-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">📈</div>
+                            <span class="tool-tag">Math</span>
+                        </div>
+
+                        <h3>Average Calculator</h3>
+                        <p>Calculate the average of multiple numbers.</p>
+
+                        <div class="input-group">
+                            <label for="averageNumbers">Numbers</label>
+                            <input
+                                type="text"
+                                id="averageNumbers"
+                                placeholder="e.g. 70, 80, 90, 85"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="averageBtn"
+                            class="tool-button"
+                        >
+                            Calculate Average
+                        </button>
+
+                        <div
+                            id="averageResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                    <!-- Discount Calculator -->
+                    <article class="tool-card calculator-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">🏷️</div>
+                            <span class="tool-tag">Shopping</span>
+                        </div>
+
+                        <h3>Discount Calculator</h3>
+                        <p>Calculate discount amount and final price.</p>
+
+                        <div class="input-group">
+                            <label for="originalPrice">Original Price</label>
+                            <input
+                                type="number"
+                                id="originalPrice"
+                                placeholder="e.g. 2000"
+                                min="0"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="discountPercent">Discount (%)</label>
+                            <input
+                                type="number"
+                                id="discountPercent"
+                                placeholder="e.g. 20"
+                                min="0"
+                                max="100"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="discountBtn"
+                            class="tool-button"
+                        >
+                            Calculate Discount
+                        </button>
+
+                        <div
+                            id="discountResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                    <!-- Simple Interest -->
+                    <article class="tool-card calculator-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">💰</div>
+                            <span class="tool-tag">Finance</span>
+                        </div>
+
+                        <h3>Simple Interest</h3>
+                        <p>Calculate simple interest and total amount.</p>
+
+                        <div class="input-group">
+                            <label for="principalAmount">Principal</label>
+                            <input
+                                type="number"
+                                id="principalAmount"
+                                placeholder="e.g. 10000"
+                                min="0"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="interestRate">Rate (%)</label>
+                            <input
+                                type="number"
+                                id="interestRate"
+                                placeholder="e.g. 5"
+                                min="0"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="interestTime">Time (Years)</label>
+                            <input
+                                type="number"
+                                id="interestTime"
+                                placeholder="e.g. 2"
+                                min="0"
+                            >
+                        </div>
+
+                        <button
+                            type="button"
+                            id="interestBtn"
+                            class="tool-button"
+                        >
+                            Calculate Interest
+                        </button>
+
+                        <div
+                            id="interestResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                </div>
+
+                <div class="section-more">
+                    <button
+                        type="button"
+                        id="showMoreCalculators"
+                        class="outline-button"
+                    >
+                        Show More Calculators
+                        <span>＋</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section
+            id="studyTools"
+            class="content-section study-tools-section"
+        >
+                        <div class="container">
+
+                <div class="section-heading">
+                    <span class="section-badge">📚 Study Tools</span>
+                    <h2>Study Smarter, Not Harder</h2>
+                    <p>Powerful tools to help you focus, plan, practice and track your study progress.</p>
+                </div>
+
+                <div class="study-tools-grid">
+
+                    <!-- Study Timer -->
+                    <article class="tool-card study-card featured-study-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">⏱️</div>
+                            <span class="tool-tag">Focus</span>
+                        </div>
+
+                        <h3>Pomodoro Study Timer</h3>
+                        <p>Use focused study sessions with short breaks.</p>
+
+                        <div class="timer-display" id="studyTimerDisplay">
                             25:00
                         </div>
 
-
-                        <div class="timer-mode">
-
-                            <button
-                                type="button"
-                                class="timer-mode-button active"
-                                data-minutes="25"
-                            >
-                                Focus 25m
-                            </button>
-
-                            <button
-                                type="button"
-                                class="timer-mode-button"
-                                data-minutes="5"
-                            >
-                                Break 5m
-                            </button>
-
-                            <button
-                                type="button"
-                                class="timer-mode-button"
-                                data-minutes="15"
-                            >
-                                Break 15m
-                            </button>
-
+                        <div class="timer-mode" id="timerMode">
+                            Focus Session
                         </div>
 
+                        <div class="timer-progress">
+                            <div
+                                id="timerProgress"
+                                class="timer-progress-fill"
+                            ></div>
+                        </div>
 
-                        <div class="timer-controls">
-
+                        <div class="timer-actions">
                             <button
                                 type="button"
                                 id="startTimer"
-                                class="primary-tool-button"
+                                class="tool-button"
                             >
                                 ▶ Start
                             </button>
@@ -1364,7 +1206,7 @@
                             <button
                                 type="button"
                                 id="pauseTimer"
-                                class="secondary-tool-button"
+                                class="outline-button"
                             >
                                 ⏸ Pause
                             </button>
@@ -1372,1713 +1214,2076 @@
                             <button
                                 type="button"
                                 id="resetTimer"
-                                class="secondary-tool-button"
+                                class="icon-button"
+                                aria-label="Reset timer"
                             >
-                                ↻ Reset
+                                ↻
                             </button>
-
                         </div>
-
                     </article>
 
-
-
-                    <!-- =========================================
-                         STUDY PLANNER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="study planner schedule timetable"
-                    >
-
+                    <!-- Study Planner -->
+                    <article class="tool-card study-card">
                         <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📅
-                            </div>
-
+                            <div class="tool-icon">🗓️</div>
+                            <span class="tool-tag">Planning</span>
                         </div>
 
-                        <h3>
-                            Study Planner
-                        </h3>
+                        <h3>Study Planner</h3>
+                        <p>Create a simple daily study plan and stay organized.</p>
 
-                        <p>
-                            Plan your daily study schedule
-                            and subjects.
-                        </p>
+                        <div class="input-group">
+                            <label for="studyTask">Study Task</label>
+                            <input
+                                type="text"
+                                id="studyTask"
+                                placeholder="e.g. C++ Chapter 5"
+                            >
+                        </div>
+
+                        <div class="input-group">
+                            <label for="studyTime">Study Time</label>
+                            <input
+                                type="time"
+                                id="studyTime"
+                            >
+                        </div>
 
                         <button
                             type="button"
-                            id="openStudyPlanner"
-                            class="primary-tool-button"
+                            id="addStudyTask"
+                            class="tool-button"
                         >
-                            Open Planner
+                            + Add Task
                         </button>
 
+                        <div
+                            id="studyTaskList"
+                            class="task-list"
+                        ></div>
                     </article>
 
-
-
-                    <!-- =========================================
-                         TO-DO LIST
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="todo to do task list tasks"
-                    >
-
+                    <!-- Quiz Practice -->
+                    <article class="tool-card study-card">
                         <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                ✅
-                            </div>
-
+                            <div class="tool-icon">🧠</div>
+                            <span class="tool-tag">Practice</span>
                         </div>
 
-                        <h3>
-                            To-Do List
-                        </h3>
+                        <h3>Quiz Practice</h3>
+                        <p>Test your knowledge with quick practice questions.</p>
 
-                        <p>
-                            Manage your daily tasks and
-                            study goals.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="openTodo"
-                            class="primary-tool-button"
-                        >
-                            Open To-Do List
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         QUIZ PRACTICE
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="quiz practice mcq questions test"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🧠
+                        <div class="quiz-preview">
+                            <span class="quiz-number">01</span>
+                            <div>
+                                <strong>Ready to test yourself?</strong>
+                                <small>Choose a topic and start practicing.</small>
                             </div>
-
-                            <span class="tool-tag">
-                                Practice
-                            </span>
-
                         </div>
-
-                        <h3>
-                            Quiz Practice
-                        </h3>
-
-                        <p>
-                            Test your knowledge with
-                            practice questions.
-                        </p>
 
                         <button
                             type="button"
                             id="openQuiz"
-                            class="primary-tool-button"
+                            class="tool-button"
                         >
-                            Start Quiz
+                            Start Quiz →
                         </button>
-
                     </article>
 
-
-
-                    <!-- =========================================
-                         FLASHCARDS
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="flashcards study cards revision"
-                    >
-
+                    <!-- Unit Converter -->
+                    <article class="tool-card study-card">
                         <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🗂️
-                            </div>
-
+                            <div class="tool-icon">🔄</div>
+                            <span class="tool-tag">Utility</span>
                         </div>
 
-                        <h3>
-                            Flashcards
-                        </h3>
+                        <h3>Unit Converter</h3>
+                        <p>Convert common units quickly for study and projects.</p>
 
-                        <p>
-                            Create flashcards for
-                            quick revision.
-                        </p>
+                        <div class="input-group">
+                            <label for="converterValue">Value</label>
+                            <input
+                                type="number"
+                                id="converterValue"
+                                placeholder="Enter value"
+                            >
+                        </div>
+
+                        <div class="converter-row">
+                            <select id="converterFrom">
+                                <option value="km">Kilometer</option>
+                                <option value="m">Meter</option>
+                                <option value="cm">Centimeter</option>
+                                <option value="kg">Kilogram</option>
+                                <option value="g">Gram</option>
+                            </select>
+
+                            <span>→</span>
+
+                            <select id="converterTo">
+                                <option value="m">Meter</option>
+                                <option value="km">Kilometer</option>
+                                <option value="cm">Centimeter</option>
+                                <option value="g">Gram</option>
+                                <option value="kg">Kilogram</option>
+                            </select>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="convertBtn"
+                            class="tool-button"
+                        >
+                            Convert
+                        </button>
+
+                        <div
+                            id="converterResult"
+                            class="tool-result"
+                            aria-live="polite"
+                        >
+                            Result will appear here
+                        </div>
+                    </article>
+
+                    <!-- Word Counter -->
+                    <article class="tool-card study-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">📝</div>
+                            <span class="tool-tag">Writing</span>
+                        </div>
+
+                        <h3>Word Counter</h3>
+                        <p>Count words, characters and lines in your text.</p>
+
+                        <textarea
+                            id="wordCounterInput"
+                            class="tool-textarea"
+                            rows="5"
+                            placeholder="Type or paste your text here..."
+                        ></textarea>
+
+                        <div class="counter-stats">
+                            <div>
+                                <strong id="wordCount">0</strong>
+                                <span>Words</span>
+                            </div>
+
+                            <div>
+                                <strong id="characterCount">0</strong>
+                                <span>Characters</span>
+                            </div>
+
+                            <div>
+                                <strong id="lineCount">0</strong>
+                                <span>Lines</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Flashcards -->
+                    <article class="tool-card study-card">
+                        <div class="tool-card-header">
+                            <div class="tool-icon">🃏</div>
+                            <span class="tool-tag">Memory</span>
+                        </div>
+
+                        <h3>Flashcards</h3>
+                        <p>Create quick question-answer cards for revision.</p>
+
+                        <div class="flashcard-preview">
+                            <span>📖</span>
+                            <strong>Quick Revision</strong>
+                            <small>Learn • Recall • Repeat</small>
+                        </div>
 
                         <button
                             type="button"
                             id="openFlashcards"
-                            class="primary-tool-button"
-                    >
-                        Open Flashcard
-                    </button>
-                        
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         QUICK NOTES
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="notes quick notes note taking"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📒
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Quick Notes
-                        </h3>
-
-                        <p>
-                            Write and organize your
-                            important study notes.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="openNotes"
-                            class="primary-tool-button"
+                            class="tool-button"
                         >
-                            Open Notes
+                            Open Flashcards →
                         </button>
-
                     </article>
-
-
-
-                    <!-- =========================================
-                         WORD COUNTER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="word counter character counter writing"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🔤
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Word Counter
-                        </h3>
-
-                        <p>
-                            Count words, characters,
-                            sentences and paragraphs.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="openWordCounter"
-                            class="primary-tool-button"
-                        >
-                            Open Word Counter
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         PROGRESS TRACKER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card study-card"
-                        data-tool="study progress tracker progress"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📈
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Study Progress
-                        </h3>
-
-                        <p>
-                            Track your study progress
-                            and completed goals.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="openProgress"
-                            class="primary-tool-button"
-                        >
-                            Track Progress
-                        </button>
-
-                    </article>
-
-
 
                 </div>
-
             </div>
-
         </section>
 
-
-
-        <!-- =====================================================
-             CODING TOOLS SECTION
-        ====================================================== -->
-
         <section
-            id="coding-tools"
+            id="codingTools"
             class="content-section coding-tools-section"
         >
+                        <div class="container">
 
-            <div class="section-container">
-
-
-                <!-- SECTION HEADER -->
-
-                <div class="section-header">
-
-                    <span class="section-badge">
-                        💻 Code
-                    </span>
-
-                    <h2>
-                        Coding Tools
-                    </h2>
-
-                    <p>
-                        Write, test and practice code
-                        directly in StudyToolsHub.
-                    </p>
-
+                <div class="section-heading">
+                    <span class="section-badge">💻 Coding Workspace</span>
+                    <h2>Code, Practice & Build</h2>
+                    <p>Practice web development and C/C++ programming directly from your browser.</p>
                 </div>
 
+                <div class="coding-tools-grid">
 
-
-                <!-- CODING GRID -->
-
-                <div class="tools-grid">
-
-
-                    <!-- =========================================
-                         HTML CSS JS EDITOR
-                    ========================================== -->
-
-                    <article
-                        class="tool-card coding-card featured-card"
-                        data-tool="html css javascript editor code editor online editor"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🌐
-                            </div>
-
-                            <span class="tool-tag">
-                                Live Editor
-                            </span>
-
+                    <!-- Web Editor -->
+                    <article class="tool-card coding-card coding-featured">
+                        <div class="coding-card-top">
+                            <div class="tool-icon coding-icon-large">🌐</div>
+                            <span class="tool-tag">Web Development</span>
                         </div>
 
-                        <h3>
-                            HTML / CSS / JS Editor
-                        </h3>
+                        <h3>HTML / CSS / JS Editor</h3>
 
                         <p>
-                            Write HTML, CSS and JavaScript
-                            and preview your project instantly.
+                            Write HTML, CSS and JavaScript and instantly
+                            preview your website.
                         </p>
 
+                        <div class="code-preview">
+                            <div class="code-preview-bar">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
 
-                        <div class="coding-features">
-
-                            <span>
-                                HTML
-                            </span>
-
-                            <span>
-                                CSS
-                            </span>
-
-                            <span>
-                                JavaScript
-                            </span>
-
-                            <span>
-                                Live Preview
-                            </span>
-
+                            <div class="code-preview-content">
+                                <span>&lt;<b>html</b>&gt;</span>
+                                <span>&nbsp;&nbsp;&lt;<b>body</b>&gt;</span>
+                                <span>&nbsp;&nbsp;&nbsp;&nbsp;Hello World</span>
+                                <span>&nbsp;&nbsp;&lt;/<b>body</b>&gt;</span>
+                                <span>&lt;/<b>html</b>&gt;</span>
+                            </div>
                         </div>
-
 
                         <button
                             type="button"
                             id="openEditor"
-                            class="primary-tool-button"
+                            class="tool-button"
                         >
-                            Open Editor
+                            Open Web Editor →
                         </button>
-
                     </article>
 
-
-
-                    <!-- =========================================
-                         C / C++ COMPILER
-                    ========================================== -->
-
-                    <article
-                        class="tool-card coding-card featured-card"
-                        data-tool="c c++ cpp compiler programming compiler"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                ⚙️
-                            </div>
-
-                            <span class="tool-tag">
-                                Compiler
-                            </span>
-
+                    <!-- C / C++ Compiler -->
+                    <article class="tool-card coding-card compiler-card">
+                        <div class="coding-card-top">
+                            <div class="tool-icon coding-icon-large">⚙️</div>
+                            <span class="tool-tag">Programming</span>
                         </div>
 
-                        <h3>
-                            C / C++ Compiler
-                        </h3>
+                        <h3>C / C++ Compiler</h3>
 
                         <p>
-                            Practice C and C++ programs
-                            with an online compiler interface.
+                            Practice C and C++ programs with a clean,
+                            mobile-friendly coding workspace.
                         </p>
 
+                        <div class="compiler-preview">
+                            <div class="compiler-preview-header">
+                                <span>C++</span>
+                                <span>● Ready</span>
+                            </div>
 
-                        <div class="coding-features">
-
-                            <span>
-                                C
-                            </span>
-
-                            <span>
-                                C++
-                            </span>
-
-                            <span>
-                                Run Code
-                            </span>
-
-                            <span>
-                                Output
-                            </span>
-
+                            <div class="compiler-preview-code">
+                                <span><b>#include</b> &lt;iostream&gt;</span>
+                                <span><b>using namespace</b> std;</span>
+                                <br>
+                                <span><b>int</b> main() {</span>
+                                <span>&nbsp;&nbsp;cout &lt;&lt; <i>"Hello!"</i>;</span>
+                                <span>&nbsp;&nbsp;<b>return</b> 0;</span>
+                                <span>}</span>
+                            </div>
                         </div>
-
 
                         <button
                             type="button"
                             id="openCompiler"
-                            class="primary-tool-button"
+                            class="tool-button"
                         >
-                            Open C / C++ Compiler
+                            Open C / C++ Compiler →
                         </button>
-
                     </article>
 
+                    <!-- Code Notes -->
+                    <article class="tool-card coding-card">
+                        <div class="tool-icon">📘</div>
 
-
-                    <!-- =========================================
-                         CODE SNIPPETS
-                    ========================================== -->
-
-                    <article
-                        class="tool-card coding-card"
-                        data-tool="code snippets programming snippets"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                🧩
-                            </div>
-
-                        </div>
-
-                        <h3>
-                            Code Snippets
-                        </h3>
+                        <h3>Programming Notes</h3>
 
                         <p>
-                            Save and organize useful
-                            programming code snippets.
+                            Learn programming concepts with quick
+                            references and examples.
                         </p>
 
-                        <button
-                            type="button"
-                            id="openCodeSnippets"
-                            class="primary-tool-button"
-                        >
-                            Open Snippets
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- =========================================
-                         PROGRAMMING NOTES
-                    ========================================== -->
-
-                    <article
-                        class="tool-card coding-card"
-                        data-tool="programming notes coding notes"
-                    >
-
-                        <div class="tool-card-header">
-
-                            <div class="tool-icon">
-                                📘
-                            </div>
-
+                        <div class="coding-feature-list">
+                            <span>✓ C++ Basics</span>
+                            <span>✓ OOP Concepts</span>
+                            <span>✓ DSA Preparation</span>
                         </div>
-
-                        <h3>
-                            Programming Notes
-                        </h3>
-
-                        <p>
-                            Keep important coding concepts
-                            and syntax notes in one place.
-                        </p>
 
                         <button
                             type="button"
                             id="openCodingNotes"
-                            class="primary-tool-button"
+                            class="outline-button"
                         >
-                            Open Coding Notes
+                            View Coding Notes →
                         </button>
-
                     </article>
 
+                    <!-- Code Challenges -->
+                    <article class="tool-card coding-card">
+                        <div class="tool-icon">🏆</div>
 
+                        <h3>Code Challenges</h3>
 
-                </div>
+                        <p>
+                            Improve your problem-solving skills with
+                            beginner-friendly coding challenges.
+                        </p>
 
-            </div>
+                        <div class="challenge-stats">
+                            <div>
+                                <strong>50+</strong>
+                                <span>Problems</span>
+                            </div>
 
-        </section>
-
-
-
-        <!-- =====================================================
-             EDITOR PAGE
-        ====================================================== -->
-
-        <section
-            id="editorPage"
-            class="tool-page editor-page"
-            aria-hidden="true"
-        >
-
-            <div class="tool-page-container">
-
-
-                <div class="tool-page-header">
-
-                    <button
-                        type="button"
-                        id="closeEditor"
-                        class="back-button"
-                    >
-                        ← Back
-                    </button>
-
-                    <div>
-
-                        <span class="section-badge">
-                            🌐 Code Editor
-                        </span>
-
-                        <h2>
-                            HTML / CSS / JS Editor
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- EDITOR TOOLBAR -->
-
-                <div class="editor-toolbar">
-
-                    <button
-                        type="button"
-                        id="runCode"
-                        class="primary-tool-button"
-                    >
-                        ▶ Run
-                    </button>
-
-                    <button
-                        type="button"
-                        id="clearCode"
-                        class="secondary-tool-button"
-                    >
-                        🗑 Clear
-                    </button>
-
-                    <button
-                        type="button"
-                        id="downloadCode"
-                        class="secondary-tool-button"
-                    >
-                        ⬇ Download
-                    </button>
-
-                    <button
-                        type="button"
-                        id="copyCode"
-                        class="secondary-tool-button"
-                    >
-                        📋 Copy
-                    </button>
-
-                </div>
-
-
-
-                <!-- EDITOR GRID -->
-
-                <div class="code-editor-grid">
-
-
-                    <!-- HTML -->
-
-                    <div class="code-panel">
-
-                        <div class="code-panel-header">
-
-                            <span>
-                                HTML
-                            </span>
-
+                            <div>
+                                <strong>3</strong>
+                                <span>Levels</span>
+                            </div>
                         </div>
-
-                        <textarea
-                            id="htmlCode"
-                            spellcheck="false"
-                            placeholder="Write HTML code here..."
-                        ></textarea>
-
-                    </div>
-
-
-
-                    <!-- CSS -->
-
-                    <div class="code-panel">
-
-                        <div class="code-panel-header">
-
-                            <span>
-                                CSS
-                            </span>
-
-                        </div>
-
-                        <textarea
-                            id="cssCode"
-                            spellcheck="false"
-                            placeholder="Write CSS code here..."
-                        ></textarea>
-
-                    </div>
-
-
-
-                    <!-- JAVASCRIPT -->
-
-                    <div class="code-panel">
-
-                        <div class="code-panel-header">
-
-                            <span>
-                                JavaScript
-                            </span>
-
-                        </div>
-
-                        <textarea
-                            id="jsCode"
-                            spellcheck="false"
-                            placeholder="Write JavaScript code here..."
-                        ></textarea>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- LIVE PREVIEW -->
-
-                <div class="preview-panel">
-
-                    <div class="preview-header">
-
-                        <h3>
-                            Live Preview
-                        </h3>
 
                         <button
                             type="button"
-                            id="refreshPreview"
-                            class="secondary-tool-button"
+                            id="openChallenges"
+                            class="outline-button"
                         >
-                            ↻ Refresh
+                            Start Challenges →
                         </button>
-
-                    </div>
-
-
-                    <iframe
-                        id="codePreview"
-                        title="Code Preview"
-                        sandbox="allow-scripts"
-                    ></iframe>
+                    </article>
 
                 </div>
-
             </div>
-
         </section>
-
-
-
-        <!-- =====================================================
-             C / C++ COMPILER PAGE
-        ====================================================== -->
-
-        <section
-            id="compilerPage"
-            class="tool-page compiler-page"
-            aria-hidden="true"
-        >
-
-            <div class="tool-page-container">
-
-
-                <!-- COMPILER HEADER -->
-
-                <div class="tool-page-header">
-
-                    <button
-                        type="button"
-                        id="closeCompiler"
-                        class="back-button"
-                    >
-                        ← Back
-                    </button>
-
-                    <div>
-
-                        <span class="section-badge">
-                            ⚙️ Compiler
-                        </span>
-
-                        <h2>
-                            C / C++ Compiler
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- COMPILER TOOLBAR -->
-
-                <div class="compiler-toolbar">
-
-
-                    <div class="compiler-language-box">
-
-                        <label
-                            for="compilerLanguage"
-                        >
-                            Language
-                        </label>
-
-                        <select
-                            id="compilerLanguage"
-                        >
-
-                            <option value="c">
-                                C
-                            </option>
-
-                            <option value="cpp">
-                                C++
-                            </option>
-
-                        </select>
-
-                    </div>
-
-
-
-                    <button
-                        type="button"
-                        id="runCompiler"
-                        class="primary-tool-button"
-                    >
-                        ▶ Run
-                    </button>
-
-
-                    <button
-                        type="button"
-                        id="clearCompiler"
-                        class="secondary-tool-button"
-                    >
-                        🗑 Clear
-                    </button>
-
-
-                    <button
-                        type="button"
-                        id="downloadCompilerCode"
-                        class="secondary-tool-button"
-                    >
-                        ⬇ Download
-                    </button>
-
-
-                </div>
-
-
-
-                <!-- COMPILER WORKSPACE -->
-
-                <div class="compiler-workspace">
-
-
-                    <!-- CODE -->
-
-                    <div class="compiler-code-panel">
-
-                        <div class="code-panel-header">
-
-                            <span>
-                                Source Code
-                            </span>
-
-                            <span id="compilerLineCount">
-                                Lines: 0
-                            </span>
-
-                        </div>
-
-
-                        <textarea
-                            id="compilerCode"
-                            spellcheck="false"
-                            placeholder="Write your C or C++ code here..."
-                        >#include &lt;stdio.h&gt;
-
-int main() {
-
-    printf("Hello, StudyToolsHub!");
-
-    return 0;
-}</textarea>
-
-                    </div>
-
-
-
-                    <!-- OUTPUT -->
-
-                    <div class="compiler-output-panel">
-
-                        <div class="code-panel-header">
-
-                            <span>
-                                Output
-                            </span>
-
-                            <button
-                                type="button"
-                                id="clearCompilerOutput"
-                                class="small-action-button"
-                            >
-                                Clear
-                            </button>
-
-                        </div>
-
-
-                        <pre
-                            id="compilerOutput"
-                        >Output will appear here...</pre>
-
-                    </div>
-
-                </div>
-
-
-
-                <!-- COMPILER INFO -->
-
-                <div class="compiler-info">
-
-                    <div class="info-item">
-
-                        <span>
-                            💡
-                        </span>
-
-                        <p>
-                            Select C or C++ before running
-                            your program.
-                        </p>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <span>
-                            ⚡
-                        </span>
-
-                                                <p>
-                            Use the compiler to practice
-                            C and C++ programming.
-                        </p>
-
-                    </div>
-
-
-                    <div class="info-item">
-
-                        <span>
-                            🧪
-                        </span>
-
-                        <p>
-                            Test small programs and
-                            learn programming concepts.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             RESOURCES SECTION
-        ====================================================== -->
 
         <section
             id="resources"
             class="content-section resources-section"
         >
 
-            <div class="section-container">
+                        <div class="container">
 
+                <div class="section-heading">
+                    <span class="section-badge">📖 Learning Resources</span>
+                    <h2>Resources for Your Study</h2>
+                    <p>Find notes, important questions and useful study material in one place.</p>
+                </div>
 
-                <div class="section-header">
+                <div class="resources-grid">
 
-                    <span class="section-badge">
-                        📖 Learn
-                    </span>
+                    <!-- Notes -->
+                    <article class="resource-card">
+                        <div class="resource-icon">📚</div>
 
-                    <h2>
-                        Student Resources
-                    </h2>
+                        <div class="resource-content">
+                            <span class="resource-label">Study Material</span>
+                            <h3>Subject Notes</h3>
+                            <p>
+                                Keep your important subject notes
+                                organized and easy to access.
+                            </p>
 
-                    <p>
-                        Useful study materials and resources
-                        for your academic journey.
-                    </p>
+                            <button
+                                type="button"
+                                id="openNotes"
+                                class="resource-button"
+                            >
+                                Open Notes →
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Important Questions -->
+                    <article class="resource-card">
+                        <div class="resource-icon">🎯</div>
+
+                        <div class="resource-content">
+                            <span class="resource-label">Exam Preparation</span>
+                            <h3>Important Questions</h3>
+                            <p>
+                                Practice important questions and
+                                prepare smarter for your exams.
+                            </p>
+
+                            <button
+                                type="button"
+                                id="openQuestions"
+                                class="resource-button"
+                            >
+                                View Questions →
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Previous Papers -->
+                    <article class="resource-card">
+                        <div class="resource-icon">📄</div>
+
+                        <div class="resource-content">
+                            <span class="resource-label">Practice</span>
+                            <h3>Previous Questions</h3>
+                            <p>
+                                Practice previous examination questions
+                                to understand important topics.
+                            </p>
+
+                            <button
+                                type="button"
+                                id="openPreviousPapers"
+                                class="resource-button"
+                            >
+                                Explore Papers →
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Coding Resources -->
+                    <article class="resource-card">
+                        <div class="resource-icon">💡</div>
+
+                        <div class="resource-content">
+                            <span class="resource-label">Programming</span>
+                            <h3>Coding Resources</h3>
+                            <p>
+                                Quick references, programming concepts
+                                and examples for coding practice.
+                            </p>
+
+                            <button
+                                type="button"
+                                id="openCodingResources"
+                                class="resource-button"
+                            >
+                                Explore Coding →
+                            </button>
+                        </div>
+                    </article>
 
                 </div>
 
-
-
-                <div class="tools-grid">
-
-
-                    <!-- NOTES -->
-
-                    <article
-                        class="tool-card resource-card"
-                        data-tool="notes study notes"
-                    >
-
-                        <div class="tool-icon">
-                            📚
-                        </div>
-
-                        <h3>
-                            Study Notes
-                        </h3>
-
+                <div class="resources-cta">
+                    <div class="resources-cta-content">
+                        <span class="section-badge">🚀 Keep Learning</span>
+                        <h3>Your next chapter starts here.</h3>
                         <p>
-                            Create, organize and manage
-                            your study notes.
+                            Use StudyToolsHub every day to practice,
+                            revise and improve your skills.
                         </p>
+                    </div>
 
-                        <button
-                            type="button"
-                            id="resourceNotes"
-                            class="primary-tool-button"
-                        >
-                            Open Notes
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- IMPORTANT QUESTIONS -->
-
-                    <article
-                        class="tool-card resource-card"
-                        data-tool="important questions exam questions"
+                    <a
+                        href="#codingTools"
+                        class="primary-button"
                     >
-
-                        <div class="tool-icon">
-                            ❓
-                        </div>
-
-                        <h3>
-                            Important Questions
-                        </h3>
-
-                        <p>
-                            Keep important exam questions
-                            organized for revision.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="importantQuestions"
-                            class="primary-tool-button"
-                        >
-                            View Questions
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- PYQ -->
-
-                    <article
-                        class="tool-card resource-card"
-                        data-tool="previous year questions pyq papers"
-                    >
-
-                        <div class="tool-icon">
-                            📄
-                        </div>
-
-                        <h3>
-                            Previous Year Questions
-                        </h3>
-
-                        <p>
-                            Practice previous-year questions
-                            and improve exam preparation.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="previousQuestions"
-                            class="primary-tool-button"
-                        >
-                            View PYQs
-                        </button>
-
-                    </article>
-
-
-
-                    <!-- STUDY MATERIAL -->
-
-                    <article
-                        class="tool-card resource-card"
-                        data-tool="study material learning resources"
-                    >
-
-                        <div class="tool-icon">
-                            🎯
-                        </div>
-
-                        <h3>
-                            Study Material
-                        </h3>
-
-                        <p>
-                            Access useful learning material
-                            in one place.
-                        </p>
-
-                        <button
-                            type="button"
-                            id="studyMaterial"
-                            class="primary-tool-button"
-                        >
-                            Explore
-                        </button>
-
-                    </article>
-
-
+                        Start Practicing →
+                    </a>
                 </div>
 
             </div>
-
         </section>
-
-
-
-        <!-- =====================================================
-             FEATURES SECTION
-        ====================================================== -->
 
         <section
-            id="features"
-            class="content-section features-section"
-        >
-
-            <div class="section-container">
-
-                <div class="section-header">
-
-                    <span class="section-badge">
-                        ✨ Why StudyToolsHub?
-                    </span>
-
-                    <h2>
-                        Everything Students Need
-                    </h2>
-
-                    <p>
-                        Simple, fast and useful tools
-                        designed for everyday study.
-                    </p>
-
-                </div>
-
-
-                <div class="features-grid">
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            ⚡
-                        </div>
-
-                        <h3>
-                            Fast & Simple
-                        </h3>
-
-                        <p>
-                            Use tools quickly without
-                            complicated setup.
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            📱
-                        </div>
-
-                        <h3>
-                            Mobile Friendly
-                        </h3>
-
-                        <p>
-                            Designed to work smoothly
-                            on phones, tablets and desktops.
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            💻
-                        </div>
-
-                        <h3>
-                            Coding Practice
-                        </h3>
-
-                        <p>
-                            Practice web development and
-                            programming in one place.
-                        </p>
-
-                    </div>
-
-
-
-                    <div class="feature-card">
-
-                        <div class="feature-icon">
-                            🔒
-                        </div>
-
-                        <h3>
-                            Your Work
-                        </h3>
-
-                        <p>
-                            Save your useful notes,
-                            tasks and coding projects.
-                        </p>
-
-                    </div>
-
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             ACCOUNT MODAL
-        ====================================================== -->
-
-        <div
-            id="accountModal"
-            class="modal"
+            id="editorPage"
+            class="workspace-page editor-page"
             aria-hidden="true"
         >
+                        <div class="workspace-container">
 
-            <div
-                class="modal-overlay"
-                id="accountModalOverlay"
-            ></div>
+                <div class="workspace-header">
+                    <div class="workspace-title">
+                        <span class="workspace-icon">🌐</span>
+                        <div>
+                            <span class="workspace-label">CODING WORKSPACE</span>
+                            <h2>Web Editor</h2>
+                        </div>
+                    </div>
 
+                    <div class="workspace-actions">
+                        <button
+                            type="button"
+                            id="runCode"
+                            class="workspace-button run-button"
+                        >
+                            ▶ Run
+                        </button>
 
-            <div
-                class="modal-content account-modal"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="accountModalTitle"
-            >
+                        <button
+                            type="button"
+                            id="clearEditor"
+                            class="workspace-button"
+                        >
+                            🗑 Clear
+                        </button>
 
-                <button
-                    type="button"
-                    id="closeAccountModal"
-                    class="modal-close"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
-
-
-                <div class="modal-icon">
-                    👤
+                        <button
+                            type="button"
+                            id="closeEditor"
+                            class="workspace-button close-button"
+                        >
+                            ← Back
+                        </button>
+                    </div>
                 </div>
 
-                <h2 id="accountModalTitle">
-                    Student Account
-                </h2>
+                <div class="editor-layout">
 
-                <p>
-                    Sign in to save your notes,
-                    coding projects and study progress.
-                </p>
+                    <div class="editor-panel">
 
+                        <div class="editor-tabs">
+                            <button
+                                type="button"
+                                class="editor-tab active"
+                                data-editor="htmlCode"
+                            >
+                                HTML
+                            </button>
 
-                <button
-                    type="button"
-                    id="loginButton"
-                    class="primary-tool-button"
-                >
-                    🔐 Login / Sign Up
-                </button>
+                            <button
+                                type="button"
+                                class="editor-tab"
+                                data-editor="cssCode"
+                            >
+                                CSS
+                            </button>
 
-            </div>
-
-        </div>
-
-
-
-        <!-- =====================================================
-             GENERIC TOOL MODAL
-        ====================================================== -->
-
-        <div
-            id="toolModal"
-            class="modal"
-            aria-hidden="true"
-        >
-
-            <div
-                class="modal-overlay"
-                id="toolModalOverlay"
-            ></div>
-
-
-            <div
-                id="toolModalContent"
-                class="modal-content large-modal"
-                role="dialog"
-                aria-modal="true"
-            >
-
-                <button
-                    type="button"
-                    id="closeToolModal"
-                    class="modal-close"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
-
-
-                <div id="toolModalBody">
-
-                    <!--
-                        Dynamic tool content will be
-                        inserted by JavaScript.
-                    -->
-
-                </div>
-
-            </div>
-
-    </div>
-
-                <!-- =====================================================
-             ABOUT SECTION
-        ====================================================== -->
-
-        <section
-            id="about"
-            class="content-section about-section"
-        >
-
-            <div class="section-container">
-
-                <div class="about-content">
-
-                    <span class="section-badge">
-                        🎓 About
-                    </span>
-
-                    <h2>
-                        Built for Students
-                    </h2>
-
-                    <p>
-                        StudyToolsHub is an all-in-one student
-                        platform containing calculators, study
-                        tools, coding tools and useful resources.
-                    </p>
-
-                    <div class="about-points">
-
-                        <div>
-                            ✅ Easy to use
+                            <button
+                                type="button"
+                                class="editor-tab"
+                                data-editor="jsCode"
+                            >
+                                JavaScript
+                            </button>
                         </div>
 
-                        <div>
-                            ✅ Mobile friendly
+                        <div class="editor-area">
+
+                            <div class="editor-box active">
+                                <div class="editor-box-header">
+                                    <span>📄 index.html</span>
+                                    <span class="editor-status">HTML</span>
+                                </div>
+
+                                <textarea
+                                    id="htmlCode"
+                                    class="code-editor"
+                                    spellcheck="false"
+                                    autocapitalize="off"
+                                    autocomplete="off"
+                                    autocorrect="off"
+                                    placeholder="Write your HTML code here..."
+                                ><!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <h1>Hello, StudyToolsHub!</h1>
+    <p>Start building your website.</p>
+</body>
+</html></textarea>
+                            </div>
+
+                            <div class="editor-box">
+                                <div class="editor-box-header">
+                                    <span>🎨 style.css</span>
+                                    <span class="editor-status">CSS</span>
+                                </div>
+
+                                <textarea
+                                    id="cssCode"
+                                    class="code-editor"
+                                    spellcheck="false"
+                                    autocapitalize="off"
+                                    autocomplete="off"
+                                    autocorrect="off"
+                                    placeholder="Write your CSS code here..."
+                                >body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+}
+
+h1 {
+    color: #2563eb;
+}</textarea>
+                            </div>
+
+                            <div class="editor-box">
+                                <div class="editor-box-header">
+                                    <span>⚡ script.js</span>
+                                    <span class="editor-status">JS</span>
+                                </div>
+
+                                <textarea
+                                    id="jsCode"
+                                    class="code-editor"
+                                    spellcheck="false"
+                                    autocapitalize="off"
+                                    autocomplete="off"
+                                    autocorrect="off"
+                                    placeholder="Write your JavaScript code here..."
+                                >console.log("Hello, StudyToolsHub!");
+
+document.body.addEventListener("click", () => {
+    console.log("Website clicked!");
+});</textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="preview-panel">
+
+                        <div class="preview-header">
+                            <div>
+                                <span class="preview-dot"></span>
+                                <strong>Live Preview</strong>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="refreshPreview"
+                                class="preview-refresh"
+                                aria-label="Refresh preview"
+                            >
+                                ↻
+                            </button>
                         </div>
 
-                        <div>
-                            ✅ Useful for daily study
-                        </div>
-
-                        <div>
-                            ✅ Coding practice included
-                        </div>
+                        <iframe
+                            id="editorPreview"
+                            class="editor-preview"
+                            title="Website Live Preview"
+                            sandbox="allow-scripts"
+                        ></iframe>
 
                     </div>
 
                 </div>
 
             </div>
-
         </section>
 
-
-
-        <!-- =====================================================
-             CONTACT SECTION
-        ====================================================== -->
-
         <section
-            id="contact"
-            class="content-section contact-section"
+            id="compilerPage"
+            class="workspace-page compiler-page"
+            aria-hidden="true"
         >
+                       <div class="workspace-container">
 
-            <div class="section-container">
+                <div class="workspace-header compiler-workspace-header">
 
-                <div class="section-header">
+                    <div class="workspace-title">
+                        <span class="workspace-icon">⚙️</span>
+                        <div>
+                            <span class="workspace-label">PROGRAMMING WORKSPACE</span>
+                            <h2>C / C++ Compiler</h2>
+                        </div>
+                    </div>
 
-                    <span class="section-badge">
-                        📩 Contact
-                    </span>
+                    <div class="workspace-actions">
 
-                    <h2>
-                        Get in Touch
-                    </h2>
+                        <select
+                            id="compilerLanguage"
+                            class="compiler-language"
+                            aria-label="Select programming language"
+                        >
+                            <option value="cpp">C++</option>
+                            <option value="c">C</option>
+                        </select>
 
-                    <p>
-                        Have a suggestion or found a problem?
-                        Let us know.
-                    </p>
+                        <button
+                            type="button"
+                            id="runCompiler"
+                            class="workspace-button run-button"
+                        >
+                            ▶ Run
+                        </button>
+
+                        <button
+                            type="button"
+                            id="clearCompiler"
+                            class="workspace-button"
+                        >
+                            🗑 Clear
+                        </button>
+
+                        <button
+                            type="button"
+                            id="closeCompiler"
+                            class="workspace-button close-button"
+                        >
+                            ← Back
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="compiler-layout">
+
+                    <div class="compiler-editor-panel">
+
+                        <div class="compiler-toolbar">
+
+                            <div class="compiler-file">
+                                <span>📄</span>
+                                <strong id="compilerFileName">
+                                    main.cpp
+                                </strong>
+                            </div>
+
+                            <div class="compiler-tools">
+
+                                <button
+                                    type="button"
+                                    id="copyCompilerCode"
+                                    class="small-tool-button"
+                                    title="Copy code"
+                                >
+                                    📋 Copy
+                                </button>
+
+                                <button
+                                    type="button"
+                                    id="downloadCompilerCode"
+                                    class="small-tool-button"
+                                    title="Download code"
+                                >
+                                    ⬇ Save
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div class="compiler-code-area">
+
+                            <div
+                                id="compilerLineNumbers"
+                                class="line-numbers"
+                                aria-hidden="true"
+                            >
+                                1
+                            </div>
+
+                            <textarea
+                                id="compilerCode"
+                                class="compiler-code-editor"
+                                spellcheck="false"
+                                autocapitalize="off"
+                                autocomplete="off"
+                                autocorrect="off"
+                                wrap="off"
+                                aria-label="C or C++ code editor"
+                            >#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "Hello, StudyToolsHub!";
+    return 0;
+}</textarea>
+
+                        </div>
+
+                        <div class="compiler-status-bar">
+
+                            <span>
+                                ●
+                                <strong id="compilerStatus">
+                                    Ready
+                                </strong>
+                            </span>
+
+                            <span id="compilerCursor">
+                                Ln 1, Col 1
+                            </span>
+
+                            <span id="compilerLanguageStatus">
+                                C++
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="compiler-output-panel">
+
+                        <div class="output-header">
+
+                            <div>
+                                <span class="output-icon">▣</span>
+                                <strong>Output</strong>
+                            </div>
+
+                            <button
+                                type="button"
+                                id="clearCompilerOutput"
+                                class="output-clear-button"
+                            >
+                                Clear
+                            </button>
+
+                        </div>
+
+                        <pre
+                            id="compilerOutput"
+                            class="compiler-output"
+                        >Output will appear here...</pre>
+
+                        <div
+                            id="compilerError"
+                            class="compiler-error"
+                            aria-live="polite"
+                        ></div>
+
+                    </div>
 
                 </div>
 
+            </div>
+        </section>
 
-                <form
-                    id="contactForm"
-                    class="contact-form"
-                >
+        <section
+            id="quizPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+                        <div class="modal-container">
 
-                    <div class="form-group">
-
-                        <label for="contactName">
-                            Name
-                        </label>
-
-                        <input
-                            type="text"
-                            id="contactName"
-                            name="name"
-                            placeholder="Enter your name"
-                            autocomplete="name"
-                            required
-                        >
-
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">🧠</span>
+                        <span class="modal-label">PRACTICE MODE</span>
+                        <h2>Quiz Practice</h2>
                     </div>
-
-
-                    <div class="form-group">
-
-                        <label for="contactEmail">
-                            Email
-                        </label>
-
-                        <input
-                            type="email"
-                            id="contactEmail"
-                            name="email"
-                            placeholder="Enter your email"
-                            autocomplete="email"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-group">
-
-                        <label for="contactMessage">
-                            Message
-                        </label>
-
-                        <textarea
-                            id="contactMessage"
-                            name="message"
-                            rows="5"
-                            placeholder="Write your message..."
-                            required
-                        ></textarea>
-
-                    </div>
-
 
                     <button
-                        type="submit"
-                        class="primary-tool-button"
+                        type="button"
+                        id="closeQuiz"
+                        class="modal-close"
+                        aria-label="Close quiz"
                     >
-                        Send Message
+                        ×
+                    </button>
+                </div>
+
+                <div class="quiz-start-screen" id="quizStartScreen">
+
+                    <p>
+                        Test your knowledge with quick questions.
+                        Choose a topic to begin.
+                    </p>
+
+                    <div class="quiz-category-grid">
+
+                        <button
+                            type="button"
+                            class="quiz-category"
+                            data-category="programming"
+                        >
+                            <span>💻</span>
+                            <strong>Programming</strong>
+                            <small>C / C++ Basics</small>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quiz-category"
+                            data-category="web"
+                        >
+                            <span>🌐</span>
+                            <strong>Web Development</strong>
+                            <small>HTML / CSS / JS</small>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quiz-category"
+                            data-category="computer"
+                        >
+                            <span>🖥️</span>
+                            <strong>Computer Science</strong>
+                            <small>CS Fundamentals</small>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quiz-category"
+                            data-category="general"
+                        >
+                            <span>📚</span>
+                            <strong>General</strong>
+                            <small>Mixed Questions</small>
+                        </button>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="startSelectedQuiz"
+                        class="tool-button"
+                    >
+                        Start Quiz →
                     </button>
 
-                </form>
+                </div>
 
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             PRIVACY POLICY
-        ====================================================== -->
-
-        <section
-            id="privacy"
-            class="content-section legal-section"
-        >
-
-            <div class="section-container">
-
-                <span class="section-badge">
-                    🔒 Privacy
-                </span>
-
-                <h2>
-                    Privacy Policy
-                </h2>
-
-                <p>
-                    StudyToolsHub is designed to provide
-                    useful educational tools. Any account,
-                    notes or saved data features will be
-                    handled according to the storage system
-                    configured for the website.
-                </p>
-
-                <p>
-                    We aim to keep user information secure
-                    and only use information required to
-                    provide website features.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- =====================================================
-             TERMS
-        ====================================================== -->
-
-        <section
-            id="terms"
-            class="content-section legal-section"
-        >
-
-            <div class="section-container">
-
-                <span class="section-badge">
-                    📋 Terms
-                </span>
-
-                <h2>
-                    Terms & Conditions
-                </h2>
-
-                <p>
-                    StudyToolsHub provides educational tools
-                    for learning and practice.
-                </p>
-
-                <p>
-                    Results produced by calculators and
-                    educational tools should be checked
-                    before being used for important decisions.
-                </p>
-
-            </div>
-
-        </section>
-
-
-
-    </main>
-
-
-
-    <!-- =====================================================
-         FOOTER
-    ====================================================== -->
-
-    <footer
-        id="mainFooter"
-        class="main-footer"
-    >
-
-        <div class="footer-container">
-
-
-            <div class="footer-brand">
-
-                <a
-                    href="#home"
-                    class="footer-logo"
+                <div
+                    class="quiz-game"
+                    id="quizGame"
+                    hidden
                 >
-                    🎓 StudyToolsHub
-                </a>
 
-                <p>
-                    Smart Tools for Students
+                    <div class="quiz-topbar">
+
+                        <span id="quizCategoryName">
+                            Programming
+                        </span>
+
+                        <span>
+                            Question
+                            <strong id="quizCurrentQuestion">1</strong>
+                            /
+                            <strong id="quizTotalQuestions">10</strong>
+                        </span>
+
+                    </div>
+
+                    <div class="quiz-progress">
+                        <div
+                            id="quizProgressBar"
+                            class="quiz-progress-fill"
+                        ></div>
+                    </div>
+
+                    <div class="quiz-question-card">
+
+                        <span class="quiz-question-number">
+                            Question
+                        </span>
+
+                        <h3 id="quizQuestion">
+                            Question will appear here
+                        </h3>
+
+                        <div
+                            id="quizOptions"
+                            class="quiz-options"
+                        ></div>
+
+                    </div>
+
+                    <div class="quiz-footer">
+
+                        <span id="quizScore">
+                            Score: 0
+                        </span>
+
+                        <button
+                            type="button"
+                            id="nextQuizQuestion"
+                            class="tool-button"
+                        >
+                            Next →
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="quiz-result-screen"
+                    id="quizResultScreen"
+                    hidden
+                >
+
+                    <div class="quiz-result-icon">
+                        🏆
+                    </div>
+
+                    <span class="section-badge">
+                        Quiz Completed
+                    </span>
+
+                    <h2 id="quizResultTitle">
+                        Great Job!
+                    </h2>
+
+                    <p>
+                        Your final score
+                    </p>
+
+                    <div class="final-score">
+                        <strong id="finalQuizScore">0</strong>
+                        <span>/ 10</span>
+                    </div>
+
+                    <div class="quiz-result-stats">
+
+                        <div>
+                            <strong id="correctAnswers">0</strong>
+                            <span>Correct</span>
+                        </div>
+
+                        <div>
+                            <strong id="wrongAnswers">0</strong>
+                            <span>Wrong</span>
+                        </div>
+
+                        <div>
+                            <strong id="quizPercentage">0%</strong>
+                            <span>Score</span>
+                        </div>
+
+                    </div>
+
+                    <div class="quiz-result-actions">
+
+                        <button
+                            type="button"
+                            id="restartQuiz"
+                            class="tool-button"
+                        >
+                            ↻ Try Again
+                        </button>
+
+                        <button
+                            type="button"
+                            id="exitQuiz"
+                            class="outline-button"
+                        >
+                            ← Back
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            id="flashcardPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+                       <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">🃏</span>
+                        <span class="modal-label">REVISION MODE</span>
+                        <h2>Flashcards</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeFlashcards"
+                        class="modal-close"
+                        aria-label="Close flashcards"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="flashcard-workspace">
+
+                    <div class="flashcard-form">
+
+                        <h3>Create a Flashcard</h3>
+
+                        <div class="input-group">
+                            <label for="flashcardQuestion">
+                                Question
+                            </label>
+
+                            <textarea
+                                id="flashcardQuestion"
+                                rows="3"
+                                placeholder="Enter your question..."
+                            ></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="flashcardAnswer">
+                                Answer
+                            </label>
+
+                            <textarea
+                                id="flashcardAnswer"
+                                rows="3"
+                                placeholder="Enter the answer..."
+                            ></textarea>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="addFlashcard"
+                            class="tool-button"
+                        >
+                            + Add Flashcard
+                        </button>
+
+                    </div>
+
+                    <div class="flashcard-list-area">
+
+                        <div class="flashcard-list-header">
+                            <div>
+                                <span class="section-badge">
+                                    📚 Your Cards
+                                </span>
+
+                                <h3>Revision Deck</h3>
+                            </div>
+
+                            <span
+                                id="flashcardCount"
+                                class="card-count"
+                            >
+                                0 Cards
+                            </span>
+                        </div>
+
+                        <div
+                            id="flashcardList"
+                            class="flashcard-list"
+                        >
+
+                            <div
+                                id="emptyFlashcards"
+                                class="empty-state"
+                            >
+                                <span>🃏</span>
+
+                                <strong>
+                                    No flashcards yet
+                                </strong>
+
+                                <p>
+                                    Create your first card to start revising.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="flashcard-study-area" hidden>
+
+                    <div class="flashcard-study-top">
+                        <span id="flashcardStudyProgress">
+                            Card 1 / 1
+                        </span>
+
+                        <button
+                            type="button"
+                            id="exitFlashcardStudy"
+                            class="outline-button"
+                        >
+                            Exit Study Mode
+                        </button>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="flashcardDisplay"
+                        class="flashcard-display"
+                        aria-label="Click to reveal answer"
+                    >
+
+                        <span
+                            id="flashcardSide"
+                            class="flashcard-side-label"
+                        >
+                            QUESTION
+                        </span>
+
+                        <strong id="flashcardText">
+                            Your question will appear here.
+                        </strong>
+
+                        <small>
+                            Tap to reveal
+                        </small>
+
+                    </button>
+
+                    <div class="flashcard-navigation">
+
+                        <button
+                            type="button"
+                            id="previousFlashcard"
+                            class="outline-button"
+                        >
+                            ← Previous
+                        </button>
+
+                        <button
+                            type="button"
+                            id="nextFlashcard"
+                            class="tool-button"
+                        >
+                            Next →
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            id="notesPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+                        <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">📚</span>
+                        <span class="modal-label">STUDY MATERIAL</span>
+                        <h2>Subject Notes</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeNotes"
+                        class="modal-close"
+                        aria-label="Close notes"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="resource-workspace">
+
+                    <div class="resource-toolbar">
+
+                        <div class="resource-search">
+                            <span>🔍</span>
+
+                            <input
+                                type="search"
+                                id="notesSearch"
+                                placeholder="Search notes..."
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <select
+                            id="notesCategory"
+                            class="resource-select"
+                        >
+                            <option value="all">All Subjects</option>
+                            <option value="programming">Programming</option>
+                            <option value="web">Web Development</option>
+                            <option value="computer">Computer Science</option>
+                            <option value="math">Mathematics</option>
+                        </select>
+
+                    </div>
+
+                    <div
+                        id="notesGrid"
+                        class="resource-items-grid"
+                    >
+
+                        <article
+                            class="resource-item"
+                            data-category="programming"
+                        >
+                            <span class="resource-item-icon">💻</span>
+
+                            <div>
+                                <span>Programming</span>
+                                <h3>C++ Basics</h3>
+                                <p>
+                                    Variables, data types, operators,
+                                    conditions and loops.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="resource-open"
+                                data-resource="cpp"
+                            >
+                                Open →
+                            </button>
+                        </article>
+
+                        <article
+                            class="resource-item"
+                            data-category="web"
+                        >
+                            <span class="resource-item-icon">🌐</span>
+
+                            <div>
+                                <span>Web Development</span>
+                                <h3>HTML Basics</h3>
+                                <p>
+                                    Learn the structure and important
+                                    HTML elements.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="resource-open"
+                                data-resource="html"
+                            >
+                                Open →
+                            </button>
+                        </article>
+
+                        <article
+                            class="resource-item"
+                            data-category="web"
+                        >
+                            <span class="resource-item-icon">🎨</span>
+
+                            <div>
+                                <span>Web Development</span>
+                                <h3>CSS Basics</h3>
+                                <p>
+                                    Selectors, colors, layouts,
+                                    Flexbox and responsive design.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="resource-open"
+                                data-resource="css"
+                            >
+                                Open →
+                            </button>
+                        </article>
+
+                        <article
+                            class="resource-item"
+                            data-category="computer"
+                        >
+                            <span class="resource-item-icon">🖥️</span>
+
+                            <div>
+                                <span>Computer Science</span>
+                                <h3>Computer Fundamentals</h3>
+                                <p>
+                                    Basic concepts of computers,
+                                    hardware and software.
+                                </p>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="resource-open"
+                                data-resource="computer"
+                            >
+                                Open →
+                            </button>
+                        </article>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            id="questionsPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+
+            <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">🎯</span>
+                        <span class="modal-label">EXAM PREPARATION</span>
+                        <h2>Important Questions</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeQuestions"
+                        class="modal-close"
+                        aria-label="Close questions"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="questions-toolbar">
+
+                    <div class="question-filter active">
+                        <button
+                            type="button"
+                            data-question-category="all"
+                        >
+                            All
+                        </button>
+                    </div>
+
+                    <div class="question-filter">
+                        <button
+                            type="button"
+                            data-question-category="programming"
+                        >
+                            Programming
+                        </button>
+                    </div>
+
+                    <div class="question-filter">
+                        <button
+                            type="button"
+                            data-question-category="web"
+                        >
+                            Web
+                        </button>
+                    </div>
+
+                    <div class="question-filter">
+                        <button
+                            type="button"
+                            data-question-category="computer"
+                        >
+                            Computer Science
+                        </button>
+                    </div>
+
+                </div>
+
+                <div
+                    id="questionsList"
+                    class="questions-list"
+                >
+
+                    <article
+                        class="question-item"
+                        data-question-category="programming"
+                    >
+                        <span class="question-number">01</span>
+
+                        <div>
+                            <span class="question-subject">
+                                C / C++
+                            </span>
+
+                            <h3>
+                                What are variables and data types in C++?
+                            </h3>
+
+                            <p>
+                                Explain with suitable examples.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article
+                        class="question-item"
+                        data-question-category="programming"
+                    >
+                        <span class="question-number">02</span>
+
+                        <div>
+                            <span class="question-subject">
+                                C / C++
+                            </span>
+
+                            <h3>
+                                Explain loops in C++.
+                            </h3>
+
+                            <p>
+                                Discuss for, while and do-while loops.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article
+                        class="question-item"
+                        data-question-category="web"
+                    >
+                        <span class="question-number">03</span>
+
+                        <div>
+                            <span class="question-subject">
+                                Web Development
+                            </span>
+
+                            <h3>
+                                What is the difference between HTML and CSS?
+                            </h3>
+
+                            <p>
+                                Explain their roles in web development.
+                            </p>
+                        </div>
+                    </article>
+
+                    <article
+                        class="question-item"
+                        data-question-category="computer"
+                    >
+                        <span class="question-number">04</span>
+
+                        <div>
+                            <span class="question-subject">
+                                Computer Science
+                            </span>
+
+                            <h3>
+                                What is an operating system?
+                            </h3>
+
+                            <p>
+                                Explain its major functions.
+                            </p>
+                        </div>
+                    </article>
+
+                </div>
+
+            </div>
+                                </section>
+
+                <section
+            id="previousPapersPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+
+            <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">📄</span>
+                        <span class="modal-label">EXAM PRACTICE</span>
+                        <h2>Previous Questions</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closePreviousPapers"
+                        class="modal-close"
+                        aria-label="Close previous questions"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="papers-grid">
+
+                    <article class="paper-card">
+                        <span class="paper-icon">💻</span>
+                        <span class="paper-tag">Programming</span>
+                        <h3>C / C++ Practice</h3>
+                        <p>
+                            Practice programming questions and
+                            strengthen your fundamentals.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="resource-button"
+                            data-paper="cpp"
+                        >
+                            Start Practice →
+                        </button>
+                    </article>
+
+                    <article class="paper-card">
+                        <span class="paper-icon">🌐</span>
+                        <span class="paper-tag">Web</span>
+                        <h3>Web Development</h3>
+                        <p>
+                            Practice HTML, CSS and JavaScript
+                            related questions.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="resource-button"
+                            data-paper="web"
+                        >
+                            Start Practice →
+                        </button>
+                    </article>
+
+                    <article class="paper-card">
+                        <span class="paper-icon">🖥️</span>
+                        <span class="paper-tag">CS</span>
+                        <h3>Computer Science</h3>
+                        <p>
+                            Revise important computer science
+                            concepts and questions.
+                        </p>
+
+                        <button
+                            type="button"
+                            class="resource-button"
+                            data-paper="computer"
+                        >
+                            Start Practice →
+                        </button>
+                    </article>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            id="codingResourcesPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+
+            <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">💡</span>
+                        <span class="modal-label">CODING RESOURCES</span>
+                        <h2>Programming Resources</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeCodingResources"
+                        class="modal-close"
+                        aria-label="Close coding resources"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="coding-resource-grid">
+
+                    <article class="coding-resource-card">
+                        <span>📘</span>
+                        <h3>C++ Fundamentals</h3>
+                        <p>
+                            Variables, conditions, loops, functions,
+                            arrays and basic OOP concepts.
+                        </p>
+                        <button
+                            type="button"
+                            class="outline-button"
+                            data-coding-resource="cpp"
+                        >
+                            Learn C++ →
+                        </button>
+                    </article>
+
+                    <article class="coding-resource-card">
+                        <span>🌐</span>
+                        <h3>Frontend Development</h3>
+                        <p>
+                            Learn HTML, CSS and JavaScript through
+                            practical examples.
+                        </p>
+                        <button
+                            type="button"
+                            class="outline-button"
+                            data-coding-resource="web"
+                        >
+                            Learn Web Dev →
+                        </button>
+                    </article>
+
+                    <article class="coding-resource-card">
+                        <span>🧠</span>
+                        <h3>DSA Preparation</h3>
+                        <p>
+                            Build your programming fundamentals before
+                            starting advanced data structures.
+                        </p>
+                        <button
+                            type="button"
+                            class="outline-button"
+                            data-coding-resource="dsa"
+                        >
+                            Explore DSA →
+                        </button>
+                    </article>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            id="challengesPage"
+            class="modal-page"
+            aria-hidden="true"
+        >
+
+            <div class="modal-container">
+
+                <div class="modal-header">
+                    <div>
+                        <span class="modal-icon">🏆</span>
+                        <span class="modal-label">CODING PRACTICE</span>
+                        <h2>Code Challenges</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeChallenges"
+                        class="modal-close"
+                        aria-label="Close challenges"
+                    >
+                        ×
+                    </button>
+                </div>
+
+                <div class="challenge-header">
+                    <div>
+                        <span class="section-badge">
+                            🚀 Improve Your Skills
+                        </span>
+
+                        <h3>
+                            Solve. Practice. Improve.
+                        </h3>
+
+                        <p>
+                            Start with beginner-friendly problems
+                            and gradually improve your coding skills.
+                        </p>
+                    </div>
+
+                    <div class="challenge-levels">
+
+                        <button
+                            type="button"
+                            class="challenge-level active"
+                            data-level="beginner"
+                        >
+                            🟢 Beginner
+                        </button>
+
+                        <button
+                            type="button"
+                            class="challenge-level"
+                            data-level="intermediate"
+                        >
+                            🟡 Intermediate
+                        </button>
+
+                        <button
+                            type="button"
+                            class="challenge-level"
+                            data-level="advanced"
+                        >
+                            🔴 Advanced
+                        </button>
+
+                    </div>
+                </div>
+
+                <div
+                    id="challengeList"
+                    class="challenge-list"
+                >
+
+                    <article class="challenge-item">
+                        <span class="challenge-number">01</span>
+
+                        <div class="challenge-info">
+                            <span>Beginner</span>
+                            <h3>Print Hello World</h3>
+                            <p>
+                                Write a program that prints
+                                "Hello World".
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="challenge-button"
+                            data-challenge="hello"
+                        >
+                            Solve →
+                        </button>
+                    </article>
+
+                    <article class="challenge-item">
+                        <span class="challenge-number">02</span>
+
+                        <div class="challenge-info">
+                            <span>Beginner</span>
+                            <h3>Find the Sum</h3>
+                            <p>
+                                Write a program to calculate the sum
+                                of two numbers.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="challenge-button"
+                            data-challenge="sum"
+                        >
+                            Solve →
+                        </button>
+                    </article>
+
+                    <article class="challenge-item">
+                        <span class="challenge-number">03</span>
+
+                        <div class="challenge-info">
+                            <span>Beginner</span>
+                            <h3>Even or Odd</h3>
+                            <p>
+                                Check whether a given number is
+                                even or odd.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="challenge-button"
+                            data-challenge="evenOdd"
+                        >
+                            Solve →
+                        </button>
+                    </article>
+
+                </div>
+
+            </div>
+                    </section>
+                        </main>
+
+        <footer
+            id="siteFooter"
+            class="site-footer"
+        >
+            <div class="container">
+
+                <div class="footer-main">
+
+                    <div class="footer-brand">
+                        <a
+                            href="#home"
+                            class="brand"
+                        >
+                            <span class="brand-icon">🎓</span>
+                            <span class="brand-name">
+                                StudyTools<span>Hub</span>
+                            </span>
+                        </a>
+
+                        <p>
+                            Smart tools for students to calculate,
+                            study, practice and code.
+                        </p>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Tools</h3>
+
+                        <a href="#calculators">
+                            Calculators
+                        </a>
+
+                        <a href="#studyTools">
+                            Study Tools
+                        </a>
+
+                        <a href="#codingTools">
+                            Coding Tools
+                        </a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Resources</h3>
+
+                        <a href="#resources">
+                            Notes
+                        </a>
+
+                        <a href="#resources">
+                            Important Questions
+                        </a>
+
+                        <a href="#resources">
+                            Previous Questions
+                        </a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>StudyToolsHub</h3>
+
+                        <a href="#home">
+                            Home
+                        </a>
+
+                        <button
+                            type="button"
+                            id="footerAbout"
+                            class="footer-link-button"
+                        >
+                            About
+                        </button>
+
+                        <button
+                            type="button"
+                            id="footerContact"
+                            class="footer-link-button"
+                        >
+                            Contact
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="footer-bottom">
+
+                    <p>
+                        © <span id="currentYear">2026</span>
+                        StudyToolsHub. All rights reserved.
+                    </p>
+
+                    <div class="footer-bottom-links">
+
+                        <button
+                            type="button"
+                            id="privacyButton"
+                        >
+                            Privacy Policy
+                        </button>
+
+                        <button
+                            type="button"
+                            id="termsButton"
+                        >
+                            Terms
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </footer>
+
+        <div
+            id="toastContainer"
+            class="toast-container"
+            aria-live="polite"
+            aria-atomic="true"
+        ></div>
+
+        <div
+            id="confirmModal"
+            class="confirm-modal"
+            aria-hidden="true"
+        >
+            <div class="confirm-box">
+
+                <button
+                    type="button"
+                    id="closeConfirmModal"
+                    class="modal-close"
+                    aria-label="Close"
+                >
+                    ×
+                </button>
+
+                <div class="confirm-icon">
+                    ⚠️
+                </div>
+
+                <h3 id="confirmTitle">
+                    Are you sure?
+                </h3>
+
+                <p id="confirmMessage">
+                    Please confirm this action.
                 </p>
 
-            </div>
+                <div class="confirm-actions">
 
+                    <button
+                        type="button"
+                        id="confirmCancel"
+                        class="outline-button"
+                    >
+                        Cancel
+                    </button>
 
+                    <button
+                        type="button"
+                        id="confirmAction"
+                        class="tool-button"
+                    >
+                        Confirm
+                    </button>
 
-            <div class="footer-links">
-
-                <a href="#home">
-                    Home
-                </a>
-
-                <a href="#about">
-                    About
-                </a>
-
-                <a href="#contact">
-                    Contact
-                </a>
-
-                <a href="#privacy">
-                    Privacy Policy
-                </a>
-
-                <a href="#terms">
-                    Terms
-                </a>
+                </div>
 
             </div>
-
-
-
-            <div class="footer-social">
-
-                <span>
-                    Made for students ❤️
-                </span>
-
-            </div>
-
-
         </div>
 
+        <div
+            id="resourceViewer"
+            class="resource-viewer"
+            aria-hidden="true"
+        >
+            <div class="resource-viewer-box">
 
-        <div class="footer-bottom">
+                <div class="resource-viewer-header">
 
-            <p>
-                © <span id="currentYear">2026</span>
-                StudyToolsHub. All rights reserved.
-            </p>
+                    <div>
+                        <span id="viewerIcon">📖</span>
+                        <h2 id="viewerTitle">
+                            Resource
+                        </h2>
+                    </div>
 
+                    <button
+                        type="button"
+                        id="closeResourceViewer"
+                        class="modal-close"
+                        aria-label="Close resource"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+                <div
+                    id="viewerContent"
+                    class="resource-viewer-content"
+                ></div>
+
+            </div>
         </div>
-
-    </footer>
-
-
-
-    <!-- =====================================================
-         TOAST / NOTIFICATION
-    ====================================================== -->
-
-    <div
-        id="toast"
-        class="toast"
-        role="status"
-        aria-live="polite"
-    >
-
-        <span id="toastIcon">
-            ✓
-        </span>
-
-        <span id="toastMessage">
-            Done
-        </span>
 
     </div>
-
-
-
-    <!-- =====================================================
-         BACK TO TOP
-    ====================================================== -->
-
-    <button
-        type="button"
-        id="backToTop"
-        class="back-to-top"
-        aria-label="Back to top"
-    >
-        ↑
-    </button>
-
-
-
-    <!-- =====================================================
-         JAVASCRIPT
-    ====================================================== -->
 
     <script src="script.js"></script>
 
 </body>
-
-                    </html>
-                    
-  
+    </html>
