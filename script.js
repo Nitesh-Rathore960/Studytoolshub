@@ -2608,6 +2608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCompiler();
 });
 
+
 // ===============================
 // PART 8 — MODALS + RESOURCES
 // ===============================
@@ -2615,48 +2616,32 @@ document.addEventListener("DOMContentLoaded", () => {
 function initToolModal() {
     const modal = get("toolModal");
     const overlay = get("toolModalOverlay");
-    const content = get("toolModalContent");
     const closeBtn = get("closeToolModal");
 
     if (!modal) return;
 
     function closeModal() {
         modal.style.display = "none";
-        overlay && (overlay.style.display = "none");
+
+        if (overlay) {
+            overlay.style.display = "none";
+        }
     }
-
-    document.querySelectorAll("[data-tool]").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const title =
-                btn.dataset.tool || "Study Tool";
-
-            if (content) {
-                content.innerHTML = `
-                    <h2>${escapeHTML(title)}</h2>
-                    <p>
-                        This tool is ready for StudyToolsHub.
-                        More advanced features can be connected here.
-                    </p>
-                `;
-            }
-
-            modal.style.display = "flex";
-
-            if (overlay) {
-                overlay.style.display = "block";
-            }
-        });
-    });
 
     closeBtn?.addEventListener("click", closeModal);
     overlay?.addEventListener("click", closeModal);
 }
 
 
+// ===============================
+// ACCOUNT MODAL
+// ===============================
+
 function initAccountModal() {
     const modal = get("accountModal");
     const overlay = get("accountModalOverlay");
     const closeBtn = get("closeAccountModal");
+
     const loginBtn = get("loginButton");
     const accountBtn = get("accountButton");
 
@@ -2678,12 +2663,12 @@ function initAccountModal() {
         }
     }
 
-    accountBtn?.addEventListener(
+    loginBtn?.addEventListener(
         "click",
         openAccount
     );
 
-    loginBtn?.addEventListener(
+    accountBtn?.addEventListener(
         "click",
         openAccount
     );
@@ -2700,61 +2685,69 @@ function initAccountModal() {
 }
 
 
+// ===============================
+// RESOURCES
+// ===============================
+
 function initResources() {
+
     const resources = {
         resourceNotes: {
             title: "📚 Study Notes",
-            text:
-                "Useful notes for students. " +
-                "Subject-wise notes can be added here."
+            text: "Study notes and useful learning material will be available here."
         },
 
         importantQuestions: {
             title: "⭐ Important Questions",
-            text:
-                "Important exam questions and " +
-                "practice questions can be added here."
+            text: "Important exam questions and practice questions will be available here."
         },
 
         previousQuestions: {
             title: "📝 Previous Questions",
-            text:
-                "Previous year question papers " +
-                "can be organized here."
+            text: "Previous year question papers can be added here."
         },
 
         studyMaterial: {
             title: "📖 Study Material",
-            text:
-                "Study material, PDFs and useful " +
-                "learning resources can be added here."
+            text: "Useful study material and educational resources can be added here."
         }
     };
 
-    Object.keys(resources).forEach(id => {
-        const button = get(id);
+    Object.entries(resources).forEach(
+        ([id, data]) => {
 
-        if (!button) return;
+            const button = get(id);
 
-        button.addEventListener("click", () => {
-            const data = resources[id];
+            if (!button) return;
 
-            showResourceModal(
-                data.title,
-                data.text
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    showResourceModal(
+                        data.title,
+                        data.text
+                    );
+                }
             );
-        });
-    });
+        }
+    );
 }
 
 
+// ===============================
+// RESOURCE POPUP
+// ===============================
+
 function showResourceModal(title, text) {
-    let modal =
-        document.getElementById(
-            "resourcePopup"
-        );
+
+    let modal = get("resourcePopup");
 
     if (!modal) {
+
         modal = document.createElement("div");
 
         modal.id = "resourcePopup";
@@ -2764,8 +2757,8 @@ function showResourceModal(title, text) {
 
                 <button
                     type="button"
-                    class="resource-popup-close"
                     id="resourcePopupClose"
+                    class="resource-popup-close"
                 >
                     ×
                 </button>
@@ -2778,17 +2771,24 @@ function showResourceModal(title, text) {
         `;
 
         document.body.appendChild(modal);
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+
+            }
+        );
     }
 
     const titleBox =
-        document.getElementById(
-            "resourcePopupTitle"
-        );
+        get("resourcePopupTitle");
 
     const textBox =
-        document.getElementById(
-            "resourcePopupText"
-        );
+        get("resourcePopupText");
 
     if (titleBox) {
         titleBox.textContent = title;
@@ -2800,43 +2800,67 @@ function showResourceModal(title, text) {
 
     modal.style.display = "flex";
 
-    document
-        .getElementById("resourcePopupClose")
-        ?.addEventListener(
-            "click",
-            () => {
-                modal.style.display = "none";
-            },
-            { once: true }
-        );
+    get("resourcePopupClose")?.addEventListener(
+        "click",
+        () => {
+            modal.style.display = "none";
+        }
+    );
 }
 
 
+// ===============================
+// QUICK ACCESS
+// ===============================
+
 function initQuickAccess() {
+
     document.querySelectorAll(
         ".feature-card, .resource-card"
     ).forEach(card => {
-        card.addEventListener("click", () => {
-            card.classList.add("tool-active");
 
-            setTimeout(() => {
+        card.addEventListener(
+            "mousedown",
+            () => {
+                card.classList.add(
+                    "tool-active"
+                );
+            }
+        );
+
+        card.addEventListener(
+            "mouseup",
+            () => {
                 card.classList.remove(
                     "tool-active"
                 );
-            }, 300);
-        });
+            }
+        );
+
     });
 }
 
 
+// ===============================
+// ESC KEY
+// ===============================
+
 function initEscapeClose() {
+
     document.addEventListener(
         "keydown",
         event => {
-            if (event.key !== "Escape") return;
 
-            const toolModal = get("toolModal");
-            const accountModal = get("accountModal");
+            if (event.key !== "Escape") {
+                return;
+            }
+
+            const toolModal =
+                get("toolModal");
+
+            const accountModal =
+                get("accountModal");
+
             const resourcePopup =
                 get("resourcePopup");
 
@@ -2851,19 +2875,29 @@ function initEscapeClose() {
             if (resourcePopup) {
                 resourcePopup.style.display = "none";
             }
+
         }
     );
 }
 
 
-// Start Part 8
-document.addEventListener("DOMContentLoaded", () => {
-    initToolModal();
-    initAccountModal();
-    initResources();
-    initQuickAccess();
-    initEscapeClose();
-});
+// ===============================
+// START PART 8
+// ===============================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        initToolModal();
+        initAccountModal();
+        initResources();
+        initQuickAccess();
+        initEscapeClose();
+
+    }
+);
+
 
 // ===============================
 // PART 9 — FAVORITES + RECENT TOOLS
