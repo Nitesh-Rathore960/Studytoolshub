@@ -4727,3 +4727,8 @@ textarea:focus-visible {
         box-shadow: none !important;
     }
 }
+
+/* FIX: Hide website loader */
+#pageLoader.page-loader {
+    display: none !important;
+       }
