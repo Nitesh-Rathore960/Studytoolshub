@@ -426,7 +426,12 @@ window.addEventListener("online", () => {
         "success"
     );
 
-
+  /* Emergency loader fix */
+#pageLoader {
+    display: none !important;
+}
+   
+   
  /* =========================================
    JS PART 2
    SEARCH + BASIC CALCULATORS
