@@ -1,10 +1,9 @@
-/* =========================================================
-   STUDYTOOLSHUB - CSS PART 1
-   Main Website + Cards + Forms + Study Tools
-========================================================= */
+/* =====================================================
+   STUDYTOOLSHUB - NEW UI
+   PART 1 : GLOBAL + HEADER + HERO
+   ===================================================== */
 
-
-/* ================= RESET ================= */
+/* ---------- RESET ---------- */
 
 * {
     margin: 0;
@@ -17,1950 +16,3232 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f5f7fb;
-    color: #1f2937;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(circle at 75% 15%, rgba(55, 95, 255, 0.15), transparent 28%),
+        radial-gradient(circle at 15% 50%, rgba(88, 55, 255, 0.10), transparent 30%),
+        #020b18;
+    color: #f5f7ff;
+    min-height: 100vh;
     line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* ---------- COMMON ---------- */
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+::selection {
+    background: #5865ff;
+    color: white;
+}
+
+/* ---------- PAGE GLOW ---------- */
+
+body::before {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    top: -220px;
+    right: -150px;
+    background: rgba(47, 100, 255, 0.16);
+    filter: blur(100px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    bottom: -180px;
+    left: -150px;
+    background: rgba(105, 55, 255, 0.12);
+    filter: blur(100px);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
 }
 
 
-/* ================= HEADER ================= */
+/* =====================================================
+   HEADER
+   ===================================================== */
 
 header {
+    width: 100%;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 6%;
+    
+    background: rgba(2, 13, 29, 0.82);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
     position: sticky;
     top: 0;
     z-index: 1000;
+}
+
+
+/* ---------- LOGO ---------- */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+
+    white-space: nowrap;
+}
+
+.logo span {
+    background: linear-gradient(
+        90deg,
+        #4da3ff,
+        #796cff,
+        #b36cff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo-icon {
+    width: 34px;
+    height: 34px;
 
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: center;
 
-    padding: 15px 6%;
+    border-radius: 10px;
 
-    background: #111827;
-    color: white;
+    background: linear-gradient(
+        135deg,
+        #287cff,
+        #713cff
+    );
 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    box-shadow:
+        0 0 20px rgba(55, 105, 255, 0.35);
 }
 
-.logo h1 {
-    font-size: 25px;
-    margin-bottom: 2px;
-}
 
-.logo p {
-    font-size: 12px;
-    color: #cbd5e1;
-}
+/* ---------- NAVIGATION ---------- */
 
 nav {
     display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
+    gap: 34px;
 }
 
 nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+    position: relative;
 
-    transition: 0.25s;
+    color: #b7c4d9;
+    font-size: 14px;
+    font-weight: 500;
+
+    transition: 0.25s ease;
 }
 
 nav a:hover {
-    color: #60a5fa;
+    color: #ffffff;
+}
+
+nav a::after {
+    content: "";
+
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+
+    width: 0;
+    height: 2px;
+
+    transform: translateX(-50%);
+
+    background: linear-gradient(
+        90deg,
+        #438cff,
+        #8265ff
+    );
+
+    border-radius: 10px;
+
+    transition: 0.25s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
 }
 
 
-/* ================= HERO ================= */
+/* ---------- LOGIN BUTTON ---------- */
 
-.hero {
-    min-height: 500px;
+.login-btn {
+    border: none;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    padding: 10px 22px;
 
-    text-align: center;
-
-    padding: 70px 20px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #111827,
-            #1e3a8a
-        );
+    border-radius: 12px;
 
     color: white;
-}
-
-.hero-badge {
-    display: inline-block;
-
-    padding: 7px 15px;
-    margin-bottom: 20px;
-
-    border-radius: 30px;
-
-    background: rgba(255, 255, 255, 0.12);
-
+    font-weight: 600;
     font-size: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #247cff,
+        #624eff
+    );
+
+    box-shadow:
+        0 8px 25px rgba(52, 92, 255, 0.28);
+
+    transition: 0.25s ease;
 }
 
-.hero h2 {
-    max-width: 800px;
+.login-btn:hover {
+    transform: translateY(-2px);
 
-    font-size: clamp(35px, 6vw, 62px);
-
-    line-height: 1.1;
-
-    margin-bottom: 20px;
+    box-shadow:
+        0 12px 30px rgba(52, 92, 255, 0.42);
 }
 
-.hero p {
-    max-width: 650px;
+.login-btn:active {
+    transform: scale(0.97);
+}
 
-    color: #dbeafe;
 
-    font-size: 17px;
+/* =====================================================
+   HERO SECTION
+   ===================================================== */
+
+.hero {
+    position: relative;
+
+    min-height: 560px;
+
+    max-width: 1250px;
+    margin: 0 auto;
+
+    padding: 80px 6% 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 50px;
+}
+
+
+/* ---------- HERO CONTENT ---------- */
+
+.hero-content {
+    flex: 1;
+    max-width: 590px;
+}
+
+.hero-content h1 {
+    font-size: clamp(42px, 5vw, 70px);
+
+    line-height: 1.04;
+
+    letter-spacing: -2px;
+
+    font-weight: 800;
+
+    margin-bottom: 22px;
+
+    color: #ffffff;
+}
+
+.hero-content h1 span {
+    background: linear-gradient(
+        90deg,
+        #4f8cff,
+        #7565ff,
+        #b06cff
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+
+/* ---------- HERO TEXT ---------- */
+
+.hero-content p {
+    max-width: 570px;
+
+    color: #9eacc1;
+
+    font-size: 16px;
+
+    line-height: 1.8;
 
     margin-bottom: 30px;
 }
 
 
-/* ================= SEARCH ================= */
+/* ---------- HERO BUTTON ---------- */
 
-.search-box {
-    width: min(600px, 100%);
+.hero-btn {
+    display: inline-flex;
 
-    display: flex;
+    align-items: center;
+    justify-content: center;
 
     gap: 10px;
+
+    padding: 14px 25px;
+
+    border-radius: 13px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    background: linear-gradient(
+        135deg,
+        #247cff,
+        #7a4cff
+    );
+
+    box-shadow:
+        0 12px 35px rgba(54, 91, 255, 0.28);
+
+    transition: 0.3s ease;
 }
 
-.search-box input {
+.hero-btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 45px rgba(54, 91, 255, 0.42);
+}
+
+
+/* =====================================================
+   HERO VISUAL / IMAGE AREA
+   ===================================================== */
+
+.hero-image {
     flex: 1;
 
-    padding: 14px 17px;
-
-    border: none;
-    border-radius: 10px;
-
-    outline: none;
-
-    font-size: 15px;
-}
-
-.search-box button {
-    padding: 14px 22px;
-
-    border: none;
-    border-radius: 10px;
-
-    background: #2563eb;
-    color: white;
-
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition: 0.25s;
-}
-
-.search-box button:hover {
-    background: #1d4ed8;
-    transform: translateY(-2px);
-}
-
-
-/* ================= SECTIONS ================= */
-
-.tools {
-    padding: 75px 6%;
-}
-
-.tools > h2 {
-    text-align: center;
-
-    font-size: 34px;
-
-    color: #111827;
-
-    margin-bottom: 8px;
-}
-
-.section-description {
-    text-align: center;
-
-    color: #64748b;
-
-    margin-bottom: 40px;
-}
-
-
-/* ================= CARD CONTAINER ================= */
-
-.tool-container {
-    max-width: 1250px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(280px, 1fr));
-
-    gap: 25px;
-}
-
-
-/* ================= TOOL CARD ================= */
-
-.tool-card {
-    background: white;
-
-    padding: 25px;
-
-    border-radius: 18px;
-
-    border: 1px solid #e5e7eb;
-
-    box-shadow:
-        0 8px 25px rgba(15, 23, 42, 0.06);
-
-    transition:
-        transform 0.25s,
-        box-shadow 0.25s;
-
-    overflow: hidden;
-}
-
-.tool-card:hover {
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 15px 35px rgba(15, 23, 42, 0.12);
-}
-
-.tool-icon {
-    width: 55px;
-    height: 55px;
+    min-height: 390px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 15px;
-
-    border-radius: 14px;
-
-    background: #eff6ff;
-
-    font-size: 27px;
+    position: relative;
 }
 
+
+/* ---------- LAPTOP / IMAGE ---------- */
+
+.hero-image img {
+    width: 100%;
+    max-width: 570px;
+
+    object-fit: contain;
+
+    filter:
+        drop-shadow(0 25px 40px rgba(0,0,0,0.5))
+        drop-shadow(0 0 35px rgba(52,100,255,0.15));
+
+    transition: 0.4s ease;
+}
+
+.hero-image img:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+
+/* ---------- FLOATING GLOW ---------- */
+
+.hero-image::before {
+    content: "";
+
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(53, 115, 255, 0.22),
+            transparent 68%
+        );
+
+    filter: blur(10px);
+
+    z-index: -1;
+}
+
+
+/* =====================================================
+   HERO BADGE
+   ===================================================== */
+
+.hero-badge {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 8px;
+
+    padding: 7px 13px;
+
+    margin-bottom: 18px;
+
+    border-radius: 30px;
+
+    color: #a9c7ff;
+
+    background: rgba(52, 107, 255, 0.10);
+
+    border: 1px solid rgba(83, 133, 255, 0.22);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   SEARCH BOX
+   ===================================================== */
+
+.search-container {
+    width: 100%;
+    max-width: 620px;
+
+    display: flex;
+    align-items: center;
+
+    margin: 25px auto;
+
+    padding: 6px;
+
+    background: rgba(8, 24, 45, 0.75);
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,0.22);
+
+    backdrop-filter: blur(14px);
+}
+
+.search-container input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 13px 16px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-size: 14px;
+}
+
+.search-container input::placeholder {
+    color: #718198;
+}
+
+.search-container button {
+    border: none;
+
+    padding: 12px 19px;
+
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #287cff,
+        #704cff
+    );
+
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+.search-container button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 20px rgba(49, 103, 255, 0.30);
+}
+
+
+/* =====================================================
+   SECTION COMMON
+   ===================================================== */
+
+section {
+    width: 100%;
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 70px 6%;
+}
+
+section h2 {
+    font-size: clamp(28px, 4vw, 40px);
+
+    color: #ffffff;
+
+    margin-bottom: 12px;
+
+    letter-spacing: -0.8px;
+}
+
+section > p {
+    color: #8191a8;
+
+    font-size: 14px;
+
+    margin-bottom: 35px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+   ===================================================== */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020b18;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        #367cff,
+        #704cff
+    );
+
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #638aff;
+}
+/* =====================================================
+   STUDYTOOLSHUB - NEW UI
+   PART 2 : CALCULATOR + STUDY TOOLS CARDS
+   ===================================================== */
+
+
+/* =====================================================
+   CALCULATOR SECTION
+   ===================================================== */
+
+#calculators {
+    position: relative;
+}
+
+#calculators::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 280px;
+
+    top: 80px;
+    left: -180px;
+
+    background: rgba(60, 100, 255, 0.12);
+
+    filter: blur(100px);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   TOOLS GRID
+   ===================================================== */
+
+.tools-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 22px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   TOOL CARD
+   ===================================================== */
+
+.tool-card {
+    position: relative;
+
+    padding: 28px;
+
+    min-height: 220px;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 37, 65, 0.82),
+            rgba(7, 20, 39, 0.78)
+        );
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,0.20);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* ---------- CARD GLOW ---------- */
+
+.tool-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 160px;
+    height: 160px;
+
+    top: -90px;
+    right: -70px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(65, 115, 255, 0.22),
+            transparent 70%
+        );
+
+    filter: blur(10px);
+
+    transition: 0.3s ease;
+
+    pointer-events: none;
+}
+
+
+/* ---------- CARD SHINE ---------- */
+
+.tool-card::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.04),
+            transparent
+        );
+
+    transform: skewX(-20deg);
+
+    transition: 0.6s ease;
+
+    pointer-events: none;
+}
+
+
+.tool-card:hover {
+    transform: translateY(-7px);
+
+    border-color:
+        rgba(82, 128, 255, 0.30);
+
+    box-shadow:
+        0 22px 55px rgba(0,0,0,0.30),
+        0 0 35px rgba(53, 100, 255, 0.08);
+}
+
+
+.tool-card:hover::before {
+    transform: scale(1.4);
+
+    opacity: 1;
+}
+
+
+.tool-card:hover::after {
+    left: 140%;
+}
+
+
+/* =====================================================
+   TOOL ICON
+   ===================================================== */
+
+.tool-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 15px;
+
+    font-size: 22px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(48, 125, 255, 0.95),
+            rgba(110, 67, 255, 0.95)
+        );
+
+    box-shadow:
+        0 10px 25px rgba(55, 100, 255, 0.24);
+
+    transition: 0.3s ease;
+}
+
+
+.tool-card:hover .tool-icon {
+    transform:
+        translateY(-3px)
+        rotate(-3deg);
+
+    box-shadow:
+        0 14px 32px rgba(55, 100, 255, 0.38);
+}
+
+
+/* =====================================================
+   CARD TITLE
+   ===================================================== */
+
 .tool-card h3 {
-    color: #111827;
+    position: relative;
+    z-index: 2;
+
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.3px;
+}
+
+
+/* =====================================================
+   CARD DESCRIPTION
+   ===================================================== */
+
+.tool-card p {
+    position: relative;
+    z-index: 2;
+
+    color: #8494aa;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    margin-bottom: 20px;
+}
+
+
+/* =====================================================
+   CARD BUTTON
+   ===================================================== */
+
+.tool-card button,
+.tool-card .tool-btn {
+    position: relative;
+    z-index: 3;
+
+    align-self: flex-start;
+
+    margin-top: auto;
+
+    padding: 9px 16px;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(94, 135, 255, 0.18);
+
+    color: #dce7ff;
+
+    background:
+        rgba(48, 105, 255, 0.10);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+
+.tool-card button:hover,
+.tool-card .tool-btn:hover {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #684eff
+        );
+
+    border-color: transparent;
+
+    box-shadow:
+        0 8px 22px rgba(52, 100, 255, 0.28);
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   CALCULATOR BOX
+   ===================================================== */
+
+.calculator-card {
+    position: relative;
+
+    padding: 26px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 34, 60, 0.90),
+            rgba(6, 18, 35, 0.88)
+        );
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,0.22);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition: 0.3s ease;
+}
+
+
+.calculator-card:hover {
+    transform: translateY(-5px);
+
+    border-color:
+        rgba(78, 125, 255, 0.28);
+
+    box-shadow:
+        0 22px 55px rgba(0,0,0,0.30),
+        0 0 30px rgba(52, 105, 255, 0.07);
+}
+
+
+/* =====================================================
+   CALCULATOR INPUTS
+   ===================================================== */
+
+.calculator-card input,
+.calculator-card select {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    margin-top: 10px;
+    margin-bottom: 14px;
+
+    border-radius: 11px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    outline: none;
+
+    background:
+        rgba(2, 13, 28, 0.70);
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    transition: 0.25s ease;
+}
+
+
+.calculator-card input::placeholder {
+    color: #65758c;
+}
+
+
+.calculator-card input:focus,
+.calculator-card select:focus {
+    border-color:
+        rgba(72, 126, 255, 0.65);
+
+    box-shadow:
+        0 0 0 3px rgba(55, 105, 255, 0.10),
+        0 0 20px rgba(55, 105, 255, 0.08);
+}
+
+
+/* =====================================================
+   CALCULATOR LABEL
+   ===================================================== */
+
+.calculator-card label {
+    display: block;
+
+    color: #aebbd0;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    margin-bottom: 5px;
+}
+
+
+/* =====================================================
+   CALCULATE BUTTON
+   ===================================================== */
+
+.calculator-card button {
+    width: 100%;
+
+    padding: 12px 16px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #674dff
+        );
+
+    box-shadow:
+        0 9px 24px rgba(53, 99, 255, 0.22);
+
+    transition: 0.25s ease;
+}
+
+
+.calculator-card button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 13px 30px rgba(53, 99, 255, 0.34);
+}
+
+
+.calculator-card button:active {
+    transform: scale(0.98);
+}
+
+
+/* =====================================================
+   CALCULATOR RESULT
+   ===================================================== */
+
+.calculator-result {
+    margin-top: 16px;
+
+    padding: 13px 15px;
+
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+
+    border-radius: 11px;
+
+    color: #bcd1ff;
+
+    background:
+        rgba(42, 91, 190, 0.10);
+
+    border: 1px solid rgba(80, 130, 255, 0.12);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =====================================================
+   STUDY TOOLS SECTION
+   ===================================================== */
+
+#study-tools {
+    position: relative;
+}
+
+
+#study-tools .tools-grid {
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+
+/* =====================================================
+   FEATURED CARD
+   ===================================================== */
+
+.tool-card.featured {
+    grid-column: span 2;
+
+    min-height: 240px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(27, 58, 108, 0.90),
+            rgba(43, 31, 92, 0.82)
+        );
+}
+
+
+.tool-card.featured .tool-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #3387ff,
+            #8a54ff
+        );
+}
+
+
+/* =====================================================
+   RESPONSIVE - TABLET
+   ===================================================== */
+
+@media (max-width: 1000px) {
+
+    .tools-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    #study-tools .tools-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .tool-card.featured {
+        grid-column: span 2;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - MOBILE
+   ===================================================== */
+
+@media (max-width: 650px) {
+
+    section {
+        padding: 55px 5%;
+    }
+
+    .tools-grid,
+    #study-tools .tools-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .tool-card,
+    .tool-card.featured {
+        grid-column: span 1;
+
+        min-height: auto;
+
+        padding: 22px;
+
+        border-radius: 17px;
+    }
+
+    .tool-icon {
+        width: 48px;
+        height: 48px;
+
+        margin-bottom: 16px;
+    }
+
+    .tool-card h3 {
+        font-size: 18px;
+    }
+
+    .tool-card p {
+        font-size: 13px;
+    }
+
+    .calculator-card {
+        padding: 21px;
+
+        border-radius: 17px;
+    }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 400px) {
+
+    section {
+        padding-left: 4%;
+        padding-right: 4%;
+    }
+
+    .tool-card {
+        padding: 19px;
+    }
+
+    .calculator-card {
+        padding: 18px;
+    }
+
+    .tool-icon {
+        width: 44px;
+        height: 44px;
+
+        font-size: 19px;
+    }
+   }
+
+       /* =====================================================
+   STUDYTOOLSHUB - NEW UI
+   PART 3 : CODING + RESOURCES + EDITOR + COMPILER
+   ===================================================== */
+
+
+/* =====================================================
+   CODING TOOLS SECTION
+   ===================================================== */
+
+#coding-tools {
+    position: relative;
+}
+
+#coding-tools::before {
+    content: "";
+
+    position: absolute;
+
+    width: 320px;
+    height: 320px;
+
+    top: 100px;
+    right: -180px;
+
+    background: rgba(74, 70, 255, 0.12);
+
+    filter: blur(110px);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   CODING GRID
+   ===================================================== */
+
+.coding-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 22px;
+}
+
+
+/* =====================================================
+   CODING CARD
+   ===================================================== */
+
+.coding-card {
+    position: relative;
+
+    min-height: 260px;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 38, 68, 0.88),
+            rgba(7, 20, 38, 0.90)
+        );
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.23);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+.coding-card:hover {
+    transform: translateY(-7px);
+
+    border-color:
+        rgba(79, 132, 255, 0.35);
+
+    box-shadow:
+        0 25px 65px rgba(0,0,0,0.30),
+        0 0 35px rgba(65,105,255,0.09);
+}
+
+
+/* =====================================================
+   CODING CARD GLOW
+   ===================================================== */
+
+.coding-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    top: -130px;
+    right: -100px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(52, 120, 255, 0.24),
+            transparent 70%
+        );
+
+    filter: blur(12px);
+
+    transition: 0.4s ease;
+
+    pointer-events: none;
+}
+
+
+.coding-card:hover::before {
+    transform: scale(1.35);
+}
+
+
+/* =====================================================
+   CODING ICON
+   ===================================================== */
+
+.coding-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 16px;
+
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #754cff
+        );
+
+    box-shadow:
+        0 12px 30px rgba(55,100,255,0.28);
+
+    transition: 0.3s ease;
+}
+
+
+.coding-card:hover .coding-icon {
+    transform:
+        translateY(-3px)
+        rotate(-4deg);
+
+    box-shadow:
+        0 16px 38px rgba(55,100,255,0.40);
+}
+
+
+/* =====================================================
+   CODING TITLE
+   ===================================================== */
+
+.coding-card h3 {
+    color: #ffffff;
 
     font-size: 21px;
 
+    font-weight: 700;
+
     margin-bottom: 8px;
+
+    position: relative;
+    z-index: 2;
 }
 
-.tool-card p {
-    color: #64748b;
 
-    font-size: 14px;
+/* =====================================================
+   CODING DESCRIPTION
+   ===================================================== */
+
+.coding-card p {
+    color: #8797ad;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    max-width: 500px;
+
+    margin-bottom: 22px;
+
+    position: relative;
+    z-index: 2;
+}
+
+
+/* =====================================================
+   CODING BUTTON
+   ===================================================== */
+
+.coding-card button,
+.coding-card .coding-btn {
+    align-self: flex-start;
+
+    margin-top: auto;
+
+    padding: 10px 18px;
+
+    border: 1px solid rgba(88,130,255,0.18);
+
+    border-radius: 11px;
+
+    color: #dce7ff;
+
+    background:
+        rgba(49,105,255,0.10);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: 0.25s ease;
+
+    position: relative;
+    z-index: 3;
+}
+
+
+.coding-card button:hover,
+.coding-card .coding-btn:hover {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #704cff
+        );
+
+    border-color: transparent;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 26px rgba(50,100,255,0.30);
+}
+
+
+/* =====================================================
+   LANGUAGE BADGES
+   ===================================================== */
+
+.language-badges {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+
+.language-badges span {
+    padding: 5px 10px;
+
+    border-radius: 8px;
+
+    color: #a9c5ff;
+
+    background:
+        rgba(52,105,255,0.10);
+
+    border: 1px solid rgba(80,125,255,0.15);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   RESOURCES SECTION
+   ===================================================== */
+
+#resources {
+    position: relative;
+}
+
+
+/* =====================================================
+   RESOURCE GRID
+   ===================================================== */
+
+.resource-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =====================================================
+   RESOURCE CARD
+   ===================================================== */
+
+.resource-card {
+    position: relative;
+
+    min-height: 190px;
+
+    padding: 25px;
+
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,34,59,0.86),
+            rgba(7,19,36,0.88)
+        );
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    box-shadow:
+        0 15px 42px rgba(0,0,0,0.20);
+
+    transition: 0.3s ease;
+}
+
+
+.resource-card:hover {
+    transform: translateY(-6px);
+
+    border-color:
+        rgba(81,130,255,0.30);
+
+    box-shadow:
+        0 22px 55px rgba(0,0,0,0.28);
+}
+
+
+/* =====================================================
+   RESOURCE ICON
+   ===================================================== */
+
+.resource-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    border-radius: 13px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #317fff,
+            #714dff
+        );
+
+    box-shadow:
+        0 9px 24px rgba(52,99,255,0.24);
+
+    transition: 0.3s ease;
+}
+
+
+.resource-card:hover .resource-icon {
+    transform: translateY(-3px);
+}
+
+
+/* =====================================================
+   RESOURCE TEXT
+   ===================================================== */
+
+.resource-card h3 {
+    color: #ffffff;
+
+    font-size: 17px;
+
+    margin-bottom: 7px;
+}
+
+
+.resource-card p {
+    color: #8191a8;
+
+    font-size: 12px;
+
+    line-height: 1.65;
+}
+
+
+/* =====================================================
+   EDITOR PAGE
+   ===================================================== */
+
+.editor-page {
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 30px 5%;
+
+    background:
+        radial-gradient(
+            circle at 80% 10%,
+            rgba(55,95,255,0.10),
+            transparent 30%
+        ),
+        #020b18;
+}
+
+
+/* =====================================================
+   EDITOR HEADER
+   ===================================================== */
+
+.editor-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+
+.editor-header h2 {
+    margin: 0;
+
+    font-size: clamp(24px,4vw,36px);
+
+    color: #ffffff;
+}
+
+
+.close-editor {
+    padding: 10px 17px;
+
+    border-radius: 10px;
+
+    border: 1px solid rgba(255,255,255,0.08);
+
+    color: #cbd8ed;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    font-size: 13px;
+
+    transition: 0.25s ease;
+}
+
+
+.close-editor:hover {
+    color: #ffffff;
+
+    background:
+        rgba(64,105,255,0.15);
+
+    border-color:
+        rgba(80,125,255,0.30);
+}
+
+
+/* =====================================================
+   EDITOR LAYOUT
+   ===================================================== */
+
+.editor-container {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 18px;
+
+    width: 100%;
+}
+
+
+/* =====================================================
+   CODE PANEL
+   ===================================================== */
+
+.code-panel,
+.preview-panel {
+    min-width: 0;
+
+    border-radius: 17px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    background:
+        rgba(7,20,37,0.88);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.25);
+}
+
+
+/* =====================================================
+   CODE TABS
+   ===================================================== */
+
+.code-tabs {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 8px;
+
+    background:
+        rgba(15,31,52,0.95);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+}
+
+
+.code-tabs button {
+    padding: 8px 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    color: #8291a8;
+
+    background: transparent;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+
+.code-tabs button:hover,
+.code-tabs button.active {
+    color: #ffffff;
+
+    background:
+        rgba(62,111,255,0.16);
+}
+
+
+/* =====================================================
+   CODE TEXTAREA
+   ===================================================== */
+
+.editor-container textarea {
+    width: 100%;
+
+    min-height: 430px;
+
+    display: block;
+
+    padding: 18px;
+
+    resize: vertical;
+
+    border: none;
+
+    outline: none;
+
+    color: #dbe7ff;
+
+    background:
+        #061221;
+
+    font-family:
+        "Fira Code",
+        "Consolas",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    tab-size: 4;
+}
+
+
+.editor-container textarea::selection {
+    background: #315cff;
+}
+
+
+/* =====================================================
+   PREVIEW
+   ===================================================== */
+
+.preview-panel iframe {
+    width: 100%;
+
+    min-height: 430px;
+
+    display: block;
+
+    border: none;
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   EDITOR ACTION BAR
+   ===================================================== */
+
+.editor-actions {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.06);
+
+    background:
+        rgba(9,24,43,0.95);
+}
+
+
+.editor-actions button {
+    padding: 9px 15px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #674eff
+        );
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    transition: 0.25s ease;
+}
+
+
+.editor-actions button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 22px rgba(50,100,255,0.28);
+}
+
+
+/* =====================================================
+   C / C++ COMPILER PAGE
+   ===================================================== */
+
+.compiler-page {
+    width: 100%;
+
+    min-height: 100vh;
+
+    padding: 30px 5%;
+
+    background:
+        radial-gradient(
+            circle at 20% 15%,
+            rgba(63,91,255,0.10),
+            transparent 30%
+        ),
+        #020b18;
+}
+
+
+/* =====================================================
+   COMPILER HEADER
+   ===================================================== */
+
+.compiler-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 22px;
+}
+
+
+.compiler-header h2 {
+    color: #ffffff;
+
+    margin: 0;
+
+    font-size: clamp(24px,4vw,36px);
+}
+
+
+/* =====================================================
+   COMPILER CONTROLS
+   ===================================================== */
+
+.compiler-controls {
+    display: flex;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
 
     margin-bottom: 18px;
 }
 
 
-/* ================= INPUTS ================= */
+.compiler-controls select {
+    min-width: 130px;
 
-.tool-card input,
-.tool-card select,
-.tool-card textarea {
+    padding: 11px 14px;
 
-    width: 100%;
+    border-radius: 10px;
 
-    padding: 11px 13px;
-
-    margin-bottom: 10px;
-
-    border: 1px solid #d1d5db;
-
-    border-radius: 9px;
-
-    background: white;
-
-    color: #111827;
-
-    font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
 
     outline: none;
 
-    transition: 0.2s;
+    color: #dce7ff;
+
+    background:
+        #08182b;
+
+    font-size: 13px;
+
+    cursor: pointer;
 }
 
-.tool-card input:focus,
-.tool-card select:focus,
-.tool-card textarea:focus {
-    border-color: #2563eb;
+
+.compiler-controls select:focus {
+    border-color:
+        rgba(75,125,255,0.60);
 
     box-shadow:
-        0 0 0 3px rgba(37, 99, 235, 0.10);
+        0 0 0 3px rgba(55,105,255,0.10);
 }
 
 
-/* ================= BUTTONS ================= */
-
-button {
-    border: none;
-
-    border-radius: 9px;
-
-    padding: 10px 15px;
-
-    background: #2563eb;
-
-    color: white;
-
-    font-size: 14px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: 0.2s;
-}
-
-button:hover {
-    background: #1d4ed8;
-
-    transform: translateY(-1px);
-}
-
-button:active {
-    transform: scale(0.97);
-}
-
-
-/* ================= RESULT ================= */
-
-.tool-card h4 {
-    margin-top: 12px;
-
-    color: #1d4ed8;
-
-    font-size: 16px;
-}
-
-
-/* ================= PERCENTAGE ================= */
-
-#number,
-#total {
-    display: block;
-}
-
-
-/* ================= CGPA ================= */
-
-#cgpaSubjects {
-    width: 100%;
-}
-
-.cgpa-row {
-    display: grid;
-
-    grid-template-columns:
-        1.4fr 0.8fr 1fr;
-
-    gap: 7px;
-
-    margin-bottom: 8px;
-}
-
-.cgpa-row input {
-    min-width: 0;
-}
-
-#addSubjectBtn {
-    background: #0f766e;
-
-    margin-bottom: 8px;
-}
-
-#addSubjectBtn:hover {
-    background: #115e59;
-}
-
-#cgpaBtn {
-    width: 100%;
-}
-
-
-/* ================= AGE ================= */
-
-#birthDate {
-    cursor: pointer;
-}
-
-
-/* ================= TIMER ================= */
-
-#timer {
-    text-align: center;
-
-    font-size: 42px;
-
-    font-family: monospace;
-
-    color: #1e3a8a;
-
-    margin: 15px 0;
-}
-
-#startTimer {
-    background: #16a34a;
-}
-
-#startTimer:hover {
-    background: #15803d;
-}
-
-#pauseTimer {
-    background: #f59e0b;
-}
-
-#pauseTimer:hover {
-    background: #d97706;
-}
-
-#resetTimer {
-    background: #dc2626;
-}
-
-#resetTimer:hover {
-    background: #b91c1c;
-}
-
-
-/* ================= STUDY PLANNER ================= */
-
-#studyPlanner {
-    grid-column: span 2;
-}
-
-#studyPlanner select {
-    cursor: pointer;
-}
-
-
-/* ================= STUDY PROGRESS ================= */
-
-.study-progress {
-    margin-top: 20px;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    background: #f8fafc;
-}
-
-.study-progress h4 {
-    margin: 0 0 5px;
-
-    color: #111827;
-}
-
-#studyProgressText {
-    margin-bottom: 8px;
-}
-
-#studyProgress {
-    width: 100%;
-
-    height: 12px;
-}
-
-
-/* ================= STUDY FILTERS ================= */
-
-.study-filters {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 7px;
-
-    margin-top: 15px;
-}
-
-.study-filters button {
-    flex: 1;
-
-    min-width: 70px;
-
-    padding: 8px;
-
-    font-size: 12px;
-
-    background: #e2e8f0;
-
-    color: #334155;
-}
-
-.study-filters button:hover {
-    background: #cbd5e1;
-}
-
-
-/* ================= TASK STATS ================= */
-
-.task-stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 8px;
-
-    margin-top: 18px;
-}
-
-.task-stats span {
-    padding: 10px 5px;
+/* =====================================================
+   COMPILER BUTTONS
+   ===================================================== */
+
+#runCompiler,
+#clearCompiler {
+    padding: 11px 18px;
 
     border-radius: 10px;
 
-    background: #f1f5f9;
+    border: none;
 
-    text-align: center;
+    color: #ffffff;
 
     font-size: 12px;
 
-    color: #64748b;
-}
+    font-weight: 700;
 
-.task-stats strong {
-    display: block;
-
-    color: #111827;
-
-    font-size: 17px;
+    transition: 0.25s ease;
 }
 
 
-/* ================= TODAY FOCUS ================= */
+#runCompiler {
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #674eff
+        );
 
-.today-focus {
-    margin-top: 18px;
-
-    padding: 15px;
-
-    border-radius: 12px;
-
-    background: #eff6ff;
-
-    border-left: 4px solid #2563eb;
-}
-
-.today-focus h4 {
-    margin: 0 0 5px;
-
-    color: #1e40af;
+    box-shadow:
+        0 9px 25px rgba(50,100,255,0.22);
 }
 
 
-/* ================= STUDY LIST ================= */
+#clearCompiler {
+    background:
+        rgba(255,255,255,0.06);
 
-#studyList {
-    margin-top: 18px;
-}
-
-.study-task {
-    padding: 15px;
-
-    margin-bottom: 10px;
-
-    border: 1px solid #e2e8f0;
-
-    border-radius: 12px;
-
-    background: white;
+    border:
+        1px solid rgba(255,255,255,0.08);
 }
 
 
-/* ================= UNIT CONVERTER ================= */
-
-#unitConverter select {
-    cursor: pointer;
-}
-
-#unitResult {
-    padding: 10px;
-
-    border-radius: 8px;
-
-    background: #f8fafc;
-
-    word-break: break-word;
+#runCompiler:hover,
+#clearCompiler:hover {
+    transform: translateY(-2px);
 }
 
 
-/* ================= WORD COUNTER ================= */
+#runCompiler:hover {
+    box-shadow:
+        0 13px 30px rgba(50,100,255,0.35);
+}
 
-#wordText {
-    min-height: 150px;
+
+#clearCompiler:hover {
+    background:
+        rgba(255,255,255,0.10);
+}
+
+
+/* =====================================================
+   COMPILER WORKSPACE
+   ===================================================== */
+
+.compiler-workspace {
+    display: grid;
+
+    grid-template-columns:
+        1.35fr 0.65fr;
+
+    gap: 18px;
+}
+
+
+/* =====================================================
+   COMPILER CODE BOX
+   ===================================================== */
+
+.compiler-code-box,
+.compiler-output-box {
+    border-radius: 17px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(255,255,255,0.07);
+
+    background:
+        #061221;
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.25);
+}
+
+
+.compiler-code-box textarea {
+    width: 100%;
+
+    min-height: 470px;
+
+    padding: 20px;
 
     resize: vertical;
 
-    line-height: 1.5;
+    border: none;
+
+    outline: none;
+
+    color: #dbe7ff;
+
+    background:
+        #061221;
+
+    font-family:
+        "Fira Code",
+        "Consolas",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.7;
 }
 
-.word-stats {
+
+/* =====================================================
+   COMPILER OUTPUT
+   ===================================================== */
+
+.compiler-output-box {
+    background:
+        #030b15;
+}
+
+
+.compiler-output-box::before {
+    content: "OUTPUT";
+
+    display: block;
+
+    padding: 13px 16px;
+
+    color: #8fa4c2;
+
+    background:
+        #081729;
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.06);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+#compilerOutput {
+    min-height: 470px;
+
+    margin: 0;
+
+    padding: 20px;
+
+    overflow: auto;
+
+    color: #bcd1ff;
+
+    background:
+        #030b15;
+
+    font-family:
+        "Fira Code",
+        "Consolas",
+        monospace;
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+}
+
+
+/* =====================================================
+   COMPILER SCROLLBAR
+   ===================================================== */
+
+#compilerOutput::-webkit-scrollbar,
+.compiler-code-box textarea::-webkit-scrollbar,
+.editor-container textarea::-webkit-scrollbar {
+    width: 7px;
+}
+
+
+#compilerOutput::-webkit-scrollbar-thumb,
+.compiler-code-box textarea::-webkit-scrollbar-thumb,
+.editor-container textarea::-webkit-scrollbar-thumb {
+    background: #304d7c;
+
+    border-radius: 20px;
+}
+
+
+/* =====================================================
+   RESPONSIVE - TABLET
+   ===================================================== */
+
+@media (max-width: 950px) {
+
+    .coding-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .resource-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .editor-container {
+        grid-template-columns: 1fr;
+    }
+
+    .compiler-workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .compiler-code-box textarea,
+    #compilerOutput {
+        min-height: 350px;
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - MOBILE
+   ===================================================== */
+
+@media (max-width: 650px) {
+
+    .coding-grid {
+        gap: 16px;
+    }
+
+    .coding-card {
+        min-height: auto;
+
+        padding: 23px;
+
+        border-radius: 18px;
+    }
+
+    .coding-icon {
+        width: 51px;
+        height: 51px;
+
+        margin-bottom: 17px;
+
+        font-size: 21px;
+    }
+
+    .coding-card h3 {
+        font-size: 19px;
+    }
+
+    .resource-grid {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .resource-card {
+        min-height: auto;
+
+        padding: 21px;
+
+        border-radius: 17px;
+    }
+
+    .editor-page,
+    .compiler-page {
+        padding: 22px 4%;
+    }
+
+    .editor-header,
+    .compiler-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .editor-header h2,
+    .compiler-header h2 {
+        font-size: 26px;
+    }
+
+    .editor-container {
+        gap: 14px;
+    }
+
+    .editor-container textarea {
+        min-height: 330px;
+
+        font-size: 12px;
+
+        padding: 15px;
+    }
+
+    .preview-panel iframe {
+        min-height: 330px;
+    }
+
+    .compiler-controls {
+        width: 100%;
+    }
+
+    .compiler-controls select,
+    #runCompiler,
+    #clearCompiler {
+        flex: 1;
+    }
+
+    .compiler-code-box textarea,
+    #compilerOutput {
+        min-height: 320px;
+
+        font-size: 12px;
+
+        padding: 15px;
+    }
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
+
+@media (max-width: 400px) {
+
+    .coding-card,
+    .resource-card {
+        padding: 19px;
+    }
+
+    .language-badges {
+        gap: 6px;
+    }
+
+    .language-badges span {
+        font-size: 10px;
+
+        padding: 4px 8px;
+    }
+
+    .editor-actions {
+        padding: 9px;
+    }
+
+    .editor-actions button {
+        flex: 1;
+    }
+   }
+
+   /* =====================================================
+   STUDYTOOLSHUB - NEW UI
+   PART 4 : FOOTER + LOGIN + MODAL + POLISH
+   ===================================================== */
+
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+
+footer {
+    position: relative;
+
+    width: 100%;
+
+    margin-top: 50px;
+
+    padding: 55px 6% 25px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(4,15,30,0.70),
+            rgba(2,9,20,0.98)
+        );
+
+    border-top:
+        1px solid rgba(255,255,255,0.07);
+
+    overflow: hidden;
+}
+
+
+footer::before {
+    content: "";
+
+    position: absolute;
+
+    width: 350px;
+    height: 180px;
+
+    top: -120px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background:
+        rgba(55,105,255,0.15);
+
+    filter: blur(90px);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   FOOTER CONTAINER
+   ===================================================== */
+
+.footer-container {
+    position: relative;
+    z-index: 2;
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
     display: grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        1.5fr 1fr 1fr 1fr;
 
-    gap: 10px;
-
-    margin: 10px 0 15px;
+    gap: 40px;
 }
 
-.word-stats div {
-    padding: 12px;
 
-    border-radius: 10px;
+/* =====================================================
+   FOOTER BRAND
+   ===================================================== */
 
-    background: #f8fafc;
-
-    text-align: center;
+.footer-brand .logo {
+    margin-bottom: 15px;
 }
 
-.word-stats strong {
-    display: block;
 
-    font-size: 22px;
+.footer-brand p {
+    max-width: 320px;
 
-    color: #1e3a8a;
-}
-
-.word-stats span {
-    display: block;
-
-    color: #64748b;
-
-    font-size: 12px;
-}
-
-.reading-time {
-    margin: 10px 0;
+    color: #7f90a8;
 
     font-size: 13px;
+
+    line-height: 1.8;
 }
 
 
-/* ================= CODING CARDS ================= */
+/* =====================================================
+   FOOTER HEADINGS
+   ===================================================== */
 
-#coding .tool-card {
-    text-align: center;
-}
-
-#coding .tool-icon {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* ================= RESOURCES ================= */
-
-#resources .tool-card {
-    text-align: center;
-}
-
-#resources .tool-icon {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-
-/* ================= FOOTER ================= */
-
-footer {
-    padding: 45px 6% 25px;
-
-    background: #111827;
-
-    color: white;
-
-    text-align: center;
-}
-
-.footer-content h3 {
-    font-size: 24px;
-
-    margin-bottom: 5px;
-}
-
-.footer-content p {
-    color: #cbd5e1;
-}
-
-.footer-links {
-    display: flex;
-
-    justify-content: center;
-
-    flex-wrap: wrap;
-
-    gap: 18px;
-
-    margin-top: 20px;
-}
-
-.footer-links a {
-    color: #cbd5e1;
-
-    text-decoration: none;
+.footer-column h4 {
+    color: #ffffff;
 
     font-size: 14px;
+
+    margin-bottom: 16px;
 }
 
-.footer-links a:hover {
-    color: white;
+
+/* =====================================================
+   FOOTER LINKS
+   ===================================================== */
+
+.footer-column {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
 }
 
-.copyright {
-    margin-top: 25px;
+
+.footer-column a {
+    position: relative;
+
+    color: #7f90a8;
+
+    font-size: 13px;
+
+    margin-bottom: 10px;
+
+    transition: 0.25s ease;
+}
+
+
+.footer-column a:hover {
+    color: #ffffff;
+
+    transform: translateX(4px);
+}
+
+
+.footer-column a::before {
+    content: "";
+
+    position: absolute;
+
+    left: -10px;
+    top: 50%;
+
+    width: 0;
+    height: 1px;
+
+    background: #5185ff;
+
+    transform: translateY(-50%);
+
+    transition: 0.25s ease;
+}
+
+
+.footer-column a:hover::before {
+    width: 6px;
+}
+
+
+/* =====================================================
+   FOOTER BOTTOM
+   ===================================================== */
+
+.footer-bottom {
+    position: relative;
+    z-index: 2;
+
+    max-width: 1250px;
+
+    margin: 40px auto 0;
 
     padding-top: 20px;
 
-    border-top: 1px solid #374151;
+    display: flex;
 
-    color: #94a3b8;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-top:
+        1px solid rgba(255,255,255,0.06);
+}
+
+
+.footer-bottom p {
+    color: #65758c;
 
     font-size: 12px;
 }
 
 
-/* =========================================================
-   TABLET
-========================================================= */
-
-@media (max-width: 900px) {
-
-    header {
-        flex-direction: column;
-
-        gap: 12px;
-
-        text-align: center;
-    }
-
-    nav {
-        gap: 12px;
-    }
-
-    #studyPlanner {
-        grid-column: span 1;
-    }
-
+.footer-bottom span {
+    color: #8fa4c2;
 }
 
 
-/* =========================================================
-   MOBILE
-========================================================= */
+/* =====================================================
+   SOCIAL BUTTONS
+   ===================================================== */
 
-@media (max-width: 600px) {
+.social-links {
+    display: flex;
 
-    header {
-        padding: 13px 4%;
-    }
+    align-items: center;
 
-    .logo h1 {
-        font-size: 22px;
-    }
-
-    nav {
-        gap: 9px;
-    }
-
-    nav a {
-        font-size: 12px;
-    }
-
-    .hero {
-        min-height: 450px;
-
-        padding: 55px 15px;
-    }
-
-    .hero h2 {
-        font-size: 36px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-
-    .search-box {
-        flex-direction: column;
-    }
-
-    .search-box button {
-        width: 100%;
-    }
-
-    .tools {
-        padding: 50px 4%;
-    }
-
-    .tools > h2 {
-        font-size: 28px;
-    }
-
-    .tool-container {
-        grid-template-columns: 1fr;
-
-        gap: 18px;
-    }
-
-    .tool-card {
-        padding: 20px;
-
-        border-radius: 15px;
-    }
-
-    .cgpa-row {
-        grid-template-columns: 1fr;
-    }
-
-    .task-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .study-filters button {
-        min-width: 45%;
-    }
-
-    .word-stats {
-        grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    #timer {
-        font-size: 36px;
-    }
-
+    gap: 8px;
 }
 
 
-/* =========================================================
-   SMALL PHONES
-========================================================= */
+.social-links a {
+    width: 34px;
+    height: 34px;
 
-@media (max-width: 380px) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    .hero h2 {
-        font-size: 30px;
-    }
+    border-radius: 10px;
 
-    .tool-card {
-        padding: 16px;
-    }
+    color: #91a3bd;
 
-    .task-stats {
-        grid-template-columns: 1fr 1fr;
-    }
+    background:
+        rgba(255,255,255,0.04);
 
-    .study-filters button {
-        width: 100%;
-    }
+    border:
+        1px solid rgba(255,255,255,0.06);
 
-   }
+    font-size: 13px;
 
-/* =========================================================
-   STUDYTOOLSHUB - CSS PART 2
-   Editor + Scientific Calculator + C/C++ Compiler
-========================================================= */
+    transition: 0.25s ease;
+}
 
 
-/* ================= FULL SCREEN PAGES ================= */
+.social-links a:hover {
+    color: #ffffff;
 
-.editor-page,
-.scientific-page,
-.compiler-page {
+    background:
+        rgba(58,105,255,0.15);
 
-    display: none;
+    border-color:
+        rgba(75,125,255,0.30);
 
+    transform: translateY(-3px);
+}
+
+
+/* =====================================================
+   LOGIN / AUTH OVERLAY
+   ===================================================== */
+
+.login-overlay {
     position: fixed;
 
     inset: 0;
 
-    z-index: 5000;
-
-    width: 100%;
-    height: 100%;
-
-    overflow-y: auto;
-
-    background: #f5f7fb;
-
-    padding-bottom: 40px;
-}
-
-
-/* ================= EDITOR ================= */
-
-.editor-header,
-.scientific-header,
-.compiler-header {
-
-    position: sticky;
-
-    top: 0;
-
-    z-index: 10;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 15px 5%;
-
-    background: #111827;
-
-    color: white;
-
-    box-shadow:
-        0 4px 15px rgba(0,0,0,.15);
-}
-
-.editor-header h2,
-.scientific-header h2,
-.compiler-header h2 {
-
-    font-size: 22px;
-
-    margin: 0;
-}
-
-.editor-header button,
-.scientific-header button,
-.compiler-header button {
-
-    background: #374151;
-
-    white-space: nowrap;
-}
-
-.editor-header button:hover,
-.scientific-header button:hover,
-.compiler-header button:hover {
-
-    background: #4b5563;
-}
-
-.editor-description {
-
-    max-width: 1200px;
-
-    margin: 25px auto;
-
-    padding: 0 20px;
-
-    color: #64748b;
-
-    text-align: center;
-}
-
-
-/* ================= EDITOR CONTAINER ================= */
-
-.editor-container {
-
-    width: 90%;
-
-    max-width: 1250px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 18px;
-}
-
-.editor-box {
-
-    background: white;
-
-    border: 1px solid #e2e8f0;
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 8px 25px rgba(15,23,42,.06);
-}
-
-.editor-box h3 {
-
-    padding: 12px 15px;
-
-    margin: 0;
-
-    background: #1e293b;
-
-    color: white;
-
-    font-size: 15px;
-}
-
-.editor-box textarea {
-
-    width: 100%;
-
-    height: 300px;
-
-    display: block;
-
-    resize: vertical;
-
-    border: none;
-
-    outline: none;
-
-    padding: 15px;
-
-    background: #0f172a;
-
-    color: #e2e8f0;
-
-    font-family: monospace;
-
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-
-/* ================= RUN CODE ================= */
-
-#runCode {
-
-    display: block;
-
-    margin: 25px auto;
-
-    padding: 13px 30px;
-
-    font-size: 15px;
-
-    background: #16a34a;
-}
-
-#runCode:hover {
-
-    background: #15803d;
-}
-
-
-/* ================= PREVIEW ================= */
-
-.preview-title {
-
-    width: 90%;
-
-    max-width: 1250px;
-
-    margin: 25px auto 10px;
-
-    color: #111827;
-}
-
-#preview {
-
-    display: block;
-
-    width: 90%;
-
-    max-width: 1250px;
-
-    height: 400px;
-
-    margin: auto;
-
-    border: 2px solid #d1d5db;
-
-    border-radius: 12px;
-
-    background: white;
-}
-
-
-/* =========================================================
-   SCIENTIFIC CALCULATOR
-========================================================= */
-
-.scientific-body {
-
-    width: min(1100px, 94%);
-
-    margin: 25px auto;
-}
-
-
-/* ================= DISPLAY ================= */
-
-.casio-display {
-
-    background: #dbe4d0;
-
-    border: 5px solid #374151;
-
-    border-radius: 12px;
-
-    padding: 14px 18px;
-
-    min-height: 115px;
-
-    box-shadow:
-        inset 0 0 15px rgba(0,0,0,.18);
-
-    font-family: monospace;
-
-    overflow: hidden;
-}
-
-.display-status {
-
-    display: flex;
-
-    gap: 15px;
-
-    font-size: 10px;
-
-    color: #374151;
-
-    min-height: 16px;
-}
-
-#scientificExpression {
-
-    margin-top: 7px;
-
-    min-height: 28px;
-
-    text-align: right;
-
-    font-size: 18px;
-
-    color: #263326;
-
-    overflow-x: auto;
-
-    white-space: nowrap;
-}
-
-#scientificAnswer {
-
-    min-height: 35px;
-
-    text-align: right;
-
-    font-size: 28px;
-
-    font-weight: bold;
-
-    color: #111827;
-
-    overflow-x: auto;
-
-    white-space: nowrap;
-}
-
-
-/* ================= MODES ================= */
-
-.calculator-modes {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 8px;
-
-    margin: 15px 0;
-}
-
-.mode-button {
-
-    background: #334155;
-
-    border-radius: 8px;
-}
-
-.mode-button.active {
-
-    background: #2563eb;
-
-    box-shadow:
-        0 0 0 2px rgba(37,99,235,.18);
-}
-
-
-/* ================= ANGLE ================= */
-
-.angle-buttons {
-
-    display: flex;
-
-    justify-content: center;
-
-    gap: 8px;
-
-    margin-bottom: 15px;
-}
-
-.angle-buttons button {
-
-    padding: 7px 15px;
-
-    background: #e2e8f0;
-
-    color: #334155;
-}
-
-.angle-buttons button.active {
-
-    background: #2563eb;
-
-    color: white;
-}
-
-
-/* ================= KEYBOARD ================= */
-
-.scientific-keyboard {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(5, 1fr);
-
-    gap: 8px;
-
-    padding: 15px;
-
-    background: #1e293b;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 12px 30px rgba(15,23,42,.18);
-}
-
-.scientific-keyboard button {
-
-    min-height: 48px;
-
-    border-radius: 8px;
-
-    background: #f8fafc;
-
-    color: #111827;
-
-    font-size: 15px;
-
-    box-shadow:
-        0 2px 0 #cbd5e1;
-}
-
-.scientific-keyboard button:hover {
-
-    background: #e2e8f0;
-
-    transform: translateY(-1px);
-}
-
-.scientific-keyboard button:active {
-
-    transform: translateY(2px);
-
-    box-shadow: none;
-}
-
-.scientific-keyboard .function-key {
-
-    background: #64748b;
-
-    color: white;
-
-    box-shadow:
-        0 2px 0 #475569;
-}
-
-.scientific-keyboard .danger-key {
-
-    background: #dc2626;
-
-    color: white;
-
-    box-shadow:
-        0 2px 0 #991b1b;
-}
-
-.scientific-keyboard .equals-key {
-
-    background: #2563eb;
-
-    color: white;
-
-    font-size: 20px;
-
-    box-shadow:
-        0 2px 0 #1d4ed8;
-}
-
-
-/* ================= HISTORY ================= */
-
-.scientific-history {
-
-    margin-top: 18px;
-
-    background: white;
-
-    border: 1px solid #e2e8f0;
-
-    border-radius: 12px;
-
-    padding: 15px;
-}
-
-.history-title {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 10px;
-}
-
-.history-title strong {
-
-    font-size: 18px;
-
-    color: #111827;
-}
-
-.history-title button {
-
-    background: #dc2626;
-
-    padding: 7px 12px;
-
-    font-size: 12px;
-}
-
-#scientificHistoryList {
-
-    max-height: 250px;
-
-    overflow-y: auto;
-}
-
-
-/* ================= CALCULATOR PANELS ================= */
-
-.scientific-mode-panel {
-
     display: none;
 
-    margin-top: 20px;
+    align-items: center;
+    justify-content: center;
 
     padding: 20px;
 
-    background: white;
+    background:
+        rgba(0,7,18,0.78);
 
-    border: 1px solid #e2e8f0;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 
-    border-radius: 14px;
-
-    box-shadow:
-        0 8px 25px rgba(15,23,42,.06);
+    z-index: 5000;
 }
 
-.scientific-mode-panel h3 {
 
-    margin-bottom: 15px;
-
-    color: #111827;
+.login-overlay.active {
+    display: flex;
 }
 
-.scientific-mode-panel input,
-.scientific-mode-panel select,
-.scientific-mode-panel textarea {
+
+/* =====================================================
+   LOGIN BOX
+   ===================================================== */
+
+.login-box {
+    position: relative;
 
     width: 100%;
 
-    padding: 11px;
+    max-width: 430px;
 
-    margin-bottom: 10px;
+    padding: 32px;
 
-    border: 1px solid #cbd5e1;
+    border-radius: 22px;
 
-    border-radius: 8px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17,39,67,0.96),
+            rgba(5,17,33,0.98)
+        );
 
-    outline: none;
-
-    font-size: 14px;
-}
-
-.scientific-mode-panel input:focus,
-.scientific-mode-panel select:focus,
-.scientific-mode-panel textarea:focus {
-
-    border-color: #2563eb;
+    border:
+        1px solid rgba(255,255,255,0.09);
 
     box-shadow:
-        0 0 0 3px rgba(37,99,235,.1);
+        0 30px 90px rgba(0,0,0,0.55),
+        0 0 45px rgba(53,100,255,0.10);
+
+    animation:
+        loginPop 0.28s ease;
 }
 
-#equationResult,
-#statisticsResult,
-#matrixResult {
 
-    margin-top: 15px;
+@keyframes loginPop {
 
-    padding: 14px;
+    from {
+        opacity: 0;
 
-    background: #f8fafc;
+        transform:
+            translateY(15px)
+            scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =====================================================
+   LOGIN CLOSE
+   ===================================================== */
+
+.login-close {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
 
     border-radius: 9px;
 
-    color: #1e3a8a;
+    color: #899ab2;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    font-size: 17px;
+
+    transition: 0.2s ease;
+}
+
+
+.login-close:hover {
+    color: #ffffff;
+
+    background:
+        rgba(255,70,90,0.14);
+}
+
+
+/* =====================================================
+   LOGIN TITLE
+   ===================================================== */
+
+.login-box h2 {
+    color: #ffffff;
+
+    font-size: 27px;
+
+    margin-bottom: 7px;
+
+    letter-spacing: -0.5px;
+}
+
+
+.login-box > p {
+    color: #8191a8;
+
+    font-size: 13px;
+
+    margin-bottom: 24px;
+}
+
+
+/* =====================================================
+   LOGIN FORM
+   ===================================================== */
+
+.login-form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+.login-form label {
+    color: #aebbd0;
+
+    font-size: 12px;
 
     font-weight: 600;
 
-    word-break: break-word;
+    margin-bottom: -7px;
 }
 
 
-/* ================= LINEAR / QUADRATIC ================= */
+.login-form input {
+    width: 100%;
 
-#linearInputs,
-#quadraticInputs {
+    padding: 13px 14px;
 
-    margin-top: 15px;
-}
+    border-radius: 11px;
 
-#quadraticInputs {
+    outline: none;
 
-    display: none;
-}
+    border:
+        1px solid rgba(255,255,255,0.08);
 
+    color: #ffffff;
 
-/* ================= STATISTICS ================= */
+    background:
+        rgba(2,13,28,0.72);
 
-#statisticsInput {
+    font-size: 13px;
 
-    min-height: 130px;
-
-    resize: vertical;
-
-    font-family: monospace;
+    transition: 0.25s ease;
 }
 
 
-/* ================= MATRIX ================= */
+.login-form input::placeholder {
+    color: #64758d;
+}
 
-.matrix-inputs {
 
-    display: grid;
+.login-form input:focus {
+    border-color:
+        rgba(77,128,255,0.65);
 
-    grid-template-columns:
-        repeat(2, 1fr);
+    box-shadow:
+        0 0 0 3px rgba(55,105,255,0.09);
+}
+
+
+/* =====================================================
+   LOGIN SUBMIT
+   ===================================================== */
+
+.login-submit {
+    width: 100%;
+
+    padding: 13px;
+
+    margin-top: 4px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #287cff,
+            #694dff
+        );
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    box-shadow:
+        0 10px 28px rgba(50,100,255,0.24);
+
+    transition: 0.25s ease;
+}
+
+
+.login-submit:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 35px rgba(50,100,255,0.35);
+}
+
+
+/* =====================================================
+   LOGIN EXTRA
+   ===================================================== */
+
+.login-extra {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
 
     gap: 10px;
 
-    max-width: 350px;
+    margin-top: 14px;
 
-    margin-bottom: 10px;
+    font-size: 11px;
 }
 
 
-/* =========================================================
-   C / C++ COMPILER
-========================================================= */
+.login-extra a {
+    color: #7098ff;
 
-.compiler-body {
-
-    width: min(1100px, 94%);
-
-    margin: 25px auto;
+    transition: 0.2s ease;
 }
 
 
-/* ================= COMPILER CONTROLS ================= */
+.login-extra a:hover {
+    color: #a9c2ff;
+}
 
-.compiler-controls {
+
+/* =====================================================
+   DIVIDER
+   ===================================================== */
+
+.auth-divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 22px 0;
+
+    color: #63748b;
+
+    font-size: 11px;
+}
+
+
+.auth-divider::before,
+.auth-divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background:
+        rgba(255,255,255,0.07);
+}
+
+
+/* =====================================================
+   GOOGLE / SECONDARY BUTTON
+   ===================================================== */
+
+.auth-secondary {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 11px;
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    color: #d7e1f2;
+
+    background:
+        rgba(255,255,255,0.04);
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    transition: 0.25s ease;
+}
+
+
+.auth-secondary:hover {
+    background:
+        rgba(255,255,255,0.08);
+
+    border-color:
+        rgba(255,255,255,0.13);
+}
+
+
+/* =====================================================
+   NOTIFICATION / TOAST
+   ===================================================== */
+
+.toast-container {
+    position: fixed;
+
+    right: 20px;
+    bottom: 20px;
 
     display: flex;
 
+    flex-direction: column;
+
     gap: 10px;
 
-    flex-wrap: wrap;
-
-    margin-bottom: 15px;
+    z-index: 9000;
 }
 
-.compiler-controls select {
 
-    padding: 11px 15px;
+.toast {
+    min-width: 260px;
 
-    border: 1px solid #cbd5e1;
+    max-width: 350px;
 
-    border-radius: 8px;
+    padding: 13px 16px;
 
-    background: white;
+    display: flex;
 
-    font-size: 14px;
+    align-items: center;
 
-    outline: none;
+    gap: 10px;
+
+    border-radius: 12px;
+
+    color: #dce7ff;
+
+    background:
+        rgba(10,27,48,0.94);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+        0 15px 45px rgba(0,0,0,0.35);
+
+    backdrop-filter: blur(15px);
+
+    animation:
+        toastIn 0.3s ease;
 }
 
-#runCompiler {
 
-    background: #16a34a;
+@keyframes toastIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateX(25px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateX(0);
+    }
 }
 
-#runCompiler:hover {
 
-    background: #15803d;
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+.loading {
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    border:
+        2px solid rgba(255,255,255,0.15);
+
+    border-top-color: #5c8dff;
+
+    animation:
+        spin 0.7s linear infinite;
 }
 
-#runCompiler:disabled {
 
-    opacity: .6;
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =====================================================
+   DISABLED BUTTON
+   ===================================================== */
+
+button:disabled {
+    opacity: 0.55;
 
     cursor: not-allowed;
 
-    transform: none;
-}
+    transform: none !important;
 
-#clearCompiler {
-
-    background: #dc2626;
-}
-
-#clearCompiler:hover {
-
-    background: #b91c1c;
+    box-shadow: none !important;
 }
 
 
-/* ================= CODE AREA ================= */
+/* =====================================================
+   FOCUS ACCESSIBILITY
+   ===================================================== */
 
-#compilerCode {
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline:
+        2px solid rgba(92,140,255,0.75);
 
-    width: 100%;
-
-    min-height: 430px;
-
-    resize: vertical;
-
-    padding: 18px;
-
-    border: 1px solid #334155;
-
-    border-radius: 12px;
-
-    outline: none;
-
-    background: #0f172a;
-
-    color: #e2e8f0;
-
-    font-family: monospace;
-
-    font-size: 14px;
-
-    line-height: 1.6;
-
-    tab-size: 4;
-}
-
-#compilerCode:focus {
-
-    border-color: #2563eb;
-
-    box-shadow:
-        0 0 0 3px rgba(37,99,235,.12);
+    outline-offset: 3px;
 }
 
 
-/* ================= COMPILER INPUT ================= */
+/* =====================================================
+   SMOOTH PAGE TRANSITION
+   ===================================================== */
 
-.compiler-body h3 {
+.page-hidden {
+    opacity: 0;
 
-    margin: 18px 0 8px;
-
-    color: #111827;
-}
-
-#compilerInput {
-
-    width: 100%;
-
-    min-height: 110px;
-
-    resize: vertical;
-
-    padding: 15px;
-
-    border: 1px solid #cbd5e1;
-
-    border-radius: 10px;
-
-    outline: none;
-
-    background: white;
-
-    font-family: monospace;
-
-    font-size: 14px;
-}
-
-#compilerInput:focus {
-
-    border-color: #2563eb;
-
-    box-shadow:
-        0 0 0 3px rgba(37,99,235,.1);
+    pointer-events: none;
 }
 
 
-/* ================= OUTPUT ================= */
+.page-visible {
+    opacity: 1;
 
-#compilerOutput {
+    pointer-events: auto;
 
-    width: 100%;
-
-    min-height: 180px;
-
-    max-height: 450px;
-
-    overflow: auto;
-
-    padding: 18px;
-
-    border-radius: 12px;
-
-    background: #020617;
-
-    color: #d1fae5;
-
-    border: 1px solid #334155;
-
-    font-family: monospace;
-
-    font-size: 14px;
-
-    line-height: 1.6;
-
-    white-space: pre-wrap;
-
-    word-break: break-word;
+    animation:
+        pageFade 0.3s ease;
 }
 
 
-/* =========================================================
-   RESPONSIVE EDITOR
-========================================================= */
+@keyframes pageFade {
 
-@media (max-width: 850px) {
+    from {
+        opacity: 0;
 
-    .editor-container {
-
-        grid-template-columns: 1fr;
+        transform: translateY(5px);
     }
 
-    .editor-box textarea {
+    to {
+        opacity: 1;
 
-        height: 230px;
+        transform: translateY(0);
     }
-
 }
 
 
-/* =========================================================
-   RESPONSIVE SCIENTIFIC CALCULATOR
-========================================================= */
+/* =====================================================
+   RESPONSIVE - TABLET
+   ===================================================== */
+
+@media (max-width: 900px) {
+
+    .footer-container {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* =====================================================
+   RESPONSIVE - MOBILE
+   ===================================================== */
 
 @media (max-width: 650px) {
 
-    .scientific-body,
-    .compiler-body {
+    footer {
+        margin-top: 30px;
 
-        width: 94%;
+        padding:
+            42px 5% 20px;
     }
 
-    .scientific-keyboard {
+    .footer-container {
+        grid-template-columns: 1fr;
 
-        gap: 5px;
-
-        padding: 8px;
+        gap: 28px;
     }
 
-    .scientific-keyboard button {
-
-        min-height: 43px;
-
-        padding: 5px 2px;
-
-        font-size: 12px;
+    .footer-brand p {
+        max-width: 100%;
     }
 
-    #scientificAnswer {
+    .footer-bottom {
+        flex-direction: column;
 
-        font-size: 23px;
+        align-items: flex-start;
+
+        margin-top: 30px;
     }
 
-    #scientificExpression {
+    .login-box {
+        padding: 25px 20px;
 
-        font-size: 15px;
+        border-radius: 19px;
     }
 
-}
-
-
-/* =========================================================
-   MOBILE FULL SCREEN PAGES
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .editor-header,
-    .scientific-header,
-    .compiler-header {
-
-        padding: 12px;
-
-        gap: 10px;
+    .login-box h2 {
+        font-size: 24px;
     }
 
-    .editor-header h2,
-    .scientific-header h2,
-    .compiler-header h2 {
+    .toast-container {
+        right: 12px;
+        left: 12px;
 
-        font-size: 17px;
+        bottom: 12px;
     }
 
-    .editor-header button,
-    .scientific-header button,
-    .compiler-header button {
-
-        padding: 8px 10px;
-
-        font-size: 12px;
-    }
-
-    .editor-description {
-
-        margin: 18px auto;
-
-        font-size: 13px;
-    }
-
-    .editor-container {
-
-        width: 94%;
-
-        gap: 12px;
-    }
-
-    .editor-box textarea {
-
-        height: 210px;
-
-        font-size: 12px;
-    }
-
-    #preview {
-
-        width: 94%;
-
-        height: 350px;
-    }
-
-    .calculator-modes {
-
-        gap: 5px;
-    }
-
-    .mode-button {
-
-        padding: 8px 4px;
-
-        font-size: 11px;
-    }
-
-    .angle-buttons button {
-
-        padding: 6px 10px;
-
-        font-size: 11px;
-    }
-
-    .compiler-controls {
-
-        gap: 7px;
-    }
-
-    .compiler-controls select,
-    .compiler-controls button {
-
-        flex: 1;
-
+    .toast {
         min-width: 0;
+
+        width: 100%;
     }
-
-    #compilerCode {
-
-        min-height: 350px;
-
-        font-size: 12px;
-    }
-
-    #compilerInput {
-
-        min-height: 100px;
-
-        font-size: 12px;
-    }
-
-    #compilerOutput {
-
-        min-height: 160px;
-
-        font-size: 12px;
-    }
-
 }
 
 
-/* =========================================================
-   EXTRA SMALL PHONES
-========================================================= */
+/* =====================================================
+   SMALL MOBILE
+   ===================================================== */
 
-@media (max-width: 380px) {
+@media (max-width: 400px) {
 
-    .scientific-keyboard {
-
-        gap: 3px;
-
-        padding: 6px;
+    .login-box {
+        padding: 23px 17px;
     }
 
-    .scientific-keyboard button {
+    .login-extra {
+        flex-direction: column;
 
-        min-height: 38px;
-
-        font-size: 10px;
-
-        border-radius: 6px;
+        align-items: flex-start;
     }
 
-    .casio-display {
-
-        padding: 10px;
-
-        min-height: 100px;
+    .social-links a {
+        width: 32px;
+        height: 32px;
     }
-
-    #scientificAnswer {
-
-        font-size: 20px;
-    }
-
-    .matrix-inputs {
-
-        gap: 6px;
-    }
-
 }
 
 
-/* =========================================================
-   SCROLLBAR
-========================================================= */
+/* =====================================================
+   FINAL MOBILE TOUCH
+   ===================================================== */
 
-.editor-page::-webkit-scrollbar,
-.scientific-page::-webkit-scrollbar,
-.compiler-page::-webkit-scrollbar,
-#scientificHistoryList::-webkit-scrollbar,
-#compilerOutput::-webkit-scrollbar {
+@media (hover: none) {
 
-    width: 7px;
+    .tool-card:hover,
+    .coding-card:hover,
+    .resource-card:hover,
+    .calculator-card:hover {
+        transform: none;
+    }
+
+    .hero-image img:hover {
+        transform: none;
+    }
 }
-
-.editor-page::-webkit-scrollbar-thumb,
-.scientific-page::-webkit-scrollbar-thumb,
-.compiler-page::-webkit-scrollbar-thumb,
-#scientificHistoryList::-webkit-scrollbar-thumb,
-#compilerOutput::-webkit-scrollbar {
-
-    background: #64748b;
-
-    border-radius: 10px;
-}
-
-
-/* =========================================================
-   ACCESSIBILITY / POLISH
-========================================================= */
-
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-a:focus-visible {
-
-    outline: 2px solid #60a5fa;
-
-    outline-offset: 2px;
-}
-
-
-/* Prevent accidental horizontal overflow */
-
-body,
-.editor-page,
-.scientific-page,
-.compiler-page {
-
-    max-width: 100vw;
-
-    overflow-x: hidden;
-           }
