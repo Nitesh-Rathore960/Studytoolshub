@@ -1,2198 +1,430 @@
-/* =========================================================
-   STUDYTOOLSHUB
-   JAVASCRIPT — PART 1
-   Core + Loader + Header + Theme + Mobile + Toast
-   ========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-"use strict";
+    /* =========================
+       PERCENTAGE CALCULATOR
+    ========================= */
 
-/* ---------- Global Helpers ---------- */
+    const calculateBtn =
+        document.getElementById("calculateBtn");
 
-const $ = (selector, parent = document) =>
-    parent.querySelector(selector);
+    calculateBtn.addEventListener("click", function () {
 
-const $$ = (selector, parent = document) =>
-    [...parent.querySelectorAll(selector)];
+        const obtained =
+            Number(document.getElementById("number").value);
 
-const get = (id) =>
-    document.getElementById(id);
+        const total =
+            Number(document.getElementById("total").value);
 
+        const result =
+            document.getElementById("result");
 
-/* ---------- Result Helper ---------- */
+        if (obtained < 0 || total <= 0) {
+            result.innerText =
+                "Please enter valid values.";
+            return;
+        }
 
-function setResult(id, message, type = "success") {
+        if (obtained > total) {
+            result.innerText =
+                "Obtained marks cannot be greater than total marks.";
+            return;
+        }
 
-    const element = get(id);
+        const percentage =
+            (obtained / total) * 100;
 
-    if (!element) return;
-
-    element.textContent = message;
-
-    element.classList.remove(
-        "success",
-        "error",
-        "warning"
-    );
-
-    element.classList.add(type);
-}
-
-
-/* ---------- Toast ---------- */
-
-function showToast(message, type = "info") {
-
-    let toast = get("toast");
-
-    if (!toast) return;
-
-    toast.textContent = message;
-
-    toast.classList.remove(
-        "show",
-        "success",
-        "error",
-        "warning",
-        "info"
-    );
-
-    toast.classList.add(type);
-
-    requestAnimationFrame(() => {
-        toast.classList.add("show");
+        result.innerText =
+            "Your Percentage is: " +
+            percentage.toFixed(2) +
+            "%";
     });
 
-    clearTimeout(window.studyToastTimer);
+    /* =========================
+   CGPA CALCULATOR
+========================= */
 
-    window.studyToastTimer = setTimeout(() => {
+const addSubjectBtn = document.getElementById("addSubjectBtn");
+const cgpaBtn = document.getElementById("cgpaBtn");
 
-        toast.classList.remove("show");
+addSubjectBtn.onclick = function () {
 
-    }, 2500);
-}
+    const row = document.createElement("div");
 
-window.showToast = showToast;
+    row.className = "cgpa-row";
+
+    row.innerHTML = `
+        <input type="text" placeholder="Subject" class="cgpa-subject">
+
+        <input type="number"
+               placeholder="Credits"
+               class="cgpa-credit"
+               min="1">
+
+        <input type="number"
+               placeholder="Grade Point"
+               class="cgpa-grade"
+               min="0"
+               max="10"
+               step="0.1">
+    `;
+
+    document.getElementById("cgpaSubjects").appendChild(row);
+};
 
 
-/* =========================================================
-   PAGE LOADER
-   ========================================================= */
+cgpaBtn.onclick = function () {
 
-function initLoader() {
+    const credits =
+        document.querySelectorAll(".cgpa-credit");
 
-    const loader = get("pageLoader");
+    const grades =
+        document.querySelectorAll(".cgpa-grade");
 
-    if (!loader) return;
+    let totalCredits = 0;
+    let totalPoints = 0;
 
-    const hideLoader = () => {
+    for (let i = 0; i < credits.length; i++) {
 
-        loader.classList.add("hidden");
+        const credit = Number(credits[i].value);
+        const grade = Number(grades[i].value);
 
-        setTimeout(() => {
+        if (credit <= 0 || grade < 0 || grade > 10) {
+            document.getElementById("cgpaResult").innerText =
+                "Please enter valid values.";
+            return;
+        }
 
-            if (loader.parentNode) {
-                loader.remove();
-            }
-
-        }, 500);
-    };
-
-    if (document.readyState === "complete") {
-
-        setTimeout(hideLoader, 300);
-
-    } else {
-
-        window.addEventListener(
-            "load",
-            () => setTimeout(hideLoader, 300),
-            { once: true }
-        );
-
+        totalCredits += credit;
+        totalPoints += credit * grade;
     }
-}
 
+    if (totalCredits === 0) {
+        document.getElementById("cgpaResult").innerText =
+            "Please enter credits and grade points.";
+        return;
+    }
 
-/* =========================================================
-   HEADER
-   ========================================================= */
+    const cgpa = totalPoints / totalCredits;
 
-function initHeader() {
+    document.getElementById("cgpaResult").innerText =
+        "Your CGPA is: " + cgpa.toFixed(2);
+};
+     
 
-    const header = $(".site-header");
+    /* =========================
+       AGE CALCULATOR
+    ========================= */
 
-    if (!header) return;
+    const ageBtn =
+        document.getElementById("ageBtn");
 
-    const updateHeader = () => {
+    ageBtn.addEventListener("click", function () {
 
-        header.classList.toggle(
-            "scrolled",
-            window.scrollY > 20
-        );
+        const birthDate =
+            document.getElementById("birthDate").value;
 
-    };
+        const result =
+            document.getElementById("ageResult");
 
-    updateHeader();
+        if (birthDate === "") {
+            result.innerText =
+                "Please select your date of birth.";
+            return;
+        }
 
-    window.addEventListener(
-        "scroll",
-        updateHeader,
-        { passive: true }
-    );
-}
+        const birth =
+            new Date(birthDate);
 
+        const today =
+            new Date();
 
-/* =========================================================
-   MOBILE MENU
-   ========================================================= */
+        if (birth > today) {
+            result.innerText =
+                "Birth date cannot be in the future.";
+            return;
+        }
 
-function initMobileMenu() {
+        let years =
+            today.getFullYear() -
+            birth.getFullYear();
 
-    const menuToggle = get("menuToggle");
-    const mainNav = $(".main-nav");
+        let months =
+            today.getMonth() -
+            birth.getMonth();
 
-    if (!menuToggle || !mainNav) return;
+        let days =
+            today.getDate() -
+            birth.getDate();
 
-    menuToggle.setAttribute(
-        "aria-expanded",
-        "false"
-    );
+        if (days < 0) {
 
-    menuToggle.addEventListener("click", () => {
+            months--;
 
-        const active =
-            mainNav.classList.toggle("active");
+            const previousMonth =
+                new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    0
+                );
 
-        menuToggle.classList.toggle(
-            "active",
-            active
-        );
+            days += previousMonth.getDate();
+        }
 
-        menuToggle.setAttribute(
-            "aria-expanded",
-            String(active)
-        );
+        if (months < 0) {
 
+            years--;
+
+            months += 12;
+        }
+
+        result.innerText =
+            "Your Age is " +
+            years +
+            " years, " +
+            months +
+            " months, " +
+            days +
+            " days.";
     });
 
 
-    $$(".main-nav a").forEach(link => {
+    /* =========================
+       STUDY TIMER
+    ========================= */
 
-        link.addEventListener("click", () => {
+    let timeLeft = 25 * 60;
 
-            mainNav.classList.remove("active");
-            menuToggle.classList.remove("active");
+    let timerInterval = null;
 
-            menuToggle.setAttribute(
-                "aria-expanded",
-                "false"
+    const timerDisplay =
+        document.getElementById("timer");
+
+    const startButton =
+        document.getElementById("startTimer");
+
+    const pauseButton =
+        document.getElementById("pauseTimer");
+
+    const resetButton =
+        document.getElementById("resetTimer");
+
+
+    function updateTimer() {
+
+        let minutes =
+            Math.floor(timeLeft / 60);
+
+        let seconds =
+            timeLeft % 60;
+
+        minutes =
+            String(minutes).padStart(2, "0");
+
+        seconds =
+            String(seconds).padStart(2, "0");
+
+        timerDisplay.innerText =
+            minutes + ":" + seconds;
+    }
+
+
+    startButton.addEventListener("click", function () {
+
+        if (timerInterval !== null) {
+            return;
+        }
+
+        timerInterval =
+            setInterval(function () {
+
+                if (timeLeft > 0) {
+
+                    timeLeft--;
+
+                    updateTimer();
+
+                } else {
+
+                    clearInterval(timerInterval);
+
+                    timerInterval = null;
+
+                    alert(
+                        "Study session completed! 🎉"
+                    );
+                }
+
+            }, 1000);
+    });
+
+
+    pauseButton.addEventListener("click", function () {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+    });
+
+
+    resetButton.addEventListener("click", function () {
+
+        clearInterval(timerInterval);
+
+        timerInterval = null;
+
+        timeLeft = 25 * 60;
+
+        updateTimer();
+    });
+
+
+    updateTimer();
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    const searchButton =
+        document.getElementById("searchButton");
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+
+    searchButton.addEventListener("click", function () {
+
+        const searchText =
+            searchInput.value
+            .toLowerCase()
+            .trim();
+
+        if (searchText === "") {
+
+            alert(
+                "Please enter a tool name."
             );
 
+            return;
+        }
+
+        const cards =
+            document.querySelectorAll(".tool-card");
+
+        let found = false;
+
+        cards.forEach(function (card) {
+
+            const text =
+                card.innerText.toLowerCase();
+
+            if (
+                text.includes(searchText) &&
+                !found
+            ) {
+
+                card.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+                found = true;
+            }
         });
 
+
+        if (!found) {
+
+            alert(
+                "Sorry, this tool is not available yet."
+            );
+        }
     });
-}
 
 
-/* =========================================================
-   THEME
-   ========================================================= */
+    /* =========================
+       OPEN EDITOR
+    ========================= */
 
-function initTheme() {
+    const openEditor =
+        document.getElementById("openEditor");
 
-    const savedTheme =
-        localStorage.getItem("studytools-theme");
+    const homePage =
+        document.getElementById("homePage");
 
-    let theme = savedTheme;
+    const editorPage =
+        document.getElementById("editorPage");
 
-    if (!theme) {
-
-        theme =
-            window.matchMedia &&
-            window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches
-                ? "dark"
-                : "light";
-    }
-
-    applyTheme(theme);
+    const closeEditor =
+        document.getElementById("closeEditor");
 
 
-    const buttons = $$(
-        "[data-theme-toggle], #themeToggle, .theme-toggle"
-    );
+    openEditor.addEventListener("click", function () {
 
-    buttons.forEach(button => {
+        homePage.style.display = "none";
 
-        button.addEventListener(
-            "click",
-            toggleTheme
-        );
+        editorPage.style.display = "block";
 
+        document.body.style.overflow = "hidden";
+
+        window.scrollTo(0, 0);
     });
-}
 
 
-function applyTheme(theme) {
+    /* =========================
+       CLOSE EDITOR
+    ========================= */
 
-    const validTheme =
-        theme === "dark"
-            ? "dark"
-            : "light";
+    closeEditor.addEventListener("click", function () {
 
-    document.documentElement.setAttribute(
-        "data-theme",
-        validTheme
-    );
+        editorPage.style.display = "none";
 
-    localStorage.setItem(
-        "studytools-theme",
-        validTheme
-    );
+        homePage.style.display = "block";
 
-    updateThemeIcons(validTheme);
-}
-
-
-function toggleTheme() {
-
-    const current =
-        document.documentElement.getAttribute(
-            "data-theme"
-        ) || "light";
-
-    const next =
-        current === "dark"
-            ? "light"
-            : "dark";
-
-    applyTheme(next);
-
-    showToast(
-        next === "dark"
-            ? "🌙 Dark mode enabled"
-            : "☀️ Light mode enabled",
-        "success"
-    );
-}
-
-
-function updateThemeIcons(theme) {
-
-    $$("[data-theme-icon]").forEach(icon => {
-
-        icon.textContent =
-            theme === "dark"
-                ? "☀️"
-                : "🌙";
-
-    });
-}
-
-
-/* =========================================================
-   BACK TO TOP
-   ========================================================= */
-
-function initBackToTop() {
-
-    const button = get("backToTop");
-
-    if (!button) return;
-
-    const update = () => {
-
-        button.classList.toggle(
-            "visible",
-            window.scrollY > 500
-        );
-
-    };
-
-    update();
-
-    window.addEventListener(
-        "scroll",
-        update,
-        { passive: true }
-    );
-
-    button.addEventListener("click", () => {
+        document.body.style.overflow = "";
 
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         });
-
-    });
-}
-
-
-/* =========================================================
-   SMOOTH ANCHOR SCROLL
-   ========================================================= */
-
-function initSmoothScroll() {
-
-    document.addEventListener(
-        "click",
-        event => {
-
-            const link =
-                event.target.closest(
-                    'a[href^="#"]'
-                );
-
-            if (!link) return;
-
-            const targetId =
-                link.getAttribute("href");
-
-            if (
-                !targetId ||
-                targetId === "#"
-            ) {
-                return;
-            }
-
-            const target =
-                document.querySelector(targetId);
-
-            if (!target) return;
-
-            event.preventDefault();
-
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-            history.replaceState(
-                null,
-                "",
-                targetId
-            );
-        }
-    );
-}
-
-
-/* =========================================================
-   KEYBOARD SHORTCUTS
-   ========================================================= */
-
-function initKeyboardShortcuts() {
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            /* Ctrl + K / Cmd + K */
-
-            if (
-                (event.ctrlKey || event.metaKey) &&
-                event.key.toLowerCase() === "k"
-            ) {
-
-                event.preventDefault();
-
-                const search =
-                    get("searchInput");
-
-                if (search) {
-
-                    search.focus();
-                    search.select();
-
-                }
-            }
-
-
-            /* Escape */
-
-            if (event.key === "Escape") {
-
-                const nav = $(".main-nav");
-                const menu = get("menuToggle");
-
-                nav?.classList.remove("active");
-                menu?.classList.remove("active");
-
-                menu?.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-            }
-        }
-    );
-}
-
-
-/* =========================================================
-   ONLINE / OFFLINE
-   ========================================================= */
-
-function initConnectionStatus() {
-
-    window.addEventListener(
-        "offline",
-        () => {
-
-            showToast(
-                "📡 You are offline.",
-                "warning"
-            );
-
-        }
-    );
-
-
-    window.addEventListener(
-        "online",
-        () => {
-
-            showToast(
-                "🌐 Internet connection restored.",
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   DOM INITIALIZATION
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initLoader();
-        initHeader();
-        initMobileMenu();
-        initTheme();
-        initBackToTop();
-        initSmoothScroll();
-        initKeyboardShortcuts();
-        initConnectionStatus();
-
-    }
-);
-
- /* =========================================================
-   JAVASCRIPT — PART 2
-   Search + Basic Calculators
-   ========================================================= */
-
-
-/* =========================================================
-   NUMBER HELPER
-   ========================================================= */
-
-function getNumber(id) {
-
-    const element = get(id);
-
-    if (!element) return NaN;
-
-    return parseFloat(element.value);
-}
-
-
-/* =========================================================
-   SEARCH SYSTEM
-   ========================================================= */
-
-function initSearch() {
-
-    const input = get("searchInput");
-    const button = get("searchButton");
-
-    if (!input) return;
-
-    const items = $$(
-        ".tool-card, .resource-card, .feature-card"
-    );
-
-    const performSearch = () => {
-
-        const query =
-            input.value.trim().toLowerCase();
-
-        let found = 0;
-
-        items.forEach(item => {
-
-            const text =
-                item.textContent.toLowerCase();
-
-            const match =
-                !query || text.includes(query);
-
-            item.style.display =
-                match ? "" : "none";
-
-            if (match) found++;
-
-        });
-
-        if (query && found === 0) {
-
-            showToast(
-                "🔍 No matching tool found.",
-                "warning"
-            );
-
-        }
-    };
-
-
-    input.addEventListener(
-        "input",
-        performSearch
-    );
-
-
-    button?.addEventListener(
-        "click",
-        performSearch
-    );
-
-
-    input.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key === "Enter") {
-                performSearch();
-            }
-
-            if (
-                event.key === "Escape" &&
-                input.value
-            ) {
-
-                input.value = "";
-                performSearch();
-
-            }
-
-        }
-    );
-}
-
-
-/* =========================================================
-   PERCENTAGE CALCULATOR
-   ========================================================= */
-
-function initPercentageCalculator() {
-
-    const button =
-        get("calculatePercentage");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const obtained =
-                getNumber("obtainedMarks");
-
-            const total =
-                getNumber("totalMarks");
-
-
-            if (
-                !Number.isFinite(obtained) ||
-                !Number.isFinite(total)
-            ) {
-
-                setResult(
-                    "percentageResult",
-                    "Please enter valid marks.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            if (total <= 0) {
-
-                setResult(
-                    "percentageResult",
-                    "Total marks must be greater than 0.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            if (
-                obtained < 0 ||
-                obtained > total
-            ) {
-
-                setResult(
-                    "percentageResult",
-                    "Obtained marks must be between 0 and total marks.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const percentage =
-                (obtained / total) * 100;
-
-
-            setResult(
-                "percentageResult",
-                `Percentage: ${percentage.toFixed(2)}%`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   CGPA CALCULATOR
-   ========================================================= */
-
-function initCGPACalculator() {
-
-    const button =
-        get("calculateCGPA");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const input =
-                get("gradePoints");
-
-            const subjects =
-                parseInt(
-                    get("subjects")?.value,
-                    10
-                );
-
-
-            const points =
-                input?.value
-                    .split(",")
-                    .map(value =>
-                        parseFloat(value.trim())
-                    )
-                    .filter(value =>
-                        Number.isFinite(value)
-                    );
-
-
-            if (
-                !points ||
-                points.length === 0
-            ) {
-
-                setResult(
-                    "cgpaResult",
-                    "Enter grade points separated by commas.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            if (
-                !Number.isInteger(subjects) ||
-                subjects <= 0
-            ) {
-
-                setResult(
-                    "cgpaResult",
-                    "Enter a valid number of subjects.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            if (points.length !== subjects) {
-
-                setResult(
-                    "cgpaResult",
-                    `Enter exactly ${subjects} grade points.`,
-                    "error"
-                );
-
-                return;
-            }
-
-
-            if (
-                points.some(
-                    point =>
-                        point < 0 ||
-                        point > 10
-                )
-            ) {
-
-                setResult(
-                    "cgpaResult",
-                    "Each grade point must be between 0 and 10.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const total =
-                points.reduce(
-                    (sum, point) =>
-                        sum + point,
-                    0
-                );
-
-
-            const cgpa =
-                total / subjects;
-
-
-            setResult(
-                "cgpaResult",
-                `CGPA: ${cgpa.toFixed(2)}`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   AGE CALCULATOR
-   ========================================================= */
-
-function initAgeCalculator() {
-
-    const button =
-        get("calculateAge");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const value =
-                get("birthDate")?.value;
-
-            if (!value) {
-
-                setResult(
-                    "ageResult",
-                    "Please select your birth date.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const birth =
-                new Date(`${value}T00:00:00`);
-
-            const today =
-                new Date();
-
-
-            if (
-                Number.isNaN(birth.getTime()) ||
-                birth > today
-            ) {
-
-                setResult(
-                    "ageResult",
-                    "Please enter a valid past date.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            let years =
-                today.getFullYear() -
-                birth.getFullYear();
-
-            let months =
-                today.getMonth() -
-                birth.getMonth();
-
-            let days =
-                today.getDate() -
-                birth.getDate();
-
-
-            if (days < 0) {
-
-                months--;
-
-                const previousMonth =
-                    new Date(
-                        today.getFullYear(),
-                        today.getMonth(),
-                        0
-                    );
-
-                days +=
-                    previousMonth.getDate();
-
-            }
-
-
-            if (months < 0) {
-
-                years--;
-                months += 12;
-
-            }
-
-
-            setResult(
-                "ageResult",
-                `${years} Years, ${months} Months, ${days} Days`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   AVERAGE CALCULATOR
-   ========================================================= */
-
-function initAverageCalculator() {
-
-    const button =
-        get("calculateAverage");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const numbers =
-                get("averageNumbers")
-                    ?.value
-                    .split(",")
-                    .map(value =>
-                        parseFloat(value.trim())
-                    )
-                    .filter(value =>
-                        Number.isFinite(value)
-                    );
-
-
-            if (!numbers?.length) {
-
-                setResult(
-                    "averageResult",
-                    "Enter numbers separated by commas.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const sum =
-                numbers.reduce(
-                    (total, number) =>
-                        total + number,
-                    0
-                );
-
-
-            const average =
-                sum / numbers.length;
-
-
-            setResult(
-                "averageResult",
-                `Average: ${average.toFixed(2)}`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   MARKS & GRADE
-   ========================================================= */
-
-function initMarksGradeCalculator() {
-
-    const button =
-        get("calculateGrade");
-
-    if (!button) return;
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const marks =
-                getNumber("marksInput");
-
-
-            if (
-                !Number.isFinite(marks) ||
-                marks < 0 ||
-                marks > 100
-            ) {
-
-                setResult(
-                    "gradeResult",
-                    "Enter marks between 0 and 100.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            let grade;
-            let message;
-
-
-            if (marks >= 90) {
-
-                grade = "A+";
-                message = "Excellent";
-
-            } else if (marks >= 80) {
-
-                grade = "A";
-                message = "Very Good";
-
-            } else if (marks >= 70) {
-
-                grade = "B";
-                message = "Good";
-
-            } else if (marks >= 60) {
-
-                grade = "C";
-                message = "Average";
-
-            } else if (marks >= 50) {
-
-                grade = "D";
-                message = "Pass";
-
-            } else {
-
-                grade = "F";
-                message = "Needs Improvement";
-
-            }
-
-
-            setResult(
-                "gradeResult",
-                `Grade: ${grade} — ${message}`,
-                marks >= 50
-                    ? "success"
-                    : "error"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   INITIALIZE PART 2
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initSearch();
-        initPercentageCalculator();
-        initCGPACalculator();
-        initAgeCalculator();
-        initAverageCalculator();
-        initMarksGradeCalculator();
-
-    }
-);
-
- /* =========================================================
-   JAVASCRIPT — PART 3
-   Advanced Calculators
-   ========================================================= */
-
-
-/* =========================================================
-   SCIENTIFIC CALCULATOR
-   ========================================================= */
-
-function initScientificCalculator() {
-
-    const display = get("scientificDisplay");
-    const keys = $$(".scientific-key");
-
-    if (!display || !keys.length) return;
-
-    let expression = "";
-
-    const updateDisplay = () => {
-        display.value = expression || "0";
-    };
-
-
-    const calculate = () => {
-
-        try {
-
-            let exp = expression
-                .replace(/π/g, "Math.PI")
-                .replace(/\be\b/g, "Math.E")
-                .replace(/√/g, "Math.sqrt")
-                .replace(/\^/g, "**")
-                .replace(/sin\(/g, "Math.sin(")
-                .replace(/cos\(/g, "Math.cos(")
-                .replace(/tan\(/g, "Math.tan(")
-                .replace(/log\(/g, "Math.log10(")
-                .replace(/ln\(/g, "Math.log(");
-
-
-            if (!exp.trim()) return;
-
-            /*
-             * Only calculator-generated expressions are evaluated.
-             * Basic character validation prevents unexpected input.
-             */
-
-            if (!/^[0-9+\-*/().,\sA-Za-z_]+$/.test(exp)) {
-                throw new Error("Invalid expression");
-            }
-
-
-            const result =
-                Function(
-                    `"use strict"; return (${exp})`
-                )();
-
-
-            if (!Number.isFinite(result)) {
-                throw new Error("Invalid result");
-            }
-
-
-            expression =
-                Number(
-                    result.toFixed(10)
-                ).toString();
-
-            updateDisplay();
-
-
-        } catch {
-
-            display.value = "Error";
-            expression = "";
-
-        }
-    };
-
-
-    keys.forEach(key => {
-
-        key.addEventListener(
-            "click",
-            () => {
-
-                const value =
-                    key.dataset.value ??
-                    key.textContent.trim();
-
-
-                if (
-                    value === "=" ||
-                    value === "Calculate"
-                ) {
-
-                    calculate();
-                    return;
-
-                }
-
-
-                if (
-                    value === "C" ||
-                    value === "AC"
-                ) {
-
-                    expression = "";
-                    updateDisplay();
-                    return;
-
-                }
-
-
-                if (
-                    value === "⌫" ||
-                    value === "DEL"
-                ) {
-
-                    expression =
-                        expression.slice(0, -1);
-
-                    updateDisplay();
-                    return;
-
-                }
-
-
-                if (value === "x²") {
-
-                    expression += "^2";
-
-                } else {
-
-                    expression += value;
-
-                }
-
-
-                updateDisplay();
-
-            }
-        );
-
     });
 
 
-    display.addEventListener(
-        "input",
-        () => {
+    /* =========================
+       RUN CODE
+    ========================= */
 
-            expression =
-                display.value
-                    .replace(/[^0-9+\-*/().^]/g, "");
+    const runCode =
+        document.getElementById("runCode");
 
-            updateDisplay();
+    const preview =
+        document.getElementById("preview");
 
-        }
-    );
 
+    runCode.addEventListener("click", function () {
 
-    updateDisplay();
-}
+        const html =
+            document.getElementById("htmlCode").value;
 
+        const css =
+            document.getElementById("cssCode").value;
 
-/* =========================================================
-   UNIT CONVERTER
-   ========================================================= */
+        const javascript =
+            document.getElementById("jsCode").value;
 
-function initUnitConverter() {
 
-    const category = get("unitCategory");
-    const from = get("fromUnit");
-    const to = get("toUnit");
-    const value = get("unitValue");
-    const button = get("convertUnit");
-
-    if (
-        !category ||
-        !from ||
-        !to ||
-        !value ||
-        !button
-    ) return;
-
-
-    const units = {
-
-        length: {
-            meter: 1,
-            kilometer: 1000,
-            centimeter: 0.01,
-            millimeter: 0.001,
-            mile: 1609.344,
-            foot: 0.3048,
-            inch: 0.0254
-        },
-
-        weight: {
-            kilogram: 1,
-            gram: 0.001,
-            milligram: 0.000001,
-            pound: 0.45359237
-        },
-
-        temperature: {
-            celsius: "celsius",
-            fahrenheit: "fahrenheit",
-            kelvin: "kelvin"
-        },
-
-        time: {
-            second: 1,
-            minute: 60,
-            hour: 3600,
-            day: 86400
-        }
-    };
-
-
-    const labels = {
-        length: {
-            meter: "Meter",
-            kilometer: "Kilometer",
-            centimeter: "Centimeter",
-            millimeter: "Millimeter",
-            mile: "Mile",
-            foot: "Foot",
-            inch: "Inch"
-        },
-
-        weight: {
-            kilogram: "Kilogram",
-            gram: "Gram",
-            milligram: "Milligram",
-            pound: "Pound"
-        },
-
-        temperature: {
-            celsius: "Celsius",
-            fahrenheit: "Fahrenheit",
-            kelvin: "Kelvin"
-        },
-
-        time: {
-            second: "Second",
-            minute: "Minute",
-            hour: "Hour",
-            day: "Day"
-        }
-    };
-
-
-    const loadUnits = () => {
-
-        const selected =
-            category.value;
-
-        const data =
-            units[selected];
-
-        if (!data) return;
-
-        from.innerHTML = "";
-        to.innerHTML = "";
-
-        Object.keys(data).forEach(unit => {
-
-            const label =
-                labels[selected]?.[unit] || unit;
-
-            const option1 =
-                new Option(label, unit);
-
-            const option2 =
-                new Option(label, unit);
-
-            from.add(option1);
-            to.add(option2);
-
-        });
-
-        if (to.options.length > 1) {
-            to.selectedIndex = 1;
-        }
-
-    };
-
-
-    const convertTemperature =
-        (amount, source, target) => {
-
-            let celsius;
-
-            if (source === "celsius") {
-                celsius = amount;
-            }
-
-            if (source === "fahrenheit") {
-                celsius =
-                    (amount - 32) * 5 / 9;
-            }
-
-            if (source === "kelvin") {
-                celsius =
-                    amount - 273.15;
-            }
-
-
-            if (target === "celsius") {
-                return celsius;
-            }
-
-            if (target === "fahrenheit") {
-                return celsius * 9 / 5 + 32;
-            }
-
-            return celsius + 273.15;
-        };
-
-
-    const convert = () => {
-
-        const amount =
-            parseFloat(value.value);
-
-        if (!Number.isFinite(amount)) {
-
-            setResult(
-                "unitResult",
-                "Enter a valid value.",
-                "error"
-            );
-
-            return;
-        }
-
-
-        const selected =
-            category.value;
-
-        let result;
-
-
-        if (selected === "temperature") {
-
-            result =
-                convertTemperature(
-                    amount,
-                    from.value,
-                    to.value
-                );
-
-        } else {
-
-            const data =
-                units[selected];
-
-            result =
-                amount *
-                data[from.value] /
-                data[to.value];
-
-        }
-
-
-        setResult(
-            "unitResult",
-            `${amount} ${from.options[from.selectedIndex].text} = ${result.toFixed(6).replace(/\.?0+$/, "")} ${to.options[to.selectedIndex].text}`,
-            "success"
-        );
-
-    };
-
-
-    category.addEventListener(
-        "change",
-        loadUnits
-    );
-
-    button.addEventListener(
-        "click",
-        convert
-    );
-
-    loadUnits();
-}
-
-
-/* =========================================================
-   DISCOUNT CALCULATOR
-   ========================================================= */
-
-function initDiscountCalculator() {
-
-    const button =
-        get("calculateDiscount");
-
-    if (!button) return;
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const price =
-                getNumber("originalPrice");
-
-            const discount =
-                getNumber("discountPercent");
-
-
-            if (
-                !Number.isFinite(price) ||
-                !Number.isFinite(discount) ||
-                price < 0 ||
-                discount < 0 ||
-                discount > 100
-            ) {
-
-                setResult(
-                    "discountResult",
-                    "Enter valid price and discount.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const saved =
-                price * discount / 100;
-
-            const finalPrice =
-                price - saved;
-
-
-            setResult(
-                "discountResult",
-                `You save ₹${saved.toFixed(2)} | Final Price: ₹${finalPrice.toFixed(2)}`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   SIMPLE INTEREST
-   ========================================================= */
-
-function initInterestCalculator() {
-
-    const button =
-        get("calculateInterest");
-
-    if (!button) return;
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const principal =
-                getNumber("principalAmount");
-
-            const rate =
-                getNumber("interestRate");
-
-            const time =
-                getNumber("interestTime");
-
-
-            if (
-                !Number.isFinite(principal) ||
-                !Number.isFinite(rate) ||
-                !Number.isFinite(time) ||
-                principal < 0 ||
-                rate < 0 ||
-                time < 0
-            ) {
-
-                setResult(
-                    "interestResult",
-                    "Enter valid values.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const interest =
-                principal * rate * time / 100;
-
-            const total =
-                principal + interest;
-
-
-            setResult(
-                "interestResult",
-                `Interest: ₹${interest.toFixed(2)} | Total: ₹${total.toFixed(2)}`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   BMI CALCULATOR
-   ========================================================= */
-
-function initBMICalculator() {
-
-    const button =
-        get("calculateBMI");
-
-    if (!button) return;
-
-
-    button.addEventListener(
-        "click",
-        () => {
-
-            const weight =
-                getNumber("bmiWeight");
-
-            const heightCm =
-                getNumber("bmiHeight");
-
-
-            if (
-                !Number.isFinite(weight) ||
-                !Number.isFinite(heightCm) ||
-                weight <= 0 ||
-                heightCm <= 0
-            ) {
-
-                setResult(
-                    "bmiResult",
-                    "Enter valid weight and height.",
-                    "error"
-                );
-
-                return;
-            }
-
-
-            const height =
-                heightCm / 100;
-
-            const bmi =
-                weight / (height * height);
-
-
-            let category;
-
-
-            if (bmi < 18.5) {
-                category = "Underweight";
-            } else if (bmi < 25) {
-                category = "Normal range";
-            } else if (bmi < 30) {
-                category = "Overweight";
-            } else {
-                category = "Obesity range";
-            }
-
-
-            setResult(
-                "bmiResult",
-                `BMI: ${bmi.toFixed(2)} — ${category}`,
-                "success"
-            );
-
-        }
-    );
-}
-
-
-/* =========================================================
-   INITIALIZE PART 3
-   ========================================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initScientificCalculator();
-        initUnitConverter();
-        initDiscountCalculator();
-        initInterestCalculator();
-        initBMICalculator();
-
-    }
-);
-
-// ===============================
-// PART 4 — STUDY TOOLS
-// ===============================
-
-function initStudyTimer() {
-    const display = get("timerDisplay");
-    const startBtn = get("startTimer");
-    const pauseBtn = get("pauseTimer");
-    const resetBtn = get("resetTimer");
-
-    if (!display) return;
-
-    let totalSeconds = 25 * 60;
-    let timer = null;
-
-    function updateDisplay() {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-
-        display.textContent =
-            String(minutes).padStart(2, "0") +
-            ":" +
-            String(seconds).padStart(2, "0");
-    }
-
-    function start() {
-        if (timer) return;
-
-        timer = setInterval(() => {
-            if (totalSeconds > 0) {
-                totalSeconds--;
-                updateDisplay();
-            } else {
-                clearInterval(timer);
-                timer = null;
-                showToast("🎉 Study session complete!");
-            }
-        }, 1000);
-
-        showToast("▶ Timer started");
-    }
-
-    function pause() {
-        clearInterval(timer);
-        timer = null;
-        showToast("⏸ Timer paused");
-    }
-
-    function reset() {
-        clearInterval(timer);
-        timer = null;
-        totalSeconds = 25 * 60;
-        updateDisplay();
-        showToast("↻ Timer reset");
-    }
-
-    startBtn?.addEventListener("click", start);
-    pauseBtn?.addEventListener("click", pause);
-    resetBtn?.addEventListener("click", reset);
-
-    updateDisplay();
-}
-
-
-function initTodoList() {
-    const input = get("todoInput");
-    const addBtn = get("addTodo");
-    const list = get("todoList");
-
-    if (!input || !addBtn || !list) return;
-
-    let todos = JSON.parse(localStorage.getItem("studytools-todos") || "[]");
-
-    function save() {
-        localStorage.setItem("studytools-todos", JSON.stringify(todos));
-    }
-
-    function render() {
-        list.innerHTML = "";
-
-        if (!todos.length) {
-            list.innerHTML = "<li>No tasks yet 📚</li>";
-            return;
-        }
-
-        todos.forEach((todo, index) => {
-            const li = document.createElement("li");
-
-            li.innerHTML = `
-                <span class="${todo.done ? "done" : ""}">
-                    ${escapeHTML(todo.text)}
-                </span>
-
-                <div>
-                    <button type="button" data-complete="${index}">
-                        ${todo.done ? "↩" : "✓"}
-                    </button>
-
-                    <button type="button" data-delete="${index}">
-                        🗑
-                    </button>
-                </div>
-            `;
-
-            list.appendChild(li);
-        });
-    }
-
-    function addTodo() {
-        const text = input.value.trim();
-
-        if (!text) {
-            showToast("Enter a task first");
-            return;
-        }
-
-        todos.push({
-            text,
-            done: false
-        });
-
-        input.value = "";
-        save();
-        render();
-    }
-
-    addBtn.addEventListener("click", addTodo);
-
-    input.addEventListener("keydown", e => {
-        if (e.key === "Enter") addTodo();
-    });
-
-    list.addEventListener("click", e => {
-        const complete = e.target.closest("[data-complete]");
-        const del = e.target.closest("[data-delete]");
-
-        if (complete) {
-            const index = Number(complete.dataset.complete);
-            todos[index].done = !todos[index].done;
-            save();
-            render();
-        }
-
-        if (del) {
-            const index = Number(del.dataset.delete);
-            todos.splice(index, 1);
-            save();
-            render();
-        }
-    });
-
-    render();
-}
-
-
-function initWordCounter() {
-    const input = get("wordCounterInput");
-
-    if (!input) return;
-
-    const word = get("wordCount");
-    const character = get("characterCount");
-    const sentence = get("sentenceCount");
-    const paragraph = get("paragraphCount");
-
-    function update() {
-        const text = input.value;
-
-        const words = text.trim()
-            ? text.trim().split(/\s+/).length
-            : 0;
-
-        const sentences = text.trim()
-            ? text.split(/[.!?]+/).filter(x => x.trim()).length
-            : 0;
-
-        const paragraphs = text.trim()
-            ? text.split(/\n\s*\n/).filter(x => x.trim()).length
-            : 0;
-
-        if (word) word.textContent = words;
-        if (character) character.textContent = text.length;
-        if (sentence) sentence.textContent = sentences;
-        if (paragraph) paragraph.textContent = paragraphs;
-    }
-
-    input.addEventListener("input", update);
-    update();
-}
-
-
-function initQuickNotes() {
-    const notes = get("quickNotes");
-    const clearBtn = get("clearNotes");
-
-    if (!notes) return;
-
-    const savedNotes =
-        localStorage.getItem("studytools-notes");
-
-    if (savedNotes !== null) {
-        notes.value = savedNotes;
-    }
-
-    notes.addEventListener("input", () => {
-        localStorage.setItem(
-            "studytools-notes",
-            notes.value
-        );
-    });
-
-    clearBtn?.addEventListener("click", () => {
-        if (!notes.value) return;
-
-        notes.value = "";
-        localStorage.removeItem("studytools-notes");
-
-        showToast("🗑 Notes cleared");
-    });
-}
-
-
-function escapeHTML(value) {
-    const div = document.createElement("div");
-    div.textContent = value;
-    return div.innerHTML;
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    initStudyTimer();
-    initTodoList();
-    initWordCounter();
-    initQuickNotes();
-});
-
-// ===============================
-// PART 5 — QUIZ + FLASHCARDS + PROGRESS
-// ===============================
-
-function initQuiz() {
-    const question = get("quizQuestion");
-    const options = get("quizOptions");
-    const nextBtn = get("nextQuiz");
-    const scoreBox = get("quizScore");
-
-    if (!question || !options) return;
-
-    const quizData = [
-        {
-            q: "HTML ka full form kya hai?",
-            options: [
-                "Hyper Text Markup Language",
-                "High Text Machine Language",
-                "Hyper Tool Multi Language",
-                "Home Text Markup Language"
-            ],
-            answer: 0
-        },
-        {
-            q: "CSS ka use kisliye hota hai?",
-            options: [
-                "Database ke liye",
-                "Website styling ke liye",
-                "Server banane ke liye",
-                "File download ke liye"
-            ],
-            answer: 1
-        },
-        {
-            q: "JavaScript kis type ki language hai?",
-            options: [
-                "Programming language",
-                "Markup language",
-                "Style sheet",
-                "Database"
-            ],
-            answer: 0
-        },
-        {
-            q: "C++ me output ke liye commonly kya use hota hai?",
-            options: [
-                "print()",
-                "cout",
-                "echo",
-                "output()"
-            ],
-            answer: 1
-        }
-    ];
-
-    let current = 0;
-    let score = 0;
-    let answered = false;
-
-    function renderQuiz() {
-        const quiz = quizData[current];
-
-        question.textContent = quiz.q;
-        options.innerHTML = "";
-        answered = false;
-
-        quiz.options.forEach((option, index) => {
-            const button = document.createElement("button");
-
-            button.type = "button";
-            button.textContent = option;
-
-            button.addEventListener("click", () => {
-                if (answered) return;
-
-                answered = true;
-
-                if (index === quiz.answer) {
-                    button.classList.add("correct");
-                    score++;
-                    showToast("✅ Correct!");
-                } else {
-                    button.classList.add("wrong");
-
-                    const correctBtn =
-                        options.children[quiz.answer];
-
-                    correctBtn?.classList.add("correct");
-
-                    showToast("❌ Wrong answer");
-                }
-
-                if (scoreBox) {
-                    scoreBox.textContent =
-                        `Score: ${score}/${current + 1}`;
-                }
-            });
-
-            options.appendChild(button);
-        });
-
-        if (nextBtn) {
-            nextBtn.textContent =
-                current === quizData.length - 1
-                    ? "Restart Quiz"
-                    : "Next Question";
-        }
-    }
-
-    nextBtn?.addEventListener("click", () => {
-        if (current === quizData.length - 1) {
-            current = 0;
-            score = 0;
-        } else {
-            current++;
-        }
-
-        renderQuiz();
-    });
-
-    renderQuiz();
-}
-
-
-function initFlashcards() {
-    const container = get("flashcardsContainer");
-
-    if (!container) return;
-
-    const cards = [
-        {
-            question: "What is HTML?",
-            answer: "HTML is used to create the structure of web pages."
-        },
-        {
-            question: "What is CSS?",
-            answer: "CSS is used to style and design web pages."
-        },
-        {
-            question: "What is JavaScript?",
-            answer: "JavaScript adds logic and interactivity to websites."
-        },
-        {
-            question: "What is C++?",
-            answer: "C++ is a general-purpose programming language."
-        }
-    ];
-
-    container.innerHTML = "";
-
-    cards.forEach(card => {
-        const element = document.createElement("div");
-
-        element.className = "flashcard";
-
-        element.innerHTML = `
-            <div class="flashcard-front">
-                ${escapeHTML(card.question)}
-            </div>
-
-            <div class="flashcard-back">
-                ${escapeHTML(card.answer)}
-            </div>
-        `;
-
-        element.addEventListener("click", () => {
-            element.classList.toggle("flipped");
-        });
-
-        container.appendChild(element);
-    });
-}
-
-
-function initStudyProgress() {
-    const input = get("studyProgressInput");
-    const updateBtn = get("updateProgress");
-    const bar = get("studyProgressBar");
-    const text = get("studyProgressText");
-
-    if (!input || !updateBtn) return;
-
-    let saved =
-        Number(localStorage.getItem("studytools-progress"));
-
-    if (Number.isNaN(saved)) saved = 0;
-
-    function update(value) {
-        value = Math.max(0, Math.min(100, Number(value)));
-
-        input.value = value;
-
-        if (bar) {
-            bar.style.width = value + "%";
-        }
-
-        if (text) {
-            text.textContent = value + "% Complete";
-        }
-
-        localStorage.setItem(
-            "studytools-progress",
-            value
-        );
-    }
-
-    updateBtn.addEventListener("click", () => {
-        const value = Number(input.value);
-
-        if (Number.isNaN(value)) {
-            showToast("Enter progress percentage");
-            return;
-        }
-
-        update(value);
-        showToast("📈 Progress updated");
-    });
-
-    update(saved);
-}
-
-
-function initStudySessionCounter() {
-    const countBox = get("studySessionCount");
-    const completeBtn = get("completeStudySession");
-
-    if (!countBox || !completeBtn) return;
-
-    let count =
-        Number(localStorage.getItem("studytools-sessions"));
-
-    if (Number.isNaN(count)) count = 0;
-
-    function render() {
-        countBox.textContent = count;
-    }
-
-    completeBtn.addEventListener("click", () => {
-        count++;
-
-        localStorage.setItem(
-            "studytools-sessions",
-            count
-        );
-
-        render();
-
-        showToast("🎉 Study session completed!");
-    });
-
-    render();
-}
-
-
-document.addEventListener("DOMContentLoaded", () => {
-    initQuiz();
-    initFlashcards();
-    initStudyProgress();
-    initStudySessionCounter();
-});
-
-       // ===============================
-// PART 6 — ADVANCED CODE EDITOR
-// ===============================
-
-function initCodeEditor() {
-    const editorPage = get("editorPage");
-    const openBtn = get("openEditor");
-    const closeBtn = get("closeEditor");
-
-    const htmlInput = get("htmlCode");
-    const cssInput = get("cssCode");
-    const jsInput = get("jsCode");
-
-    const preview = get("codePreview");
-    const runBtn = get("runCode");
-    const clearBtn = get("clearCode");
-    const downloadBtn = get("downloadCode");
-    const copyBtn = get("copyCode");
-
-    if (!editorPage) return;
-
-    function openEditor() {
-        editorPage.style.display = "block";
-        document.body.classList.add("editor-open");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function closeEditor() {
-        editorPage.style.display = "none";
-        document.body.classList.remove("editor-open");
-    }
-
-    function runCode() {
-        if (!preview) return;
-
-        const html = htmlInput?.value || "";
-        const css = cssInput?.value || "";
-        const js = jsInput?.value || "";
-
-        preview.srcdoc = `
+        const output = `
 <!DOCTYPE html>
 <html>
+
 <head>
+
 <meta charset="UTF-8">
 
 <style>
+
 ${css}
+
 </style>
 
 </head>
@@ -2202,1248 +434,3221 @@ ${css}
 ${html}
 
 <script>
-try {
-${js}
-} catch(error) {
-    document.body.innerHTML +=
-    '<pre style="color:red;padding:15px;">' +
-    error.message +
-    '</pre>';
-}
+
+${javascript}
+
 <\/script>
 
 </body>
+
 </html>
-        `;
+`;
 
-        saveEditorData();
-        showToast("▶ Code executed");
-    }
 
-    function clearEditor() {
-        if (htmlInput) htmlInput.value = "";
-        if (cssInput) cssInput.value = "";
-        if (jsInput) jsInput.value = "";
-
-        if (preview) {
-            preview.srcdoc = "";
-        }
-
-        localStorage.removeItem("studytools-editor-html");
-        localStorage.removeItem("studytools-editor-css");
-        localStorage.removeItem("studytools-editor-js");
-
-        showToast("🗑 Editor cleared");
-    }
-
-    function saveEditorData() {
-        localStorage.setItem(
-            "studytools-editor-html",
-            htmlInput?.value || ""
-        );
-
-        localStorage.setItem(
-            "studytools-editor-css",
-            cssInput?.value || ""
-        );
-
-        localStorage.setItem(
-            "studytools-editor-js",
-            jsInput?.value || ""
-        );
-    }
-
-    function loadEditorData() {
-        if (htmlInput) {
-            htmlInput.value =
-                localStorage.getItem(
-                    "studytools-editor-html"
-                ) || htmlInput.value;
-        }
-
-        if (cssInput) {
-            cssInput.value =
-                localStorage.getItem(
-                    "studytools-editor-css"
-                ) || cssInput.value;
-        }
-
-        if (jsInput) {
-            jsInput.value =
-                localStorage.getItem(
-                    "studytools-editor-js"
-                ) || jsInput.value;
-        }
-    }
-
-    async function copyCode() {
-        const html = htmlInput?.value || "";
-        const css = cssInput?.value || "";
-        const js = jsInput?.value || "";
-
-        const combined = `
-HTML:
-${html}
-
-CSS:
-${css}
-
-JavaScript:
-${js}
-        `.trim();
-
-        try {
-            await navigator.clipboard.writeText(combined);
-            showToast("📋 Code copied");
-        } catch {
-            showToast("Copy not supported");
-        }
-    }
-
-    function downloadCode() {
-        const html = htmlInput?.value || "";
-        const css = cssInput?.value || "";
-        const js = jsInput?.value || "";
-
-        const completeHTML = `
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>My StudyToolsHub Project</title>
-
-<style>
-${css}
-</style>
-
-</head>
-
-<body>
-
-${html}
-
-<script>
-${js}
-<\/script>
-
-</body>
-</html>
-        `.trim();
-
-        const blob = new Blob(
-            [completeHTML],
-            { type: "text/html" }
-        );
-
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-
-        link.href = url;
-        link.download = "studytoolshub-project.html";
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        URL.revokeObjectURL(url);
-
-        showToast("💾 HTML file downloaded");
-    }
-
-    openBtn?.addEventListener("click", openEditor);
-    closeBtn?.addEventListener("click", closeEditor);
-
-    runBtn?.addEventListener("click", runCode);
-    clearBtn?.addEventListener("click", clearEditor);
-
-    downloadBtn?.addEventListener(
-        "click",
-        downloadCode
-    );
-
-    copyBtn?.addEventListener(
-        "click",
-        copyCode
-    );
-
-    [htmlInput, cssInput, jsInput].forEach(input => {
-        input?.addEventListener(
-            "input",
-            saveEditorData
-        );
+        preview.srcdoc = output;
     });
 
-    loadEditorData();
+ /* ==========================================
+   STUDY PLANNER - COMPLETE
+   ADD + COMPLETE + DELETE
+   FILTERS + OVERDUE + TODAY FOCUS
+========================================== */
+
+const studySubject = document.getElementById("studySubject");
+const studyTask = document.getElementById("studyTask");
+const studyDate = document.getElementById("studyDate");
+const studyStartTime = document.getElementById("studyStartTime");
+const studyEndTime = document.getElementById("studyEndTime");
+const studyPriority = document.getElementById("studyPriority");
+const addStudyBtn = document.getElementById("addStudyBtn");
+const studyList = document.getElementById("studyList");
+
+const showAllTasks = document.getElementById("showAllTasks");
+const showTodayTasks = document.getElementById("showTodayTasks");
+const showPendingTasks = document.getElementById("showPendingTasks");
+const showCompletedTasks = document.getElementById("showCompletedTasks");
+
+let studyTasks = JSON.parse(
+    localStorage.getItem("studyTasks")
+) || [];
+
+let currentStudyFilter = "all";
+
+
+/* ==========================================
+   SAVE TASKS
+========================================== */
+
+function saveStudyTasks() {
+
+    localStorage.setItem(
+        "studyTasks",
+        JSON.stringify(studyTasks)
+    );
+
 }
 
 
-// Start Editor
-document.addEventListener("DOMContentLoaded", () => {
-    initCodeEditor();
-});
+/* ==========================================
+   TODAY DATE
+========================================== */
 
-// ===============================
-// PART 7 — C / C++ COMPILER
-// ===============================
+function getTodayDate() {
 
-function initCompiler() {
-    const page = get("compilerPage");
-    const openBtn = get("openCompiler");
-    const closeBtn = get("closeCompiler");
+    const today = new Date();
 
-    const language = get("compilerLanguage");
-    const code = get("compilerCode");
-    const runBtn = get("runCompiler");
-    const clearBtn = get("clearCompiler");
+    const year = today.getFullYear();
 
-    const output = get("compilerOutput");
-    const lineCount = get("compilerLineCount");
-    const clearOutputBtn = get("clearCompilerOutput");
-    const downloadBtn = get("downloadCompilerCode");
+    const month = String(
+        today.getMonth() + 1
+    ).padStart(2, "0");
+
+    const day = String(
+        today.getDate()
+    ).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* ==========================================
+   CHECK OVERDUE
+========================================== */
+
+function isTaskOverdue(task) {
+
+    if (task.completed) {
+        return false;
+    }
+
+    const today = getTodayDate();
+
+    if (task.date < today) {
+        return true;
+    }
+
+    if (
+        task.date === today &&
+        task.endTime
+    ) {
+
+        const now = new Date();
+
+        const currentTime =
+            String(now.getHours()).padStart(2, "0") +
+            ":" +
+            String(now.getMinutes()).padStart(2, "0");
+
+        return task.endTime < currentTime;
+    }
+
+    return false;
+}
+
+
+/* ==========================================
+   RENDER TASKS
+========================================== */
+
+function renderStudyTasks(tasks = studyTasks) {
+
+    if (!studyList) return;
+
+    studyList.innerHTML = "";
+
+
+    if (tasks.length === 0) {
+
+        studyList.innerHTML =
+            "<p>No study tasks found.</p>";
+
+        updateStudyProgress();
+
+        updateTodayFocus();
+
+        return;
+    }
+
+
+    tasks.forEach(function (task) {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "study-task-item";
+
+
+        if (task.completed) {
+            item.classList.add("completed");
+        }
+
+
+        if (isTaskOverdue(task)) {
+            item.classList.add("overdue");
+        }
+
+
+        const overdueText =
+            isTaskOverdue(task)
+                ? "<strong>⚠️ Overdue</strong>"
+                : "";
+
+
+        item.innerHTML = `
+            <div>
+
+                <strong>
+                    ${task.subject}
+                </strong>
+
+                <p>
+                    ${task.task}
+                </p>
+
+                <small>
+                    Date: ${task.date}
+                </small>
+
+                <br>
+
+                <small>
+                    Time:
+                    ${task.startTime || "--"}
+                    -
+                    ${task.endTime || "--"}
+                </small>
+
+                <br>
+
+                <small>
+                    Priority:
+                    ${task.priority || "Medium"}
+                </small>
+
+                <br>
+
+                ${overdueText}
+
+            </div>
+
+            <div>
+
+                <button
+                    type="button"
+                    class="complete-study-task"
+                    data-id="${task.id}">
+                    ${
+                        task.completed
+                            ? "Undo"
+                            : "Complete"
+                    }
+                </button>
+
+                <button
+                    type="button"
+                    class="delete-study-task"
+                    data-id="${task.id}">
+                    Delete
+                </button>
+
+            </div>
+        `;
+
+
+        studyList.appendChild(item);
+
+    });
+
+
+    updateStudyProgress();
+
+    updateTodayFocus();
+}
+
+
+/* ==========================================
+   ADD STUDY TASK
+========================================== */
+
+if (addStudyBtn) {
+
+    addStudyBtn.addEventListener(
+        "click",
+        function () {
+
+            const subject =
+                studySubject.value.trim();
+
+            const taskText =
+                studyTask.value.trim();
+
+            const date =
+                studyDate.value;
+
+            const startTime =
+                studyStartTime.value;
+
+            const endTime =
+                studyEndTime.value;
+
+            const priority =
+                studyPriority.value || "medium";
+
+
+            if (
+                subject === "" ||
+                taskText === "" ||
+                date === ""
+            ) {
+
+                alert(
+                    "Please fill Subject, Task and Date."
+                );
+
+                return;
+            }
+
+
+            if (
+                startTime &&
+                endTime &&
+                startTime >= endTime
+            ) {
+
+                alert(
+                    "End time must be after start time."
+                );
+
+                return;
+            }
+
+
+            const newTask = {
+
+                id: Date.now(),
+
+                subject: subject,
+
+                task: taskText,
+
+                date: date,
+
+                startTime: startTime,
+
+                endTime: endTime,
+
+                priority: priority,
+
+                completed: false
+
+            };
+
+
+            studyTasks.push(newTask);
+
+            saveStudyTasks();
+
+
+            currentStudyFilter = "all";
+
+            renderStudyTasks();
+
+
+            studySubject.value = "";
+
+            studyTask.value = "";
+
+            studyDate.value = "";
+
+            studyStartTime.value = "";
+
+            studyEndTime.value = "";
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   COMPLETE / DELETE
+========================================== */
+
+if (studyList) {
+
+    studyList.addEventListener(
+        "click",
+        function (event) {
+
+            const completeButton =
+                event.target.closest(
+                    ".complete-study-task"
+                );
+
+            const deleteButton =
+                event.target.closest(
+                    ".delete-study-task"
+                );
+
+
+            /* COMPLETE / UNDO */
+
+            if (completeButton) {
+
+                const id =
+                    Number(
+                        completeButton.dataset.id
+                    );
+
+
+                const task =
+                    studyTasks.find(
+                        function (item) {
+                            return item.id === id;
+                        }
+                    );
+
+
+                if (task) {
+
+                    task.completed =
+                        !task.completed;
+
+                    saveStudyTasks();
+
+                    applyStudyFilter();
+
+                }
+
+                return;
+            }
+
+
+            /* DELETE */
+
+            if (deleteButton) {
+
+                const id =
+                    Number(
+                        deleteButton.dataset.id
+                    );
+
+
+                studyTasks =
+                    studyTasks.filter(
+                        function (item) {
+                            return item.id !== id;
+                        }
+                    );
+
+
+                saveStudyTasks();
+
+                applyStudyFilter();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   FILTER TASKS
+========================================== */
+
+function applyStudyFilter() {
+
+    let filteredTasks = studyTasks;
+
+
+    if (currentStudyFilter === "today") {
+
+        const today =
+            getTodayDate();
+
+        filteredTasks =
+            studyTasks.filter(
+                function (task) {
+                    return task.date === today;
+                }
+            );
+
+    }
+
+
+    else if (
+        currentStudyFilter === "pending"
+    ) {
+
+        filteredTasks =
+            studyTasks.filter(
+                function (task) {
+                    return !task.completed;
+                }
+            );
+
+    }
+
+
+    else if (
+        currentStudyFilter === "completed"
+    ) {
+
+        filteredTasks =
+            studyTasks.filter(
+                function (task) {
+                    return task.completed;
+                }
+            );
+
+    }
+
+
+    renderStudyTasks(filteredTasks);
+
+}
+
+
+/* ==========================================
+   ALL TASKS
+========================================== */
+
+if (showAllTasks) {
+
+    showAllTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "all";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   TODAY TASKS
+========================================== */
+
+if (showTodayTasks) {
+
+    showTodayTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "today";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   PENDING TASKS
+========================================== */
+
+if (showPendingTasks) {
+
+    showPendingTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "pending";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   COMPLETED TASKS
+========================================== */
+
+if (showCompletedTasks) {
+
+    showCompletedTasks.addEventListener(
+        "click",
+        function () {
+
+            currentStudyFilter = "completed";
+
+            applyStudyFilter();
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   STUDY PROGRESS
+========================================== */
+
+function updateStudyProgress() {
+
+    const total =
+        studyTasks.length;
+
+
+    const completed =
+        studyTasks.filter(
+            function (task) {
+                return task.completed;
+            }
+        ).length;
+
+
+    const pending =
+        total - completed;
+
+
+    const overdue =
+        studyTasks.filter(
+            function (task) {
+                return isTaskOverdue(task);
+            }
+        ).length;
+
+
+    const progress =
+        total === 0
+            ? 0
+            : Math.round(
+                (completed / total) * 100
+            );
+
+
+        const progressText =
+        document.getElementById(
+            "studyProgressText"
+        );
+
+    const progressBar =
+        document.getElementById(
+            "studyProgress"
+        );
+
+    const totalCount =
+        document.getElementById(
+            "totalTasksCount"
+        );
+
+    const completedCount =
+        document.getElementById(
+            "completedTasksCount"
+        );
+
+    const pendingCount =
+        document.getElementById(
+            "pendingTasksCount"
+        );
+
+    const overdueCount =
+        document.getElementById(
+            "overdueTasksCount"
+        );
+
+
+    if (progressText) {
+
+        progressText.innerText =
+            progress + "%";
+
+    }
+
+
+    if (progressBar) {
+
+        progressBar.value =
+            progress;
+
+    }
+
+
+    if (totalCount) {
+
+        totalCount.innerText =
+            total;
+
+    }
+
+
+    if (completedCount) {
+
+        completedCount.innerText =
+            completed;
+
+    }
+
+
+    if (pendingCount) {
+
+        pendingCount.innerText =
+            pending;
+
+    }
+
+
+    if (overdueCount) {
+
+        overdueCount.innerText =
+            overdue;
+
+    }
+
+}
+
+
+/* ==========================================
+   TODAY FOCUS
+========================================== */
+
+function updateTodayFocus() {
+
+    const todayFocusText =
+        document.getElementById(
+            "todayFocusText"
+        );
+
+    if (!todayFocusText) return;
+
+
+    const today =
+        getTodayDate();
+
+
+    const todayTasks =
+        studyTasks.filter(
+            function (task) {
+
+                return (
+                    task.date === today &&
+                    !task.completed
+                );
+
+            }
+        );
+
+
+    if (todayTasks.length === 0) {
+
+        todayFocusText.innerText =
+            "No pending tasks for today. 🎉";
+
+        return;
+    }
+
+
+    const highPriority =
+        todayTasks.filter(
+            function (task) {
+                return task.priority === "high";
+            }
+        );
+
+
+    if (highPriority.length > 0) {
+
+        todayFocusText.innerText =
+            `Focus on: ${highPriority[0].subject} - ${highPriority[0].task}`;
+
+    }
+
+    else {
+
+        todayFocusText.innerText =
+            `Today's focus: ${todayTasks[0].subject} - ${todayTasks[0].task}`;
+
+    }
+
+}
+
+
+/* ==========================================
+   INITIAL LOAD
+========================================== */
+
+renderStudyTasks();
+
+/* ==========================================
+   UNIT CONVERTER
+   LENGTH + WEIGHT + TEMPERATURE + TIME + AREA + DATA
+========================================== */
+   const unitType = document.getElementById("unitType");
+const unitValue = document.getElementById("unitValue");
+const unitFrom = document.getElementById("unitFrom");
+const unitTo = document.getElementById("unitTo");
+const convertUnitBtn = document.getElementById("convertUnitBtn");
+const unitResult = document.getElementById("unitResult");
+
+
+const unitOptions = {
+
+    /* LENGTH */
+    length: {
+        meter: "Meter (m)",
+        kilometer: "Kilometer (km)",
+        centimeter: "Centimeter (cm)",
+        millimeter: "Millimeter (mm)",
+        mile: "Mile (mi)",
+        yard: "Yard (yd)",
+        foot: "Foot (ft)",
+        inch: "Inch (in)"
+    },
+
+    /* WEIGHT */
+    weight: {
+        kilogram: "Kilogram (kg)",
+        gram: "Gram (g)",
+        milligram: "Milligram (mg)",
+        pound: "Pound (lb)",
+        ounce: "Ounce (oz)"
+    },
+
+    /* TEMPERATURE */
+    temperature: {
+        celsius: "Celsius (°C)",
+        fahrenheit: "Fahrenheit (°F)",
+        kelvin: "Kelvin (K)"
+    },
+
+    /* AREA */
+    area: {
+        squareMeter: "Square Meter (m²)",
+        squareKilometer: "Square Kilometer (km²)",
+        squareFoot: "Square Foot (ft²)",
+        squareInch: "Square Inch (in²)",
+        acre: "Acre",
+        hectare: "Hectare"
+    },
+
+    /* TIME */
+    time: {
+        second: "Second",
+        minute: "Minute",
+        hour: "Hour",
+        day: "Day",
+        week: "Week"
+    },
+
+    /* DATA */
+    data: {
+        byte: "Byte (B)",
+        kilobyte: "Kilobyte (KB)",
+        megabyte: "Megabyte (MB)",
+        gigabyte: "Gigabyte (GB)",
+        terabyte: "Terabyte (TB)"
+    }
+};
+
+
+/* ==========================================
+   LOAD UNIT OPTIONS
+========================================== */
+
+function loadUnitOptions() {
+
+    const type = unitType.value;
+
+    unitFrom.innerHTML = "";
+    unitTo.innerHTML = "";
+
+    const options = unitOptions[type];
+
+    for (const key in options) {
+
+        const option1 =
+            document.createElement("option");
+
+        option1.value = key;
+        option1.textContent = options[key];
+
+        unitFrom.appendChild(option1);
+
+
+        const option2 =
+            document.createElement("option");
+
+        option2.value = key;
+        option2.textContent = options[key];
+
+        unitTo.appendChild(option2);
+    }
+
+    if (unitTo.options.length > 1) {
+        unitTo.selectedIndex = 1;
+    }
+}
+
+
+/* ==========================================
+   CONVERT LENGTH
+========================================== */
+
+function convertLength(value, from, to) {
+
+    const meters = {
+
+        meter: 1,
+        kilometer: 1000,
+        centimeter: 0.01,
+        millimeter: 0.001,
+        mile: 1609.344,
+        yard: 0.9144,
+        foot: 0.3048,
+        inch: 0.0254
+    };
+
+    return value *
+        meters[from] /
+        meters[to];
+}
+
+
+/* ==========================================
+   CONVERT WEIGHT
+========================================== */
+
+function convertWeight(value, from, to) {
+
+    const kilograms = {
+
+        kilogram: 1,
+        gram: 0.001,
+        milligram: 0.000001,
+        pound: 0.45359237,
+        ounce: 0.028349523125
+    };
+
+    return value *
+        kilograms[from] /
+        kilograms[to];
+}
+
+
+/* ==========================================
+   CONVERT TEMPERATURE
+========================================== */
+
+function convertTemperature(value, from, to) {
+
+    let celsius;
+
+
+    if (from === "celsius") {
+
+        celsius = value;
+    }
+
+    else if (from === "fahrenheit") {
+
+        celsius = (value - 32) * 5 / 9;
+    }
+
+    else if (from === "kelvin") {
+
+        celsius = value - 273.15;
+    }
+
+
+    if (to === "celsius") {
+
+        return celsius;
+    }
+
+    if (to === "fahrenheit") {
+
+        return (celsius * 9 / 5) + 32;
+    }
+
+    if (to === "kelvin") {
+
+        return celsius + 273.15;
+    }
+}
+
+
+/* ==========================================
+   CONVERT AREA
+========================================== */
+
+function convertArea(value, from, to) {
+
+    const squareMeters = {
+
+        squareMeter: 1,
+        squareKilometer: 1000000,
+        squareFoot: 0.09290304,
+        squareInch: 0.00064516,
+        acre: 4046.8564224,
+        hectare: 10000
+    };
+
+    return value *
+        squareMeters[from] /
+        squareMeters[to];
+}
+
+
+/* ==========================================
+   CONVERT TIME
+========================================== */
+
+function convertTime(value, from, to) {
+
+    const seconds = {
+
+        second: 1,
+        minute: 60,
+        hour: 3600,
+        day: 86400,
+        week: 604800
+    };
+
+    return value *
+        seconds[from] /
+        seconds[to];
+           }
+
+   /* ==========================================
+   CONVERT DATA
+========================================== */
+
+function convertData(value, from, to) {
+
+    const bytes = {
+
+        byte: 1,
+        kilobyte: 1024,
+        megabyte: 1024 ** 2,
+        gigabyte: 1024 ** 3,
+        terabyte: 1024 ** 4
+    };
+
+    return value *
+        bytes[from] /
+        bytes[to];
+}
+
+
+/* ==========================================
+   MAIN CONVERTER
+========================================== */
+
+if (
+    unitType &&
+    unitValue &&
+    unitFrom &&
+    unitTo &&
+    convertUnitBtn &&
+    unitResult
+) {
+
+
+    /* CHANGE UNIT TYPE */
+
+    unitType.addEventListener(
+        "change",
+        loadUnitOptions
+    );
+
+
+    /* CONVERT */
+
+    convertUnitBtn.addEventListener(
+        "click",
+        function () {
+
+            const value =
+                Number(unitValue.value);
+
+            const type =
+                unitType.value;
+
+            const from =
+                unitFrom.value;
+
+            const to =
+                unitTo.value;
+
+
+            /* EMPTY / INVALID VALUE */
+
+            if (
+                unitValue.value.trim() === "" ||
+                !Number.isFinite(value)
+            ) {
+
+                unitResult.innerText =
+                    "Please enter a valid number.";
+
+                return;
+            }
+
+
+            let result;
+
+
+            /* LENGTH */
+
+            if (type === "length") {
+
+                result =
+                    convertLength(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* WEIGHT */
+
+            else if (type === "weight") {
+
+                result =
+                    convertWeight(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* TEMPERATURE */
+
+            else if (type === "temperature") {
+
+                result =
+                    convertTemperature(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* AREA */
+
+            else if (type === "area") {
+
+                result =
+                    convertArea(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* TIME */
+
+            else if (type === "time") {
+
+                result =
+                    convertTime(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* DATA */
+
+            else if (type === "data") {
+
+                result =
+                    convertData(
+                        value,
+                        from,
+                        to
+                    );
+            }
+
+
+            /* ERROR CHECK */
+
+            if (!Number.isFinite(result)) {
+
+                unitResult.innerText =
+                    "Conversion error.";
+
+                return;
+            }
+
+
+            /* SHOW RESULT */
+
+            unitResult.innerText =
+                `${value} ${unitFrom.options[unitFrom.selectedIndex].text}
+                = ${Number(result.toFixed(8))}
+                ${unitTo.options[unitTo.selectedIndex].text}`;
+        }
+    );
+
+
+    /* INITIAL OPTIONS */
+
+    loadUnitOptions();
+}
+    
+  /* ==========================================
+   WORD COUNTER
+   WORDS + CHARACTERS + SENTENCES + READING TIME
+========================================== */
+
+const wordCounter =
+    document.getElementById("wordCounter");
+
+const wordText =
+    document.getElementById("wordText");
+
+const wordCount =
+    document.getElementById("wordCount");
+
+const charCount =
+    document.getElementById("charCount");
+
+const charNoSpaceCount =
+    document.getElementById("charNoSpaceCount");
+
+const sentenceCount =
+    document.getElementById("sentenceCount");
+
+const readingTime =
+    document.getElementById("readingTime");
+
+const clearWordText =
+    document.getElementById("clearWordText");
+
+
+function updateWordCounter() {
+
+    if (!wordText) return;
+
+    const text =
+        wordText.value;
+
+
+    /* WORD COUNT */
+
+    const words =
+        text.trim() === ""
+            ? []
+            : text.trim().split(/\s+/);
+
+
+    /* CHARACTER COUNT */
+
+   
+    const characters =
+        text.length;
+
+
+    /* CHARACTERS WITHOUT SPACES */
+
+    const charactersNoSpace =
+        text.replace(/\s/g, "").length;
+
+
+    /* SENTENCE COUNT */
+
+    const sentences =
+        text.trim() === ""
+            ? 0
+            : text
+                .split(/[.!?]+/)
+                .filter(function (sentence) {
+                    return sentence.trim() !== "";
+                })
+                .length;
+
+
+    /* READING TIME */
+
+    const minutes =
+        words.length === 0
+            ? 0
+            : Math.ceil(words.length / 200);
+
+
+    if (wordCount) {
+        wordCount.innerText =
+            words.length;
+    }
+
+
+    if (charCount) {
+        charCount.innerText =
+            characters;
+    }
+
+
+    if (charNoSpaceCount) {
+        charNoSpaceCount.innerText =
+            charactersNoSpace;
+    }
+
+
+    if (sentenceCount) {
+        sentenceCount.innerText =
+            sentences;
+    }
+
+
+    if (readingTime) {
+
+        readingTime.innerText =
+            minutes === 0
+                ? "0 min"
+                : minutes + " min";
+    }
+}
+
+
+/* ==========================================
+   LIVE WORD COUNT
+========================================== */
+
+if (wordText) {
+
+    wordText.addEventListener(
+        "input",
+        updateWordCounter
+    );
+}
+
+
+/* ==========================================
+   CLEAR TEXT
+========================================== */
+
+if (clearWordText) {
+
+    clearWordText.addEventListener(
+        "click",
+        function () {
+
+            if (wordText) {
+                wordText.value = "";
+            }
+
+            updateWordCounter();
+        }
+    );
+}
+
+
+/* ==========================================
+INITIAL COUNT
+========================================== */
+
+updateWordCounter();
+
+/* ==========================================
+   SCIENTIFIC CALCULATOR - PART 1
+   CORE CALCULATOR
+========================================== */
+
+(() => {
+
+    const page = document.getElementById("scientificCalculatorPage");
 
     if (!page) return;
 
-    const defaultCode = {
-        c: `#include <stdio.h>
+    const expressionBox =
+        document.getElementById("scientificExpression");
+
+    const answerBox =
+        document.getElementById("scientificAnswer");
+
+    const openBtn =
+        document.getElementById("openScientificCalculator");
+
+    const closeBtn =
+        document.getElementById("closeScientificCalculator");
+
+    let expression = "";
+    let answer = 0;
+
+    /* =========================
+       OPEN / CLOSE
+    ========================= */
+
+    if (openBtn) {
+        openBtn.addEventListener("click", () => {
+
+            document.getElementById("homePage").style.display = "none";
+
+            page.style.display = "block";
+
+            document.body.style.overflow = "hidden";
+
+            window.scrollTo(0, 0);
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+
+            page.style.display = "none";
+
+            document.getElementById("homePage").style.display = "block";
+
+            document.body.style.overflow = "";
+        });
+    }
+
+    /* =========================
+       DISPLAY
+    ========================= */
+
+    function updateDisplay() {
+
+        expressionBox.innerText =
+            expression || "0";
+
+        answerBox.innerText =
+            String(answer);
+    }
+
+    /* =========================
+       FACTORIAL
+    ========================= */
+
+    function factorial(n) {
+
+        if (!Number.isFinite(n)) {
+            throw new Error("Invalid factorial");
+        }
+
+        if (n < 0 || !Number.isInteger(n)) {
+            throw new Error("Factorial needs a positive integer");
+        }
+
+        if (n > 170) {
+            throw new Error("Number too large");
+        }
+
+        let result = 1;
+
+        for (let i = 2; i <= n; i++) {
+            result *= i;
+        }
+
+        return result;
+    }
+
+    /* =========================
+       TOKENIZER
+    ========================= */
+
+    function tokenize(text) {
+
+        const tokens = [];
+
+        let i = 0;
+
+        while (i < text.length) {
+
+            const char = text[i];
+
+            if (/\s/.test(char)) {
+                i++;
+                continue;
+            }
+
+            if (/[0-9.]/.test(char)) {
+
+                let number = "";
+
+                while (
+                    i < text.length &&
+                    /[0-9.]/.test(text[i])
+                ) {
+                    number += text[i];
+                    i++;
+                }
+
+                const value = Number(number);
+
+                if (!Number.isFinite(value)) {
+                    throw new Error("Invalid number");
+                }
+
+                tokens.push({
+                    type: "number",
+                    value: value
+                });
+
+                continue;
+            }
+
+            if (char === "π") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.PI
+                });
+
+                i++;
+                continue;
+            }
+
+            if (char === "e") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.E
+                });
+
+                i++;
+                continue;
+            }
+
+            if (char === "A" && text.slice(i, i + 3) === "Ans") {
+
+                tokens.push({
+                    type: "number",
+                    value: answer
+                });
+
+                i += 3;
+                continue;
+            }
+
+            if ("+-*/^()!%".includes(char)) {
+
+                tokens.push({
+                    type: char,
+                    value: char
+                });
+
+                i++;
+                continue;
+            }
+
+            throw new Error("Invalid character");
+
+        }
+
+        return tokens;
+    }
+
+    /* =========================
+       PARSER
+    ========================= */
+
+    function calculate(text) {
+
+        const tokens = tokenize(text);
+
+        let position = 0;
+
+        function current() {
+            return tokens[position];
+        }
+
+        function eat(type) {
+
+            if (
+                current() &&
+                current().type === type
+            ) {
+                position++;
+                return true;
+            }
+
+            return false;
+        }
+
+        function primary() {
+
+            if (eat("+")) {
+                return primary();
+            }
+
+            if (eat("-")) {
+                return -primary();
+            }
+
+            if (eat("(")) {
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "number"
+            ) {
+
+                const value = current().value;
+
+                position++;
+
+                return value;
+            }
+
+            throw new Error("Invalid expression");
+        }
+
+        function postfix() {
+
+            let value = primary();
+
+            while (true) {
+
+                if (eat("!")) {
+                    value = factorial(value);
+                    continue;
+                }
+
+                if (eat("%")) {
+                    value = value / 100;
+                    continue;
+                }
+
+                break;
+            }
+
+            return value;
+        }
+
+        function power() {
+
+            let value = postfix();
+
+            if (eat("^")) {
+
+                const exponent = power();
+
+                value = Math.pow(value, exponent);
+            }
+
+            return value;
+        }
+
+        function multiplyDivide() {
+
+            let value = power();
+
+            while (true) {
+
+                if (eat("*")) {
+
+                    value *= power();
+
+                } else if (eat("/")) {
+
+                    const divisor = power();
+
+                    if (divisor === 0) {
+                        throw new Error("Cannot divide by zero");
+                    }
+
+                    value /= divisor;
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        function addSub() {
+
+            let value = multiplyDivide();
+
+            while (true) {
+
+                if (eat("+")) {
+
+                    value += multiplyDivide();
+
+                } else if (eat("-")) {
+
+                    value -= multiplyDivide();
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        const result = addSub();
+
+        if (position !== tokens.length) {
+            throw new Error("Invalid expression");
+        }
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Math error");
+        }
+
+        return result;
+    }
+
+    /* =========================
+       BUTTON HANDLER
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const value =
+            button.dataset.value;
+
+        const key =
+            button.dataset.key;
+
+        /* ---------- NUMBER / OPERATOR ---------- */
+
+        if (value !== undefined) {
+
+            if (value === "^2") {
+
+                expression += "^2";
+
+            } else if (value === "^3") {
+
+                expression += "^3";
+
+            } else {
+
+                expression += value;
+            }
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- CLEAR ---------- */
+
+        if (key === "clear") {
+
+            expression = "";
+
+            answer = 0;
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- DELETE ---------- */
+
+        if (key === "delete") {
+
+            expression =
+                expression.slice(0, -1);
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- ANS ---------- */
+
+        if (key === "ans") {
+
+            expression += "Ans";
+
+            updateDisplay();
+
+            return;
+        }
+
+        /* ---------- EQUALS ---------- */
+
+        if (key === "equals") {
+
+            if (!expression.trim()) {
+                return;
+            }
+
+            try {
+
+                const result =
+                    calculate(expression);
+
+                answer = result;
+
+                answerBox.innerText =
+                    Number.isInteger(result)
+                        ? result
+                        : Number(result.toFixed(12));
+
+            } catch (error) {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+
+            return;
+        }
+
+        /* ---------- RECIPROCAL ---------- */
+
+        if (key === "reciprocal") {
+
+            try {
+
+                const result =
+                    calculate(expression);
+
+                if (result === 0) {
+                    answerBox.innerText =
+                        "Math Error";
+                    return;
+                }
+
+                answer = 1 / result;
+
+                answerBox.innerText =
+                    Number(answer.toFixed(12));
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+
+        }
+
+    });
+
+    /* =========================
+       INITIAL DISPLAY
+    ========================= */
+
+    updateDisplay();
+
+})();
+
+/* ==========================================
+   SCIENTIFIC CALCULATOR - PART 2
+   SCIENTIFIC FUNCTIONS + MEMORY + HISTORY
+========================================== */
+
+(() => {
+
+    const page =
+        document.getElementById("scientificCalculatorPage");
+
+    if (!page) return;
+
+    const expressionBox =
+        document.getElementById("scientificExpression");
+
+    const answerBox =
+        document.getElementById("scientificAnswer");
+
+    const shiftStatus =
+        document.getElementById("shiftStatus");
+
+    const alphaStatus =
+        document.getElementById("alphaStatus");
+
+    const angleStatus =
+        document.getElementById("angleStatus");
+
+    const historyList =
+        document.getElementById("scientificHistoryList");
+
+    let memory = 0;
+    let shift = false;
+    let alpha = false;
+    let angle = "DEG";
+
+    let history = [];
+
+    /* =========================
+       ANGLE CONVERSION
+    ========================= */
+
+    function toRadians(value) {
+
+        if (angle === "DEG") {
+            return value * Math.PI / 180;
+        }
+
+        if (angle === "GRAD") {
+            return value * Math.PI / 200;
+        }
+
+        return value;
+    }
+
+    function fromRadians(value) {
+
+        if (angle === "DEG") {
+            return value * 180 / Math.PI;
+        }
+
+        if (angle === "GRAD") {
+            return value * 200 / Math.PI;
+        }
+
+        return value;
+    }
+
+    /* =========================
+       FACTORIAL
+    ========================= */
+
+    function fact(n) {
+
+        if (
+            n < 0 ||
+            !Number.isInteger(n) ||
+            n > 170
+        ) {
+            throw new Error("Invalid factorial");
+        }
+
+        let r = 1;
+
+        for (let i = 2; i <= n; i++) {
+            r *= i;
+        }
+
+        return r;
+    }
+
+    /* =========================
+       TOKENIZER
+    ========================= */
+
+    function tokenize(text) {
+
+        const tokens = [];
+
+        let i = 0;
+
+        while (i < text.length) {
+
+            const c = text[i];
+
+            if (/\s/.test(c)) {
+                i++;
+                continue;
+            }
+
+            if (/[0-9.]/.test(c)) {
+
+                let n = "";
+
+                while (
+                    i < text.length &&
+                    /[0-9.]/.test(text[i])
+                ) {
+                    n += text[i++];
+                }
+
+                const value = Number(n);
+
+                if (!Number.isFinite(value)) {
+                    throw new Error("Invalid number");
+                }
+
+                tokens.push({
+                    type: "number",
+                    value
+                });
+
+                continue;
+            }
+
+            if (text.startsWith("Ans", i)) {
+
+                tokens.push({
+                    type: "number",
+                    value: answerValue()
+                });
+
+                i += 3;
+                continue;
+            }
+
+            if (c === "π") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.PI
+                });
+
+                i++;
+                continue;
+            }
+
+            if (c === "e") {
+
+                tokens.push({
+                    type: "number",
+                    value: Math.E
+                });
+
+                i++;
+                continue;
+            }
+
+            if (/[a-zA-Z]/.test(c)) {
+
+                let name = "";
+
+                while (
+                    i < text.length &&
+                    /[a-zA-Z]/.test(text[i])
+                ) {
+                    name += text[i++];
+                }
+
+                tokens.push({
+                    type: "function",
+                    value: name
+                });
+
+                continue;
+            }
+
+            if ("+-*/^()!%".includes(c)) {
+
+                tokens.push({
+                    type: c,
+                    value: c
+                });
+
+                i++;
+                continue;
+            }
+
+            throw new Error("Invalid character");
+        }
+
+        return tokens;
+    }
+
+    /* =========================
+       ANSWER VALUE
+    ========================= */
+
+    function answerValue() {
+
+        const n =
+            Number(answerBox.innerText);
+
+        return Number.isFinite(n) ? n : 0;
+    }
+
+    /* =========================
+       SCIENTIFIC PARSER
+    ========================= */
+
+    function solve(text) {
+
+        const tokens = tokenize(text);
+
+        let pos = 0;
+
+        function current() {
+            return tokens[pos];
+        }
+
+        function eat(type) {
+
+            if (
+                current() &&
+                current().type === type
+            ) {
+                pos++;
+                return true;
+            }
+
+            return false;
+        }
+
+        function functionValue(name, value) {
+
+            switch (name) {
+
+                case "sin":
+                    return Math.sin(toRadians(value));
+
+                case "cos":
+                    return Math.cos(toRadians(value));
+
+                case "tan":
+                    return Math.tan(toRadians(value));
+
+                case "asin":
+                    return fromRadians(Math.asin(value));
+
+                case "acos":
+                    return fromRadians(Math.acos(value));
+
+                case "atan":
+                    return fromRadians(Math.atan(value));
+
+                case "log":
+                    return Math.log10(value);
+
+                case "ln":
+                    return Math.log(value);
+
+                case "sqrt":
+                    return Math.sqrt(value);
+
+                case "cbrt":
+                    return Math.cbrt(value);
+
+                case "abs":
+                    return Math.abs(value);
+
+                case "exp":
+                    return Math.exp(value);
+
+                default:
+                    throw new Error("Unknown function");
+            }
+        }
+
+        function primary() {
+
+            if (eat("+")) {
+                return primary();
+            }
+
+            if (eat("-")) {
+                return -primary();
+            }
+
+            if (eat("(")) {
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "number"
+            ) {
+
+                const value =
+                    current().value;
+
+                pos++;
+
+                return value;
+            }
+
+            if (
+                current() &&
+                current().type === "function"
+            ) {
+
+                const name =
+                    current().value;
+
+                pos++;
+
+                if (!eat("(")) {
+                    throw new Error("Missing (");
+                }
+
+                const value = addSub();
+
+                if (!eat(")")) {
+                    throw new Error("Missing )");
+                }
+
+                return functionValue(
+                    name,
+                    value
+                );
+            }
+
+            throw new Error("Invalid expression");
+        }
+
+        function postfix() {
+
+            let value = primary();
+
+            while (true) {
+
+                if (eat("!")) {
+
+                    value = fact(value);
+                    continue;
+                }
+
+                if (eat("%")) {
+
+                    value /= 100;
+                    continue;
+                }
+
+                break;
+            }
+
+            return value;
+        }
+
+        function power() {
+
+            let value = postfix();
+
+            if (eat("^")) {
+
+                value =
+                    Math.pow(
+                        value,
+                        power()
+                    );
+            }
+
+            return value;
+        }
+
+        function multiplyDivide() {
+
+            let value = power();
+
+            while (true) {
+
+                if (eat("*")) {
+
+                    value *= power();
+
+                } else if (eat("/")) {
+
+                    const divisor = power();
+
+                    if (divisor === 0) {
+                        throw new Error(
+                            "Cannot divide by zero"
+                        );
+                    }
+
+                    value /= divisor;
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        function addSub() {
+
+            let value =
+                multiplyDivide();
+
+            while (true) {
+
+                if (eat("+")) {
+
+                    value += multiplyDivide();
+
+                } else if (eat("-")) {
+
+                    value -= multiplyDivide();
+
+                } else {
+
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        const result = addSub();
+
+        if (pos !== tokens.length) {
+            throw new Error("Invalid expression");
+        }
+
+        if (!Number.isFinite(result)) {
+            throw new Error("Math Error");
+        }
+
+        return result;
+    }
+
+    /* =========================
+       HISTORY
+    ========================= */
+
+    function addHistory(expr, result) {
+
+        history.unshift({
+            expression: expr,
+            result: result
+        });
+
+        if (history.length > 20) {
+            history.pop();
+        }
+
+        renderHistory();
+    }
+
+    function renderHistory() {
+
+        if (!historyList) return;
+
+        historyList.innerHTML = "";
+
+        history.forEach(item => {
+
+            const div =
+                document.createElement("div");
+
+            div.className =
+                "history-item";
+
+            div.innerText =
+                item.expression +
+                " = " +
+                item.result;
+
+            historyList.appendChild(div);
+        });
+    }
+
+    /* =========================
+       SCIENTIFIC EQUALS
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const key =
+            button.dataset.key;
+
+        /* ------------- EQUALS ---------- */
+
+        if (key === "equals") {
+
+            const expr =
+                expressionBox.innerText.trim();
+
+            if (!expr || expr === "0") {
+                return;
+            }
+
+            try {
+
+                const result =
+                    solve(expr);
+
+                answerBox.innerText =
+                    Number.isInteger(result)
+                        ? result
+                        : Number(
+                            result.toFixed(12)
+                        );
+
+                addHistory(
+                    expr,
+                    answerBox.innerText
+                );
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+        }
+
+    });
+
+    /* =========================
+       ANGLE BUTTONS
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("[data-angle]");
+
+        if (!button) return;
+
+        angle =
+            button.dataset.angle;
+
+        if (angleStatus) {
+            angleStatus.innerText =
+                angle;
+        }
+    });
+
+    /* =========================
+       MEMORY
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest("button");
+
+        if (!button) return;
+
+        const key =
+            button.dataset.key;
+
+        if (key === "memory") {
+
+            try {
+
+                memory +=
+                    solve(
+                        expressionBox.innerText
+                    );
+
+                answerBox.innerText =
+                    memory;
+
+            } catch {
+
+                answerBox.innerText =
+                    "Math Error";
+            }
+        }
+
+        if (key === "memoryRecall") {
+
+            expressionBox.innerText =
+                String(memory);
+        }
+
+    });
+
+    /* =========================
+       SHIFT
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(
+                '[data-key="shift"]'
+            );
+
+        if (!button) return;
+
+        shift = !shift;
+
+        if (shiftStatus) {
+            shiftStatus.innerText =
+                shift ? "SHIFT" : "";
+        }
+    });
+
+    /* =========================
+       ALPHA
+    ========================= */
+
+    page.addEventListener("click", function (event) {
+
+        const button =
+            event.target.closest(
+                '[data-key="alpha"]'
+            );
+
+        if (!button) return;
+
+        alpha = !alpha;
+
+        if (alphaStatus) {
+            alphaStatus.innerText =
+                alpha ? "ALPHA" : "";
+        }
+    });
+
+    /* =========================
+       CLEAR HISTORY
+    ========================= */
+
+    const clearHistory =
+        document.getElementById(
+            "clearScientificHistory"
+        );
+
+    if (clearHistory) {
+
+        clearHistory.addEventListener(
+            "click",
+            function () {
+
+                history = [];
+
+                renderHistory();
+            }
+        );
+    }
+
+})();
+
+  /* ==========================================
+   SCIENTIFIC CALCULATOR - PART 3
+   EQN + STAT + MATRIX
+========================================== */
+               
+(() => {
+
+    const page =
+        document.getElementById("scientificCalculatorPage");
+
+    if (!page) return;
+
+    /* =========================
+       MODE SWITCHING
+    ========================= */
+
+    const panels = {
+        calculate: document.getElementById("scientificCalcPanel"),
+        equation: document.getElementById("scientificEquationPanel"),
+        statistics: document.getElementById("scientificStatisticsPanel"),
+        matrix: document.getElementById("scientificMatrixPanel")
+    };
+
+    function showMode(mode) {
+
+        Object.keys(panels).forEach(name => {
+
+            if (panels[name]) {
+                panels[name].style.display =
+                    name === mode ? "block" : "none";
+            }
+        });
+
+        document
+            .querySelectorAll("[data-calc-mode]")
+            .forEach(btn => {
+
+                btn.classList.toggle(
+                    "active",
+                    btn.dataset.calcMode === mode
+                );
+            });
+    }
+
+    document
+        .querySelectorAll("[data-calc-mode]")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                showMode(button.dataset.calcMode);
+            });
+        });
+
+    showMode("calculate");
+
+
+    /* =========================
+       EQUATION MODE
+    ========================= */
+
+    const equationSelect =
+        document.getElementById("equationModeSelect");
+
+    const linearInputs =
+        document.getElementById("linearInputs");
+
+    const quadraticInputs =
+        document.getElementById("quadraticInputs");
+
+    function updateEquationMode() {
+
+        const mode =
+            equationSelect.value;
+
+        linearInputs.style.display =
+            mode === "linear"
+                ? "block"
+                : "none";
+
+        quadraticInputs.style.display =
+            mode === "quadratic"
+                ? "block"
+                : "none";
+    }
+
+    equationSelect.addEventListener(
+        "change",
+        updateEquationMode
+    );
+
+    updateEquationMode();
+
+
+    /* =========================
+       LINEAR EQUATION
+       ax + b = c
+    ========================= */
+
+    document
+        .getElementById("solveLinearEquation")
+        .addEventListener("click", () => {
+
+            const a =
+                Number(
+                    document.getElementById("linearA").value
+                );
+
+            const b =
+                Number(
+                    document.getElementById("linearB").value
+                );
+
+            const c =
+                Number(
+                    document.getElementById("linearC").value
+                );
+
+            const output =
+                document.getElementById("equationAnswer");
+
+            if (
+                !Number.isFinite(a) ||
+                !Number.isFinite(b) ||
+                !Number.isFinite(c)
+            ) {
+                output.innerText =
+                    "Please enter all values.";
+                return;
+            }
+
+            if (a === 0 && b === c) {
+
+                output.innerText =
+                    "Infinitely many solutions.";
+
+                return;
+            }
+
+            if (a === 0) {
+
+                output.innerText =
+                    "No solution.";
+
+                return;
+            }
+
+            const x =
+                (c - b) / a;
+
+            output.innerText =
+                "x = " + formatNumber(x);
+        });
+
+
+    /* =========================
+       QUADRATIC EQUATION
+       ax² + bx + c = 0
+    ========================= */
+
+    document
+        .getElementById("solveQuadraticEquation")
+        .addEventListener("click", () => {
+
+            const a =
+                Number(
+                    document.getElementById("quadraticA").value
+                );
+
+            const b =
+                Number(
+                    document.getElementById("quadraticB").value
+                );
+
+            const c =
+                Number(
+                    document.getElementById("quadraticC").value
+                );
+
+            const output =
+                document.getElementById("equationAnswer");
+
+            if (
+                !Number.isFinite(a) ||
+                !Number.isFinite(b) ||
+                !Number.isFinite(c)
+            ) {
+                output.innerText =
+                    "Please enter all values.";
+                return;
+            }
+
+            if (a === 0) {
+
+                if (b === 0) {
+
+                    output.innerText =
+                        c === 0
+                            ? "Infinitely many solutions."
+                            : "No solution.";
+
+                } else {
+
+                    output.innerText =
+                        "Linear solution: x = " +
+                        formatNumber(-c / b);
+                }
+
+                return;
+            }
+
+            const d =
+                b * b - 4 * a * c;
+
+            if (d > 0) {
+
+                const x1 =
+                    (-b + Math.sqrt(d)) /
+                    (2 * a);
+
+                const x2 =
+                    (-b - Math.sqrt(d)) /
+                    (2 * a);
+
+                output.innerText =
+                    "x₁ = " +
+                    formatNumber(x1) +
+                    "   x₂ = " +
+                    formatNumber(x2);
+
+            } else if (d === 0) {
+
+                const x =
+                    -b / (2 * a);
+
+                output.innerText =
+                    "x = " +
+                    formatNumber(x);
+
+            } else {
+
+                const real =
+                    -b / (2 * a);
+
+                const imaginary =
+                    Math.sqrt(-d) /
+                    Math.abs(2 * a);
+
+                output.innerText =
+                    "x₁ = " +
+                    formatNumber(real) +
+                    " + " +
+                    formatNumber(imaginary) +
+                    "i\n" +
+                    "x₂ = " +
+                    formatNumber(real) +
+                    " − " +
+                    formatNumber(imaginary) +
+                    "i";
+            }
+        });
+
+
+    /* =========================
+       STATISTICS
+    ========================= */
+
+    document
+        .getElementById("calculateStatisticsAdvanced")
+        .addEventListener("click", () => {
+
+            const input =
+                document.getElementById(
+                    "statisticsNumbers"
+                ).value;
+
+            const output =
+                document.getElementById(
+                    "statisticsAnswer"
+                );
+
+            const numbers =
+                input
+                    .split(/[\s,]+/)
+                    .map(Number)
+                    .filter(Number.isFinite);
+
+            if (!numbers.length) {
+
+                output.innerText =
+                    "Please enter valid numbers.";
+
+                return;
+            }
+
+            const sorted =
+                [...numbers].sort(
+                    (a, b) => a - b
+                );
+
+            const n =
+                numbers.length;
+
+            const sum =
+                numbers.reduce(
+                    (a, b) => a + b,
+                    0
+                );
+
+            const mean =
+                sum / n;
+
+            const median =
+                n % 2
+                    ? sorted[Math.floor(n / 2)]
+                    : (
+                        sorted[n / 2 - 1] +
+                        sorted[n / 2]
+                    ) / 2;
+
+            const frequencies = {};
+
+            numbers.forEach(x => {
+                frequencies[x] =
+                    (frequencies[x] || 0) + 1;
+            });
+
+            const maxFrequency =
+                Math.max(
+                    ...Object.values(frequencies)
+                );
+
+            let mode = "No mode";
+
+            if (maxFrequency > 1) {
+
+                mode =
+                    Object.keys(frequencies)
+                        .filter(
+                            x =>
+                                frequencies[x] ===
+                                maxFrequency
+                        )
+                        .join(", ");
+            }
+
+            const variance =
+                numbers.reduce(
+                    (total, x) =>
+                        total +
+                        Math.pow(x - mean, 2),
+                    0
+                ) / n;
+
+            const standardDeviation =
+                Math.sqrt(variance);
+
+            output.innerHTML =
+                "Count: " + n +
+                "<br>Sum: " + formatNumber(sum) +
+                "<br>Mean: " + formatNumber(mean) +
+                "<br>Median: " + formatNumber(median) +
+                "<br>Mode: " + mode +
+                "<br>Variance: " + formatNumber(variance) +
+                "<br>Standard Deviation: " +
+                formatNumber(standardDeviation);
+        });
+
+
+    /* =========================
+       MATRIX INPUTS
+    ========================= */
+
+    const matrixSize =
+        document.getElementById("matrixSize");
+
+    const matrixInputs =
+        document.getElementById("matrixInputs");
+
+    function createMatrix() {
+
+        const size =
+            Number(matrixSize.value);
+
+        matrixInputs.innerHTML = "";
+
+        for (let i = 0; i < size * size; i++) {
+
+            const input =
+                document.createElement("input");
+
+            input.type = "number";
+            input.className = "matrix-cell";
+            input.placeholder = "0";
+
+            matrixInputs.appendChild(input);
+        }
+    }
+
+    matrixSize.addEventListener(
+        "change",
+        createMatrix
+    );
+
+    createMatrix();
+
+
+    /* =========================
+       MATRIX DETERMINANT
+    ========================= */
+
+    document
+        .getElementById("calculateMatrix")
+        .addEventListener("click", () => {
+
+            const size =
+                Number(matrixSize.value);
+
+            const cells =
+                [...document.querySelectorAll(
+                    "#matrixInputs .matrix-cell"
+                )];
+
+            const values =
+                cells.map(input =>
+                    Number(input.value || 0)
+                );
+
+            let determinant;
+
+            if (size === 2) {
+
+                determinant =
+                    values[0] * values[3] -
+                    values[1] * values[2];
+
+            } else {
+
+                const a = values[0];
+                const b = values[1];
+                const c = values[2];
+                const d = values[3];
+                const e = values[4];
+                const f = values[5];
+                const g = values[6];
+                const h = values[7];
+                const i = values[8];
+
+                determinant =
+                    a * (e * i - f * h) -
+                    b * (d * i - f * g) +
+                    c * (d * h - e * g);
+            }
+
+            document
+                .getElementById("matrixAnswer")
+                .innerText =
+                    "Determinant = " +
+                    formatNumber(determinant);
+        });
+
+
+    /* =========================
+       NUMBER FORMAT
+    ========================= */
+
+    function formatNumber(value) {
+
+        if (!Number.isFinite(value)) {
+            return "Math Error";
+        }
+
+        if (Number.isInteger(value)) {
+            return String(value);
+        }
+
+        return Number(
+            value.toFixed(10)
+        ).toString();
+    }
+
+})();
+
+/* =========================================
+   C / C++ COMPILER PAGE
+========================================= */
+
+const compilerPage = document.getElementById("compilerPage");
+const openCompiler = document.getElementById("openCompiler");
+const closeCompiler = document.getElementById("closeCompiler");
+
+const compilerCode = document.getElementById("compilerCode");
+const compilerLanguage = document.getElementById("compilerLanguage");
+
+const runCompiler = document.getElementById("runCompiler");
+const clearCompiler = document.getElementById("clearCompiler");
+
+const compilerOutput = document.getElementById("compilerOutput");
+
+
+/* =========================================
+   OPEN COMPILER
+========================================= */
+
+if (openCompiler) {
+
+    openCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "block";
+
+        document.body.style.overflow = "hidden";
+
+    });
+
+}
+
+
+if (closeCompiler) {
+
+    closeCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "none";
+
+        document.body.style.overflow = "auto";
+
+    });
+
+}
+
+
+/* =========================================
+   CLOSE COMPILER
+========================================= */
+
+if (closeCompiler) {
+
+    closeCompiler.addEventListener("click", function () {
+
+        compilerPage.style.display = "none";
+
+    });
+
+}
+
+
+/* =========================================
+   CLEAR
+========================================= */
+
+if (clearCompiler) {
+
+    clearCompiler.addEventListener("click", function () {
+
+        compilerCode.value = "";
+
+        compilerOutput.textContent =
+            "Output will appear here...";
+
+    });
+
+}
+
+/* =========================================
+   RUN C / C++ CODE
+========================================= */
+
+if (runCompiler) {
+
+    runCompiler.addEventListener("click", async function () {
+
+        const code = compilerCode.value.trim();
+        const language = compilerLanguage.value;
+
+        if (code === "") {
+            compilerOutput.textContent =
+                "⚠️ Please write some code first.";
+            return;
+        }
+
+        compilerOutput.textContent =
+            "⏳ Compiling and running...";
+
+        runCompiler.disabled = true;
+
+        try {
+
+            /*
+             * Language IDs:
+             * C   = 50
+             * C++ = 54
+             */
+
+            const languageId =
+                language === "c" ? 50 : 54;
+
+            const response = await fetch(
+                "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        source_code: code,
+                        language_id: languageId
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    "Compiler server error: " + response.status
+                );
+            }
+
+            const result = await response.json();
+
+            /* Compiler error */
+
+            if (result.compile_output) {
+
+                compilerOutput.textContent =
+                    "❌ Compilation Error\n\n" +
+                    result.compile_output;
+
+                return;
+            }
+
+            /* Runtime error */
+
+            if (result.stderr) {
+
+                compilerOutput.textContent =
+                    "❌ Runtime Error\n\n" +
+                    result.stderr;
+
+                return;
+            }
+
+            /* Normal output */
+
+            if (result.stdout !== null) {
+
+                compilerOutput.textContent =
+                    result.stdout || "Program finished with no output.";
+
+                return;
+            }
+
+            /* Other error */
+
+            compilerOutput.textContent =
+                result.message ||
+                "Program could not be executed.";
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            compilerOutput.textContent =
+                "❌ Unable to connect to compiler.";
+
+        }
+
+        finally {
+
+            runCompiler.disabled = false;
+
+        }
+
+    });
+
+}
+  
+/* =========================================
+   LANGUAGE CHANGE
+========================================= */
+
+if (compilerLanguage) {
+
+    compilerLanguage.addEventListener("change", function () {
+
+        const language = compilerLanguage.value;
+
+        if (language === "c") {
+
+            compilerCode.value =
+`#include <stdio.h>
 
 int main() {
     printf("Hello, StudyToolsHub!");
     return 0;
-}`,
-        cpp: `#include <iostream>
+}`;
+
+        } else {
+
+            compilerCode.value =
+`#include <iostream>
 using namespace std;
 
 int main() {
     cout << "Hello, StudyToolsHub!";
     return 0;
-}`
-    };
+}`;
 
-    function openCompiler() {
-        page.style.display = "block";
-        document.body.classList.add("compiler-open");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function closeCompiler() {
-        page.style.display = "none";
-        document.body.classList.remove("compiler-open");
-    }
-
-    function updateLineCount() {
-        if (!code || !lineCount) return;
-
-        const lines = code.value.split("\n").length;
-
-        lineCount.textContent =
-            `${lines} line${lines !== 1 ? "s" : ""}`;
-    }
-
-    function saveCode() {
-        if (!code || !language) return;
-
-        localStorage.setItem(
-            `studytools-compiler-${language.value}`,
-            code.value
-        );
-    }
-
-    function loadCode() {
-        if (!code || !language) return;
-
-        const saved = localStorage.getItem(
-            `studytools-compiler-${language.value}`
-        );
-
-        code.value =
-            saved !== null
-                ? saved
-                : defaultCode[language.value];
-
-        updateLineCount();
-    }
-
-    function changeLanguage() {
-        saveCode();
-        loadCode();
-
-        if (output) {
-            output.textContent =
-                "Ready to run " +
-                language.value.toUpperCase() +
-                " code.";
-        }
-    }
-
-    function runCompilerCode() {
-        if (!code || !output) return;
-
-        const source = code.value.trim();
-
-        if (!source) {
-            output.textContent =
-                "⚠️ Please write some code first.";
-            return;
         }
 
-        saveCode();
-
-        output.textContent =
-`C/C++ compiler backend is not connected yet.
-
-Your ${language.value.toUpperCase()} code is ready.
-
-Lines: ${source.split("\n").length}
-
-Next step:
-Connect a secure server-side compiler API to execute this code.`;
-
-        showToast("▶ Code sent to compiler panel");
-    }
-
-    function clearCode() {
-        if (!code) return;
-
-        code.value = "";
-        localStorage.removeItem(
-            `studytools-compiler-${language.value}`
-        );
-
-        updateLineCount();
-
-        showToast("🗑 Compiler code cleared");
-    }
-
-    function clearOutput() {
-        if (!output) return;
-
-        output.textContent =
+        compilerOutput.textContent =
             "Output will appear here...";
 
-        showToast("Output cleared");
-    }
-
-    function downloadCode() {
-        if (!code || !language) return;
-
-        const extension =
-            language.value === "c"
-                ? "c"
-                : "cpp";
-
-        const blob = new Blob(
-            [code.value],
-            { type: "text/plain" }
-        );
-
-        const url = URL.createObjectURL(blob);
-
-        const link =
-            document.createElement("a");
-
-        link.href = url;
-        link.download =
-            `studytoolshub-code.${extension}`;
-
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-
-        URL.revokeObjectURL(url);
-
-        showToast("💾 Code downloaded");
-    }
-
-    openBtn?.addEventListener(
-        "click",
-        openCompiler
-    );
-
-    closeBtn?.addEventListener(
-        "click",
-        closeCompiler
-    );
-
-    language?.addEventListener(
-        "change",
-        changeLanguage
-    );
-
-    runBtn?.addEventListener(
-        "click",
-        runCompilerCode
-    );
-
-    clearBtn?.addEventListener(
-        "click",
-        clearCode
-    );
-
-    clearOutputBtn?.addEventListener(
-        "click",
-        clearOutput
-    );
-
-    downloadBtn?.addEventListener(
-        "click",
-        downloadCode
-    );
-
-    code?.addEventListener("input", () => {
-        updateLineCount();
-        saveCode();
     });
 
-    loadCode();
 }
-
-
-// Start Compiler
-document.addEventListener("DOMContentLoaded", () => {
-    initCompiler();
+  
 });
 
-
-// ===============================
-// PART 8 — MODALS + RESOURCES
-// ===============================
-
-function initToolModal() {
-    const modal = get("toolModal");
-    const overlay = get("toolModalOverlay");
-    const closeBtn = get("closeToolModal");
-
-    if (!modal) return;
-
-    function closeModal() {
-        modal.style.display = "none";
-
-        if (overlay) {
-            overlay.style.display = "none";
-        }
-    }
-
-    closeBtn?.addEventListener("click", closeModal);
-    overlay?.addEventListener("click", closeModal);
-}
-
-
-// ===============================
-// ACCOUNT MODAL
-// ===============================
-
-function initAccountModal() {
-    const modal = get("accountModal");
-    const overlay = get("accountModalOverlay");
-    const closeBtn = get("closeAccountModal");
-
-    const loginBtn = get("loginButton");
-    const accountBtn = get("accountButton");
-
-    if (!modal) return;
-
-    function openAccount() {
-        modal.style.display = "flex";
-
-        if (overlay) {
-            overlay.style.display = "block";
-        }
-    }
-
-    function closeAccount() {
-        modal.style.display = "none";
-
-        if (overlay) {
-            overlay.style.display = "none";
-        }
-    }
-
-    loginBtn?.addEventListener(
-        "click",
-        openAccount
-    );
-
-    accountBtn?.addEventListener(
-        "click",
-        openAccount
-    );
-
-    closeBtn?.addEventListener(
-        "click",
-        closeAccount
-    );
-
-    overlay?.addEventListener(
-        "click",
-        closeAccount
-    );
-}
-
-
-// ===============================
-// RESOURCES
-// ===============================
-
-function initResources() {
-
-    const resources = {
-        resourceNotes: {
-            title: "📚 Study Notes",
-            text: "Study notes and useful learning material will be available here."
-        },
-
-        importantQuestions: {
-            title: "⭐ Important Questions",
-            text: "Important exam questions and practice questions will be available here."
-        },
-
-        previousQuestions: {
-            title: "📝 Previous Questions",
-            text: "Previous year question papers can be added here."
-        },
-
-        studyMaterial: {
-            title: "📖 Study Material",
-            text: "Useful study material and educational resources can be added here."
-        }
-    };
-
-    Object.entries(resources).forEach(
-        ([id, data]) => {
-
-            const button = get(id);
-
-            if (!button) return;
-
-            button.addEventListener(
-                "click",
-                event => {
-
-                    event.preventDefault();
-                    event.stopPropagation();
-
-                    showResourceModal(
-                        data.title,
-                        data.text
-                    );
-                }
-            );
-        }
-    );
-}
-
-
-// ===============================
-// RESOURCE POPUP
-// ===============================
-
-function showResourceModal(title, text) {
-
-    let modal = get("resourcePopup");
-
-    if (!modal) {
-
-        modal = document.createElement("div");
-
-        modal.id = "resourcePopup";
-
-        modal.innerHTML = `
-            <div class="resource-popup-box">
-
-                <button
-                    type="button"
-                    id="resourcePopupClose"
-                    class="resource-popup-close"
-                >
-                    ×
-                </button>
-
-                <h2 id="resourcePopupTitle"></h2>
-
-                <p id="resourcePopupText"></p>
-
-            </div>
-        `;
-
-        document.body.appendChild(modal);
-
-        modal.addEventListener(
-            "click",
-            event => {
-
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-
-            }
-        );
-    }
-
-    const titleBox =
-        get("resourcePopupTitle");
-
-    const textBox =
-        get("resourcePopupText");
-
-    if (titleBox) {
-        titleBox.textContent = title;
-    }
-
-    if (textBox) {
-        textBox.textContent = text;
-    }
-
-    modal.style.display = "flex";
-
-    get("resourcePopupClose")?.addEventListener(
-        "click",
-        () => {
-            modal.style.display = "none";
-        }
-    );
-}
-
-
-// ===============================
-// QUICK ACCESS
-// ===============================
-
-function initQuickAccess() {
-
-    document.querySelectorAll(
-        ".feature-card, .resource-card"
-    ).forEach(card => {
-
-        card.addEventListener(
-            "mousedown",
-            () => {
-                card.classList.add(
-                    "tool-active"
-                );
-            }
-        );
-
-        card.addEventListener(
-            "mouseup",
-            () => {
-                card.classList.remove(
-                    "tool-active"
-                );
-            }
-        );
-
-    });
-}
-
-
-// ===============================
-// ESC KEY
-// ===============================
-
-function initEscapeClose() {
-
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key !== "Escape") {
-                return;
-            }
-
-            const toolModal =
-                get("toolModal");
-
-            const accountModal =
-                get("accountModal");
-
-            const resourcePopup =
-                get("resourcePopup");
-
-            if (toolModal) {
-                toolModal.style.display = "none";
-            }
-
-            if (accountModal) {
-                accountModal.style.display = "none";
-            }
-
-            if (resourcePopup) {
-                resourcePopup.style.display = "none";
-            }
-
-        }
-    );
-}
-
-
-// ===============================
-// START PART 8
-// ===============================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initToolModal();
-        initAccountModal();
-        initResources();
-        initQuickAccess();
-        initEscapeClose();
-
-    }
-);
-
-
-// ===============================
-// PART 9 — FAVORITES + RECENT TOOLS
-// ===============================
-
-function initFavorites() {
-    const buttons = document.querySelectorAll(
-        "[data-favorite]"
-    );
-
-    let favorites = JSON.parse(
-        localStorage.getItem(
-            "studytools-favorites"
-        ) || "[]"
-    );
-
-    function save() {
-        localStorage.setItem(
-            "studytools-favorites",
-            JSON.stringify(favorites)
-        );
-
-        updateFavoriteCount();
-    }
-
-    buttons.forEach(button => {
-        const id =
-            button.dataset.favorite;
-
-        if (favorites.includes(id)) {
-            button.classList.add("favorite-active");
-            button.textContent = "★";
-        }
-
-        button.addEventListener("click", event => {
-            event.stopPropagation();
-
-            if (favorites.includes(id)) {
-                favorites =
-                    favorites.filter(
-                        item => item !== id
-                    );
-
-                button.classList.remove(
-                    "favorite-active"
-                );
-
-                button.textContent = "☆";
-
-                showToast("☆ Removed from favorites");
-            } else {
-                favorites.push(id);
-
-                button.classList.add(
-                    "favorite-active"
-                );
-
-                button.textContent = "★";
-
-                showToast("★ Added to favorites");
-            }
-
-            save();
-        });
-    });
-
-    updateFavoriteCount();
-}
-
-
-function updateFavoriteCount() {
-    const countBox =
-        get("favoriteCount");
-
-    if (!countBox) return;
-
-    const favorites = JSON.parse(
-        localStorage.getItem(
-            "studytools-favorites"
-        ) || "[]"
-    );
-
-    countBox.textContent =
-        favorites.length;
-}
-
-
-function initRecentTools() {
-    const toolButtons =
-        document.querySelectorAll(
-            "[data-tool], .tool-card"
-        );
-
-    let recent = JSON.parse(
-        localStorage.getItem(
-            "studytools-recent"
-        ) || "[]"
-    );
-
-    function save() {
-        localStorage.setItem(
-            "studytools-recent",
-            JSON.stringify(recent)
-        );
-    }
-
-    toolButtons.forEach(button => {
-        button.addEventListener("click", () => {
-            const name =
-                button.dataset.tool ||
-                button.querySelector("h3")
-                    ?.textContent ||
-                button.textContent.trim();
-
-            if (!name) return;
-
-            recent = recent.filter(
-                item => item !== name
-            );
-
-            recent.unshift(name);
-
-            recent = recent.slice(0, 6);
-
-            save();
-        });
-    });
-
-    showRecentTools();
-}
-
-
-function showRecentTools() {
-    const box =
-        get("recentTools");
-
-    if (!box) return;
-
-    const recent = JSON.parse(
-        localStorage.getItem(
-            "studytools-recent"
-        ) || "[]"
-    );
-
-    if (!recent.length) {
-        box.innerHTML =
-            "<p>No recently used tools.</p>";
-        return;
-    }
-
-    box.innerHTML = `
-        <h3>🕘 Recent Tools</h3>
-        <div class="recent-tools-list">
-            ${recent.map(item => `
-                <span>
-                    ${escapeHTML(item)}
-                </span>
-            `).join("")}
-        </div>
-    `;
-}
-
-
-function initSaveShortcut() {
-    document.addEventListener(
-        "keydown",
-        event => {
-            if (
-                (event.ctrlKey ||
-                    event.metaKey) &&
-                event.key.toLowerCase() === "s"
-            ) {
-                event.preventDefault();
-
-                const editor =
-                    get("editorPage");
-
-                const compiler =
-                    get("compilerPage");
-
-                if (
-                    editor &&
-                    editor.style.display !== "none"
-                ) {
-                    showToast("💾 Editor auto-saved");
-                    return;
-                }
-
-                if (
-                    compiler &&
-                    compiler.style.display !== "none"
-                ) {
-                    showToast("💾 Compiler code saved");
-                    return;
-                }
-
-                showToast("✓ Saved");
-            }
-        }
-    );
-}
-
-
-function initLazyImages() {
-    const images =
-        document.querySelectorAll(
-            "img[data-src]"
-        );
-
-    if (!images.length) return;
-
-    if ("IntersectionObserver" in window) {
-        const observer =
-            new IntersectionObserver(
-                entries => {
-                    entries.forEach(entry => {
-                        if (!entry.isIntersecting)
-                            return;
-
-                        const img =
-                            entry.target;
-
-                        img.src =
-                            img.dataset.src;
-
-                        img.removeAttribute(
-                            "data-src"
-                        );
-
-                        observer.unobserve(img);
-                    });
-                }
-            );
-
-        images.forEach(img =>
-            observer.observe(img)
-        );
-    } else {
-        images.forEach(img => {
-            img.src = img.dataset.src;
-        });
-    }
-}
-
-
-function initScrollProgress() {
-    const bar =
-        get("scrollProgress");
-
-    if (!bar) return;
-
-    function update() {
-        const scrollTop =
-            window.scrollY;
-
-        const height =
-            document.documentElement
-                .scrollHeight -
-            window.innerHeight;
-
-        const progress =
-            height > 0
-                ? (scrollTop / height) * 100
-                : 0;
-
-        bar.style.width =
-            progress + "%";
-    }
-
-    window.addEventListener(
-        "scroll",
-        update,
-        { passive: true }
-    );
-
-    update();
-}
-
-
-function initPageVisibility() {
-    const originalTitle =
-        document.title;
-
-    document.addEventListener(
-        "visibilitychange",
-        () => {
-            if (document.hidden) {
-                document.title =
-                    "Come back 👋 | StudyToolsHub";
-            } else {
-                document.title =
-                    originalTitle;
-            }
-        }
-    );
-}
-
-
-function initAppReady() {
-    setTimeout(() => {
-        document.body.classList.add(
-            "app-ready"
-        );
-    }, 100);
-}
-
-
-// Start Part 9
-document.addEventListener("DOMContentLoaded", () => {
-    initFavorites();
-    initRecentTools();
-    initSaveShortcut();
-    initLazyImages();
-    initScrollProgress();
-    initPageVisibility();
-    initAppReady();
-});
-
-// ===============================
-// PART 10 — FINAL JS SETUP
-// ===============================
-
-function initFinalSetup() {
-
-    // -------------------------------
-    // External links safety
-    // -------------------------------
-    document.querySelectorAll(
-        'a[target="_blank"]'
-    ).forEach(link => {
-        link.rel = "noopener noreferrer";
-    });
-
-
-    // -------------------------------
-    // Required form validation
-    // -------------------------------
-    document.querySelectorAll("form").forEach(form => {
-
-        form.addEventListener("submit", event => {
-
-            const requiredFields =
-                form.querySelectorAll("[required]");
-
-            let valid = true;
-
-            requiredFields.forEach(field => {
-
-                if (!field.value.trim()) {
-                    field.classList.add(
-                        "input-error"
-                    );
-
-                    valid = false;
-                } else {
-                    field.classList.remove(
-                        "input-error"
-                    );
-                }
-
-            });
-
-            if (!valid) {
-                event.preventDefault();
-                showToast(
-                    "⚠️ Please fill required fields"
-                );
-            }
-
-        });
-
-    });
-
-
-    // -------------------------------
-    // Search shortcut
-    // Ctrl + K / Cmd + K
-    // -------------------------------
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (
-                (event.ctrlKey ||
-                    event.metaKey) &&
-                event.key.toLowerCase() === "k"
-            ) {
-
-                event.preventDefault();
-
-                const search =
-                    get("searchInput");
-
-                search?.focus();
-            }
-
-        }
-    );
-
-
-    // -------------------------------
-    // Escape closes menus
-    // -------------------------------
-    document.addEventListener(
-        "keydown",
-        event => {
-
-            if (event.key !== "Escape")
-                return;
-
-            document
-                .querySelectorAll(
-                    ".main-nav.active"
-                )
-                .forEach(nav => {
-                    nav.classList.remove(
-                        "active"
-                    );
-                });
-
-        }
-    );
-
-
-    // -------------------------------
-    // Online / Offline status
-    // -------------------------------
-    function updateOnlineStatus() {
-
-        if (navigator.onLine) {
-            document.body.classList.remove(
-                "offline-mode"
-            );
-        } else {
-            document.body.classList.add(
-                "offline-mode"
-            );
-        }
-
-    }
-
-    window.addEventListener(
-        "online",
-        () => {
-            updateOnlineStatus();
-            showToast("🟢 Back online");
-        }
-    );
-
-    window.addEventListener(
-        "offline",
-        () => {
-            updateOnlineStatus();
-            showToast("🔴 You are offline");
-        }
-    );
-
-    updateOnlineStatus();
-
-
-    // -------------------------------
-    // Prevent broken buttons
-    // -------------------------------
-    document.querySelectorAll(
-        "button"
-    ).forEach(button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    button.disabled
-                ) {
-                    return;
-                }
-
-            }
-        );
-
-    });
-
-
-    // -------------------------------
-    // Page loaded
-    // -------------------------------
-    document.body.classList.add(
-        "js-loaded"
-    );
-
-    setTimeout(() => {
-        document.body.classList.add(
-            "fully-loaded"
-        );
-    }, 300);
-
-}
-
-
-// ===============================
-// GLOBAL ERROR HANDLER
-// ===============================
-
-window.addEventListener(
-    "error",
-    event => {
-
-        console.error(
-            "StudyToolsHub Error:",
-            event.error || event.message
-        );
-
-    }
-);
-
-
-// ===============================
-// UNHANDLED PROMISE ERRORS
-// ===============================
-
-window.addEventListener(
-    "unhandledrejection",
-    event => {
-
-        console.error(
-            "StudyToolsHub Promise Error:",
-            event.reason
-        );
-
-    }
-);
-
-
-// ===============================
-// FINAL START
-// ===============================
-
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        initFinalSetup();
-
-        console.log(
-            "StudyToolsHub JS loaded successfully 🚀"
-        );
-
-    }
-);
+               
